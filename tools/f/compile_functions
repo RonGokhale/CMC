@@ -1,8 +1,8 @@
 #!/bin/bash
 # Shortcuts
+CMC_HOME=$(dirname $0)
 MAIN=". ./CMCompiler"
 CMC_CONFIG="$HOME/.cmcrc"
-CMC_HOME="$HOME/CMC"
 CMC_TOOLS="$CMC_HOME/tools/t"
 CMC_SCRIPTS="$CMC_HOME/tools/s"
 CMC_FUNCTIONS="$CMC_HOME/f"
@@ -82,13 +82,15 @@ echo "Looking for currently installed repos..."
 if [ ! -f $CMC_CONFIG ]; then
 	touch $CMC_CONFIG
 fi
+CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
 CMC_CONFIG_REPO_CHK=$(grep REPO $CMC_CONFIG |wc -l)
-CHK_4_REPO=$(find $HOME -type d -iname .repo |wc -l)
+CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
 if [ "$CMC_CONFIG_REPO_CHK" != "1" ];then
 	if [ "$CHK_4_REPO" = "0" ]; then
 		echo "No found repos creating a folder now."
 		echo "You might want to setup the repo before doing much!"
-		mkdir -p ~/Development/CM-GB
+		echo "Setting up a default repo for you here: $DEFAULT_REPO_HOME"
+		mkdir -p $DEFAULT_REPO_HOME
 		sleep 2
 		. ./menu_items/setup_cm_repo
 	fi
@@ -101,16 +103,25 @@ if [ "$CMC_CONFIG_REPO_CHK" != "1" ];then
 		else
 			echo "REPO: $repo" >> $TMP_REPO
 			echo "REPO: $repo" >> $CMC_CONFIG
-			FOUND_NUM=$(grep "REPO:" $TMP_REPO |awk '{print $2}' |wc -l)
 		fi
 	done
 elif [ "$CMC_CONFIG_REPO_CHK" = "1" ] && [ "$CHK_4_REPO" = "0" ];then
-	sed ""$(grep -n0 REPO $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
-	chk_repo_path
+	clear
+	echo "Found $CMC_CONFIG_REPO in $CMC_CONFIG, but no repo, you will need a repo to use this."
+	echo "Are you sure you want to use this path? No will remove this entry!"
+	echo -n "( Y/n) default: yes > "
+	read response
+	case $response in
+		[nN] | [n|N][O|o] )
+			sed ""$(grep -n0 REPO $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
+			chk_repo_path;;
+		*)
+			REPO_PATH=$CMC_CONFIG_REPO
+	esac
 else
-	REPO_PATH=$(grep REPO $CMC_CONFIG |awk '{print $2}')
-	FOUND_NUM=$(grep REPO $CMC_CONFIG |awk '{print $2}' |wc -l)
+	REPO_PATH=$CMC_CONFIG_REPO
 fi
+FOUND_NUM=$(grep REPO $CMC_CONFIG |awk '{print $2}' |wc -l)
 }
 
 function list_em() {
