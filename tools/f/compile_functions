@@ -243,7 +243,7 @@ while true; do
 	fi
 	sleep 5
 	SYNC_PROCESS=$(cat /tmp/repo_sync.log |wc -l)
-	PERCENT=$($SYNC_PROCESS / 210)
+	PERCENT=$(($SYNC_PROCESS / 210))
 	clear
 	echo -n "Syncing the CM repo. $BRANCH branch. Progress: $PERCENT"
 done
