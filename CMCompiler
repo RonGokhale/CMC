@@ -1,0 +1,67 @@
+#!/bin/bash
+# Main script that runs
+. ./tools/f/compile_functions
+get_colors_set
+chk_cmc_config
+chk_adb_running
+
+if [ ! -f $TMP_REPO ]; then
+	chk_repo_path
+fi
+
+clear
+echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
+"$CLR"Main"$toff"
+Repos Found: "$CLR"$FOUND_NUM"$toff"
+
+	"$CLR"1"$toff") Choose your Manufacturer
+	"$CLR"2"$toff") Choose your Model
+	-----
+	"$CLR"3"$toff") Remove Languages (GB/ICS)
+	"$CLR"4"$toff") Remove Live Wallpapers (GB/ICS)
+	"$CLR"5"$toff") Remove CM Wallpapers (GB)
+	"$CLR"6"$toff") Setup Cyanogenmod Repo (GB/ICS)
+	"$CLR"7"$toff") Update Repo (GB/ICS)
+	"$CLR"8"$toff") Compile Cyanogenmod (GB/ICS)
+	-----
+	"$CLR"P"$toff") CMC Plugins
+	-----
+	"$CLR"98"$toff") Change theme
+	"$CLR"99"$toff") Information about CMC
+	"$CLR"X"$toff") exit
+
+Device Info: "$CLR"$DEVICE_MAN"$toff"/"$CLR"$DEVICE_MOD"$toff" ADB: $ADB_MSG
+Please choose an option to continue"
+echo -n "> "
+
+read option
+case $option in
+	1)
+		. ./menu_items/ch_manufacturer;;
+	2)
+		. ./menu_items/ch_model;;
+	3)
+		. ./menu_items/ch_rem_languages;;
+	4)
+		. ./menu_items/ch_rem_live_wallpaper;;
+	5)
+		. ./menu_items/ch_rem_cm_wallpaper;;
+	6)
+		. ./menu_items/setup_cm_repo;;
+	7)
+		. ./menu_items/update_cm_repo;;
+	8)
+		. ./menu_items/compile_cm_repo;;
+	98)
+		. ./menu_items/ch_theme;;
+	99)
+		;;
+	p|P)
+		. ./menu_items/run_plugins;;
+	x|X)
+		echo "Goodbye!"
+		chk_tmp
+		exit 1;;
+	*)
+		$MAIN;;
+esac

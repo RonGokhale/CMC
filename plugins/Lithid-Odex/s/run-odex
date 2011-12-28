@@ -1,0 +1,92 @@
+#!/bin/bash
+MH="$CMC_HOME/plugins/Lithid-Odex"
+H="$CMC_HOME/plugins/Lithid-Odex/.ODEX"
+CMD="adb shell"
+DW="dexopt-wrapper"
+OS="odex.sh"
+AP="system/app"
+FW="system/framework"
+DA="data/app"
+FL="$AP $FW $DA"
+
+if [ "$ADB_MSG" != "Running" ]; then
+	clear
+	echo "Shit please, adb isn't running we can't do this. Going to the main menu."
+	sleep 1
+	$MAIN
+fi
+
+cd $MH
+
+for x in $FL; do
+if [ ! -d $H/$x ]; then
+	mkdir -p $H/$x
+fi
+done
+
+function del_dex() {
+echo "Removing classes.dex files"
+ZIPS=$(find $H -type f -iname *.jar && find $H -type f -name *.apk)
+for i in $ZIPS; do
+	zip -d $i classes.dex >> /dev/null
+done
+echo "Done removing classes.dex files"
+}
+
+function push_files() {
+adb remount
+echo "Pushing adb files"
+adb push $MH/t/$DW /system/bin/$DW &>> /dev/null
+adb shell chmod 0755 /system/bin/$DW
+adb push $MH/s/$OS /sdcard/$OS &>> /dev/null
+adb shell chmod 0755 /sdcard/$OS
+echo "Done pushing adb files"
+}
+
+function pull_files() {
+echo "Pulling files from the phone"
+cd $H/$AP/
+adb pull /$AP/ &>> /dev/null
+cd $H/$FW
+adb pull /$FW/ &>> /dev/null
+cd $H/$DA/
+adb pull /$DA/ &>> /dev/null
+cd $H
+echo "Done pulling files from the phone"
+}
+
+function push_finished_files() {
+adb remount
+echo "Pushing adb files"
+adb push $H/$DA /$DA &>> /dev/null
+adb push $H/$OS /$OS &>> /dev/null
+adb push $H/$FW /$FW &>> /dev/null
+echo "Done pushing adb files"
+}
+
+function clean_up() {
+if [ -d $H ]; then
+	rm -rf $H
+fi
+echo "Everything is cleaned up and the zips are in your home folder!"
+}
+
+clear
+echo -n "Do you want your "$CLR"/data/app"$toff" odexed too? > ("$CLR"Y"$toff"/n) "
+read response
+case $response in
+	[nN] | [n|N][O|o] )
+		CODE="sh /scard/odex";;
+	*)
+		CODE="sh /sdcard/odex -Data";;
+esac
+
+# Process it all
+push_files
+$CMD $CODE
+pull_files
+del_dex
+
+clean_up
+
+exit 0

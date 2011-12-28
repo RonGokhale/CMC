@@ -1,0 +1,92 @@
+#!/bin/bash
+# Main script that runs
+. ./tools/f/compile_functions
+chk_cmc_config
+chk_adb_running
+
+if [ ! -f $TMP_REPO ]; then
+	chk_repo_path
+fi
+
+clear
+echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
+"$CLR"Main"$toff"
+Repos Found: "$CLR"$FOUND_NUM"$toff"
+
+	"$CLR"1"$toff") Black
+	"$CLR"2"$toff") Red
+	"$CLR"3"$toff") Green
+	"$CLR"4"$toff") Yellow
+	"$CLR"5"$toff") Blue
+	"$CLR"6"$toff") Purple
+	"$CLR"7"$toff") Cyan
+	"$CLR"8"$toff") Light Black
+	"$CLR"9"$toff") Light Red
+	"$CLR"10"$toff") Light Green
+	"$CLR"11"$toff") Light Yellow
+	"$CLR"12"$toff") Light Blue
+	"$CLR"13"$toff") Light Purple
+	"$CLR"14"$toff") Light Cyan
+	-----
+	"$CLR"B"$toff") back to main menu
+	"$CLR"X"$toff") exit
+
+Device Info: "$CLR"$DEVICE_MAN"$toff"/"$CLR"$DEVICE_MOD"$toff" ADB: $ADB_MSG
+Please choose an option to continue"
+echo -n "> "
+
+read option
+case $option in
+	1)
+		CUST_COLOR="$tblk"
+		COLOR_DESC="Black";;
+	2)
+		CUST_COLOR="$tred"
+		COLOR_DESC="Red";;
+	3)
+		CUST_COLOR="$tgrn"
+		COLOR_DESC="Green";;
+	4)
+		CUST_COLOR="$tylw"
+		COLOR_DESC="Yellow";;
+	5)
+		CUST_COLOR="$tblu"
+		COLOR_DESC="Blue";;
+	6)
+		CUST_COLOR="$tprpl"
+		COLOR_DESC="Purple";;
+	7)
+		CUST_COLOR="$tcyn"
+		COLOR_DESC="Cyan";;
+	8)
+		CUST_COLOR="$ltblk"
+		COLOR_DESC="Light Black";;
+	9)
+		CUST_COLOR="$ltred"
+		COLOR_DESC="Light Red";;
+	10)
+		CUST_COLOR="$ltgrn"
+		COLOR_DESC="Light Green";;
+	11)
+		CUST_COLOR="$ltylw"
+		COLOR_DESC="Light Yellow";;
+	12)
+		CUST_COLOR="$ltblu"
+		COLOR_DESC="Light Blue";;
+	13)
+		CUST_COLOR="$ltprpl"
+		COLOR_DESC="Light Purple";;
+	14)
+		CUST_COLOR="$ltcyn"
+		COLOR_DESC="Light Cyan";;
+	b|B)
+		$MAIN;;
+	x|X)
+		echo "Goodbye!"
+		chk_tmp
+		exit 1;;
+	*)
+		. ./menu_items/ch_theme;;
+esac
+
+apply_theme_process
