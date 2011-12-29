@@ -247,7 +247,7 @@ function reposync() {
 clear
 REPO_PATH=$(cat $TMP_REPO |awk '{print $2}')
 cd $REPO_PATH
-$CMC_FUNCTIONS/loading 50 0.1 [ "SYNCING CYANOGENMOD" ] $
+$CMC_FUNCTIONS/loading 50 0.1 [ "SYNCING CYANOGENMOD" ] &
 MYSELF=$!
 $REPO sync &>> /tmp/repo_sync.log
 kill -9 $MYSELF
@@ -262,7 +262,7 @@ if [ "$CHK_REPO_4_SYNC" -lt "5" ]; then
 	sleep 2
 else
 	cd $REPO_PATH
-	$CMC_FUNCTIONS/loading 50 0.1 [ "SYNCING CYANOGENMOD" ] $
+	$CMC_FUNCTIONS/loading 50 0.1 [ "SYNCING CYANOGENMOD" ] &
 	MYSELF=$!
 	$REPO sync &>> /tmp/repo_sync.log
 	kill -9 $MYSELF
