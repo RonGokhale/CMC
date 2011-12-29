@@ -1,6 +1,6 @@
 #!/bin/bash
 # Shortcuts
-CMC_HOME=$(dirname $0)
+CMC_HOME=$(pwd)
 MAIN=". ./CMCompiler"
 CMC_CONFIG="$HOME/.cmcrc"
 CMC_TOOLS="$CMC_HOME/tools/t"
@@ -117,6 +117,9 @@ elif [ "$CMC_CONFIG_REPO_CHK" = "1" ] && [ "$CHK_4_REPO" = "0" ];then
 			chk_repo_path;;
 		*)
 			REPO_PATH=$CMC_CONFIG_REPO
+			if [ ! -d $REPO_PATH ]; then
+				mkdir -p $REPO_PATH
+			fi
 			. ./menu_items/setup_cm_repo
 	esac
 else

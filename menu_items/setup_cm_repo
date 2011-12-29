@@ -37,6 +37,5 @@ case $option in
 		chk_tmp
 		exit 1;;
 	*)
-		MSG="Languages have been removed!"
 		setup_cm_repo;;
 esac
