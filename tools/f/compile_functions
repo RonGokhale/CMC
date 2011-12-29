@@ -7,12 +7,12 @@ CMC_SCRIPTS="$CMC_HOME/tools/s"
 CMC_FUNCTIONS="$CMC_HOME/tools/f"
 CMC_PLUGINS="$CMC_HOME/plugins"
 CMC_DELETED="/tmp/CMC_DELETED_FILES"
+REPO="$CMC_TOOLS/repo"
 TMPX="/tmp/CM_BUILD"
 TMP_REPO="/tmp/found_repos"
 CM_GIT="git://github.com/CyanogenMod/android.git"
 DEFAULT_REPO_HOME="$HOME/Development/CM-GB"
 GOG_REPO="https://dl-ssl.google.com/dl/googlesource/git-repo/repo"
-REPO="${REPO:-}"   # marking as Global...
 #######################################################
 #
 # Start of the functions
@@ -279,14 +279,13 @@ if [ ! -d $REPO_PATH ]; then
 fi
 
 clear
-curl -# $GOG_REPO > $CMC_TOOLS/repo
-if [ -f $CMC_TOOLS/repo ]; then
-	REPO="$CMC_TOOLS/repo"
+curl -# $GOG_REPO > $REPO
+if [ -f $REPO ]; then
 	chmod a+x $REPO
 else
 	clear
 	echo "Couldn't link repo correctly. Check your internet and try again."
-	rm -rf $CMC_TOOLS/repo >> /dev/null
+	rm -rf $REPO >> /dev/null
 	$MAIN
 fi
 cd $REPO_PATH
