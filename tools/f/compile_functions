@@ -4,7 +4,7 @@ MAIN=". $CMC_HOME/CMCompiler"
 CMC_CONFIG="$HOME/.cmcrc"
 CMC_TOOLS="$CMC_HOME/tools/t"
 CMC_SCRIPTS="$CMC_HOME/tools/s"
-CMC_FUNCTIONS="$CMC_HOME/f"
+CMC_FUNCTIONS="$CMC_HOME/tools/f"
 CMC_DELETED="/tmp/CMC_DELETED_FILES"
 TMPX="/tmp/CM_BUILD"
 TMP_REPO="/tmp/found_repos"
@@ -91,10 +91,13 @@ if [ "$CMC_CONFIG_REPO_CHK" != "1" ];then
 		echo "You might want to setup the repo before doing much!"
 		echo "Setting up a default repo for you here: $DEFAULT_REPO_HOME"
 		mkdir -p $DEFAULT_REPO_HOME
+		echo "REPO: $DEFAULT_REPO_HOME" >> $CMC_CONFIG
+		echo "REPO: $DEFAULT_REPO_HOME" >> $TMP_REPO
+		REPO_PATH=$DEFAULT_REPO_HOME
 		sleep 2
 		. $CMC_HOME/menu_items/setup_cm_repo
 	fi
-	CHK_4_REPO=$(find $DEFAULT_REPO_HOME -type d -iname .repo |cut -d"." -f"1")
+	CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |cut -d"." -f"1")
 	CHK_4_REPO_LST="$CHK_4_REPO"
 	for repo in $CHK_4_REPO_LST; do
 		CHK_REPO_SIZE=$(du -sh $repo)
@@ -120,10 +123,12 @@ elif [ "$CMC_CONFIG_REPO_CHK" = "1" ] && [ "$CHK_4_REPO" = "0" ];then
 			if [ ! -d $REPO_PATH ]; then
 				mkdir -p $REPO_PATH
 			fi
+			echo "REPO: $REPO_PATH" >> $TMP_REPO
 			. $CMC_HOME/menu_items/setup_cm_repo
 	esac
 else
 	REPO_PATH=$CMC_CONFIG_REPO
+	echo "REPO: $REPO_PATH" >> $TMP_REPO
 fi
 FOUND_NUM=$(grep REPO $CMC_CONFIG |awk '{print $2}' |wc -l)
 }
@@ -320,7 +325,9 @@ case $input in
 		read input
 		case $input in
 			*)
-				reposync;;
+				cd $REPO_PATH
+				reposync
+				cd $CMC_HOME;;
 		esac;;
 esac
 $MAIN
