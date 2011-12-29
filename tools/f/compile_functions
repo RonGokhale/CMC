@@ -311,7 +311,7 @@ case $input in
 				sed ""$(grep -n0 $i $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
 			done
 			echo "BRANCH: $BRANCH" >> $CMC_CONFIG
-		elif [ "$CHK_BRANCH" -eg "0" ]; then
+		elif [ "$CHK_BRANCH" -eq "0" ]; then
 			echo "BRANCH: $BRANCH" >> $CMC_CONFIG
 		else
 			echo "Branch config in $CMC_CONFIG isn't configured correctly"
