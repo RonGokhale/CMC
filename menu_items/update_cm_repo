@@ -37,6 +37,6 @@ case $option in
 		chk_tmp
 		exit 1;;
 	*)
-		reposync
+		reposync_update
 		$MAIN;;
 esac
