@@ -249,7 +249,7 @@ while true; do
 	SYNC_PROCESS=$(cat /tmp/repo_sync.log |wc -l)
 	PERCENT=$(($SYNC_PROCESS / 210))
 	clear
-	echo -n "Syncing the CM repo. $BRANCH branch. Progress: $PERCENT"
+	echo -n "Syncing the CM repo. $BRANCH branch. Progress: $PERCENT%"
 done
 }
 
@@ -296,6 +296,18 @@ echo -n "Press enter to continue..."
 read input
 case $input in
 	*)
+		CHK_BRANCH=$(grep BRANCH $CMC_CONFIG |wc -l)
+		if [ "$CHK_BRANCH" -eq "1" ]; then
+			sed ""$(grep -n0 BRANCH $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
+		elif "$CHK_BRANCH" -gt "1" ]; then
+			LIST_BRANCH=$(grep BRANCH $CMC_CONFIG | awk '{print $2}')
+			for i in $LIST_BRANCH; do
+				sed ""$(grep -n0 $i $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
+			done
+		else
+			echo "Branch config in $CMC_CONFIG isn't configured correctly"
+			exit 6
+		fi
 		echo "BRANCH: $BRANCH" >> $CMC_CONFIG
 		clear
 		$REPO init -u $CM_GIT -b $BRANCH

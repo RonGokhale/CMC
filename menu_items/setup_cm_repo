@@ -12,7 +12,7 @@ Repos Found: "$CLR"$FOUND_NUM"$toff"
 	Are you sure you want to do this?
 
 	Always Default "$CLR"Location:"$toff" 
-	$DEFAULT_REPO_HOME
+	$REPO_PATH
 
 	"$CLR"Note:"$toff"
 	Default is yes type \"n\" or \"no\" to stop this from happening.
