@@ -1,6 +1,6 @@
 #!/bin/bash
 # Main script that runs
-CMC_HOME=$(dirname $0)
+CMC_HOME=${CMC_HOME:-$(dirname $0)}
 if [ -n "${CMC_HOME##*/*}" ];
 then
 	#dirname didn't give us a full path, try PWD
