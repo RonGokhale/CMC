@@ -251,7 +251,7 @@ done
 }
 
 function setup_cm_repo() {
-if [ ! -d $DEFAULT_REPO_HOME ]; then
+if [ ! -d $REPO_PATH ]; then
 	clear
 	echo "Something is very wrong, send an email to mrlithid@gmail.com"
 	echo "error code 4"
@@ -270,7 +270,7 @@ else
 	rm -rf $CMC_TOOLS/repo >> /dev/null
 	$MAIN
 fi
-cd $DEFAULT_REPO_HOME
+cd $REPO_PATH
 clear
 echo -e "Is this new repo going to be ICS or GB? (i/"$CLR"G"$toff")
 Default is GB.
