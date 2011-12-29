@@ -1,5 +1,6 @@
 #!/bin/bash
-. ./tools/f/compile_functions
+$CMC_HOME/tools/f/compile_functions
+LITHID_HOME=$(basename $0)
 chk_cmc_config
 chk_adb_running
 
@@ -27,14 +28,14 @@ case $option in
 		MSG="Nothing has been done!"
 		chk_tmp
 		sleep 1
-		. ./menu_items/run_plugins;;
+		. $LITHID_HOME/menu_items/run_plugins;;
 	b|B)
 		chk_tmp
-		. ./menu_items/run_plugins;;
+		. $LITHID_HOME/menu_items/run_plugins;;
 	x|X)
 		echo "Goodbye!"
 		chk_tmp
 		exit 1;;
 	*)
-		. ./plugins/Lithid-Odex/s/run-odex;;
+		. $LITHID_HOME/plugins/Lithid-Odex/s/run-odex;;
 esac

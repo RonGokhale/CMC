@@ -1,6 +1,13 @@
 #!/bin/bash
 # Main script that runs
-. ./tools/f/compile_functions
+CMC_HOME=$(dirname $0)
+if [ -n "${CMC_HOME##*/*}" ];
+then
+	#dirname didn't give us a full path, try PWD
+	CMC_HOME=$(pwd -P)
+fi
+
+. $CMC_HOME/tools/f/compile_functions
 get_colors_set
 chk_cmc_config
 chk_adb_running
@@ -37,27 +44,27 @@ echo -n "> "
 read option
 case $option in
 	1)
-		. ./menu_items/ch_manufacturer;;
+		. $CMC_HOME/menu_items/ch_manufacturer ;;
 	2)
-		. ./menu_items/ch_model;;
+		. $CMC_HOME/menu_items/ch_model;;
 	3)
-		. ./menu_items/ch_rem_languages;;
+		. $CMC_HOME/menu_items/ch_rem_languages;;
 	4)
-		. ./menu_items/ch_rem_live_wallpaper;;
+		. $CMC_HOME/menu_items/ch_rem_live_wallpaper;;
 	5)
-		. ./menu_items/ch_rem_cm_wallpaper;;
+		. $CMC_HOME/menu_items/ch_rem_cm_wallpaper;;
 	6)
-		. ./menu_items/setup_cm_repo;;
+		. $CMC_HOME/menu_items/setup_cm_repo;;
 	7)
-		. ./menu_items/update_cm_repo;;
+		. $CMC_HOME/menu_items/update_cm_repo;;
 	8)
-		. ./menu_items/compile_cm_repo;;
+		. $CMC_HOME/menu_items/compile_cm_repo;;
 	98)
-		. ./menu_items/ch_theme;;
+		. $CMC_HOME/menu_items/ch_theme;;
 	99)
 		;;
 	p|P)
-		. ./menu_items/run_plugins;;
+		. $CMC_HOME/menu_items/run_plugins;;
 	x|X)
 		echo "Goodbye!"
 		chk_tmp

@@ -1,7 +1,6 @@
 #!/bin/bash
 # Shortcuts
-CMC_HOME=$(pwd)
-MAIN=". ./CMCompiler"
+MAIN=". $CMC_HOME/CMCompiler"
 CMC_CONFIG="$HOME/.cmcrc"
 CMC_TOOLS="$CMC_HOME/tools/t"
 CMC_SCRIPTS="$CMC_HOME/tools/s"
@@ -12,6 +11,7 @@ TMP_REPO="/tmp/found_repos"
 CM_GIT="git://github.com/CyanogenMod/android.git"
 DEFAULT_REPO_HOME="$HOME/Development/CM-GB"
 GOG_REPO="https://dl-ssl.google.com/dl/googlesource/git-repo/repo"
+REPO="${REPO:-}"   # marking as Global...
 #######################################################
 #
 # Start of the functions
@@ -92,9 +92,9 @@ if [ "$CMC_CONFIG_REPO_CHK" != "1" ];then
 		echo "Setting up a default repo for you here: $DEFAULT_REPO_HOME"
 		mkdir -p $DEFAULT_REPO_HOME
 		sleep 2
-		. ./menu_items/setup_cm_repo
+		. $CMC_HOME/menu_items/setup_cm_repo
 	fi
-	CHK_4_REPO=$(find $HOME -type d -iname .repo |cut -d"." -f"1")
+	CHK_4_REPO=$(find $DEFAULT_REPO_HOME -type d -iname .repo |cut -d"." -f"1")
 	CHK_4_REPO_LST="$CHK_4_REPO"
 	for repo in $CHK_4_REPO_LST; do
 		CHK_REPO_SIZE=$(du -sh $repo)
@@ -120,7 +120,7 @@ elif [ "$CMC_CONFIG_REPO_CHK" = "1" ] && [ "$CHK_4_REPO" = "0" ];then
 			if [ ! -d $REPO_PATH ]; then
 				mkdir -p $REPO_PATH
 			fi
-			. ./menu_items/setup_cm_repo
+			. $CMC_HOME/menu_items/setup_cm_repo
 	esac
 else
 	REPO_PATH=$CMC_CONFIG_REPO
@@ -164,7 +164,7 @@ else
 	echo -e "Your Manufacturer is "$CLR"$DEVICE_MAN"$toff", please try again"
 	chk_tmp
 	sleep 2
-	. ./menu_items/ch_manufacturer
+	. $CMC_HOME/menu_items/ch_manufacturer
 fi
 chk_tmp
 }
@@ -192,7 +192,7 @@ else
 	echo -e "Your model is "$CLR"$DEVICE_MOD"$toff", please try again"
 	chk_tmp
 	sleep 2
-	. ./menu_items/ch_model
+	. $CMC_HOME/menu_items/ch_model
 fi
 }
 
@@ -201,14 +201,14 @@ GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
 if [ "$GET_LIST_W" != "0" ]; then
 	PLUGIN=$(echo "$GET_LIST")
-	. ./plugins/$PLUGIN/main
+	. $CMC_HOME/plugins/$PLUGIN/main
 	chk_tmp
 else
 	clear
 	echo -e ""$CLR"Unable"$toff" to find that plugin, please try again"
 	chk_tmp
 	sleep 2
-	. ./menu_items/run_plugins
+	. $CMC_HOME/menu_items/run_plugins
 fi
 }
 
@@ -228,7 +228,7 @@ $MAIN
 }
 
 function chk_adb_running() {
-chk_adb=$(adb devices |grep device |grep -v attached |wc -l)
+chk_adb=$(adb devices 2>/dev/null |grep device |grep -v attached |wc -l)
 if [ "$chk_adb" != "1" ]; then
 	ADB_MSG=""$tred"N/A"$toff""
 else
@@ -292,7 +292,7 @@ esac
 clear
 echo "You are now going to go into the repo script and this interface will not exist, 
 don't worry though. You will be back!"
-echo -n "Press any key to continue..."
+echo -n "Press enter to continue..."
 read input
 case $input in
 	*)
@@ -301,7 +301,7 @@ case $input in
 		$REPO init -u $CM_GIT -b $BRANCH
 		clear
 		echo "Now we are going to sync the repo. This will take some time. Go play some MW3."
-		echo -n "Press any key to continue..."
+		echo -n "Press enter to continue..."
 		read input
 		case $input in
 			*)
@@ -350,7 +350,7 @@ echo "Your files are located:"
 echo "Rom: $H_ROM"
 md5sum $HOME/*.md5sum
 echo
-echo -e "Press any key to continue..."
+echo -e "Press enter to continue..."
 read response
 case $response in
 	*)$MAIN;;

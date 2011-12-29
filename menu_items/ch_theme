@@ -1,6 +1,6 @@
 #!/bin/bash
 # Main script that runs
-. ./tools/f/compile_functions
+. $CMC_HOME/tools/f/compile_functions
 chk_cmc_config
 chk_adb_running
 
@@ -86,7 +86,7 @@ case $option in
 		chk_tmp
 		exit 1;;
 	*)
-		. ./menu_items/ch_theme;;
+		. $CMC_HOME/menu_items/ch_theme;;
 esac
 
 apply_theme_process
