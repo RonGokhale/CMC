@@ -1,5 +1,5 @@
 #!/bin/sh
-
+# Written by lithid (mrlithid@gmail.com)
 echo "$REPO_PATH/vendor/cyanogen/products/common_full.mk" >> $CMC_DELETED
 
 rm -rf $REPO_PATH/vendor/cyanogen/products/common_full.mk

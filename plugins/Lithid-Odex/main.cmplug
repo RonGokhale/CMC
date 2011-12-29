@@ -1,6 +1,7 @@
 #!/bin/bash
+# Written by lithid (mrlithid@gmail.com)
 $CMC_HOME/tools/f/compile_functions
-LITHID_HOME=$(basename $0)
+LITHID_HOME="$CMC_PLUGINS/Lithid-Odex"
 chk_cmc_config
 chk_adb_running
 
@@ -13,7 +14,7 @@ Repos Found: "$CLR"$FOUND_NUM"$toff"
 
 	"$CLR"Note:"$toff"
 	Default is yes type \"n\" or \"no\" to stop this from happening.
-	You can also press \"0\" to return to the main menu without changes.
+	You can also press \"X\" to return to the main menu without changes.
 	-----
 	"$CLR"B"$toff") back to plugins
 	"$CLR"X"$toff") exit
@@ -28,14 +29,14 @@ case $option in
 		MSG="Nothing has been done!"
 		chk_tmp
 		sleep 1
-		. $LITHID_HOME/menu_items/run_plugins;;
+		. $CMC_HOME/menu_items/run_plugins;;
 	b|B)
 		chk_tmp
-		. $LITHID_HOME/menu_items/run_plugins;;
+		. $CMC_HOME/menu_items/run_plugins;;
 	x|X)
 		echo "Goodbye!"
 		chk_tmp
 		exit 1;;
 	*)
-		. $LITHID_HOME/plugins/Lithid-Odex/s/run-odex;;
+		. $LITHID_HOME/s/run-odex;;
 esac

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Main script that runs
+# Written by lithid (mrlithid@gmail.com)
 CMC_HOME=${CMC_HOME:-$(dirname $0)}
 if [ -n "${CMC_HOME##*/*}" ];
 then

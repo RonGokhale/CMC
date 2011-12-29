@@ -1,5 +1,5 @@
 #!/bin/sh
-
+# Written by lithid (mrlithid@gmail.com)
 echo "$REPO_PATH/vendor/$DEVICE_MAN/$DEVICE_MOD/supersonic-vendor.mk" >> $CMC_DELETED
 
 rm -rf $REPO_PATH/vendor/$DEVICE_MAN/$DEVICE_MOD/$DEVICE_MOD-vendor.mk

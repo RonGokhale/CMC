@@ -1,10 +1,11 @@
 #!/bin/bash
-# Shortcuts
-MAIN=". $CMC_HOME/CMCompiler"
+# Written by lithid (mrlithid@gmail.com)
+MAIN="$CMC_HOME/CMCompiler"
 CMC_CONFIG="$HOME/.cmcrc"
 CMC_TOOLS="$CMC_HOME/tools/t"
 CMC_SCRIPTS="$CMC_HOME/tools/s"
 CMC_FUNCTIONS="$CMC_HOME/tools/f"
+CMC_PLUGINS="$CMC_HOME/plugins"
 CMC_DELETED="/tmp/CMC_DELETED_FILES"
 TMPX="/tmp/CM_BUILD"
 TMP_REPO="/tmp/found_repos"
@@ -134,6 +135,7 @@ FOUND_NUM=$(grep REPO $CMC_CONFIG |awk '{print $2}' |wc -l)
 }
 
 function list_em() {
+chk_tmp
 COUNT=1
 ls_files=$(ls $MORE_PATH |sort)
 for x in $ls_files; do
@@ -206,7 +208,7 @@ GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
 if [ "$GET_LIST_W" != "0" ]; then
 	PLUGIN=$(echo "$GET_LIST")
-	. $CMC_HOME/plugins/$PLUGIN/main
+	. $CMC_PLUGINS/$PLUGIN/main.plug
 	chk_tmp
 else
 	clear
@@ -242,20 +244,19 @@ fi
 }
 
 function reposync() {
-nohup $REPO sync >> /tmp/repo_sync.log &
-echo "Syncing the CM repo. $BRANCH branch. Progress: 0"
-sleep 3
-while true; do
-	CHK_SYNC_PID=$(ps aux |grep repo |grep sync |grep python |wc -l)
-	if [ "$CHK_SYNC_PID" != "1" ]; then
-		break
-	fi
-	sleep 5
-	SYNC_PROCESS=$(cat /tmp/repo_sync.log |wc -l)
-	PERCENT=$(($SYNC_PROCESS / 210))
+REPO_PATH=$(cat $TMP_REPO |awk '{print $2}')
+CHK_REPO_4_SYNC=$(ls $REPO_PATH |wc -l)
+if [ "$CHK_REPO_4_SYNC" -lt "5" ]; then
 	clear
-	echo -n "Syncing the CM repo. $BRANCH branch. Progress: $PERCENT%"
-done
+	echo "You need to setup the repo first"
+	sleep 2
+else
+	cd $REPO_PATH
+	$CMC_FUNCTIONS/loading 50 0.1 [ "SYNCING CYANOGENMOD" ] $
+	MYSELF=$!
+	$REPO sync &>> /tmp/repo_sync.log
+	kill -9 $MYSELF
+fi
 }
 
 function setup_cm_repo() {

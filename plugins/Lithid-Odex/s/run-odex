@@ -1,4 +1,5 @@
 #!/bin/bash
+# Written by lithid (mrlithid@gmail.com)
 MH="$CMC_HOME/plugins/Lithid-Odex"
 H="$CMC_HOME/plugins/Lithid-Odex/.ODEX"
 CMD="adb shell"

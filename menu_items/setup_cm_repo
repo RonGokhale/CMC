@@ -1,4 +1,5 @@
 #!/bin/bash
+# Written by lithid (mrlithid@gmail.com)
 . $CMC_HOME/tools/f/compile_functions
 chk_cmc_config
 chk_adb_running
@@ -37,6 +38,5 @@ case $option in
 		chk_tmp
 		exit 1;;
 	*)
-		MSG="Languages have been removed!"
 		setup_cm_repo;;
 esac

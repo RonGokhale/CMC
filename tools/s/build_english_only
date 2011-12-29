@@ -1,5 +1,5 @@
 #!/bin/sh
-
+# Written by lithid (mrlithid@gmail.com)
 echo "$REPO_PATH/build/target/product/languages_full.mk" >> $CMC_DELETED
 echo "$REPO_PATH/build/target/product/full_base.mk" >> $CMC_DELETED
 echo "$REPO_PATH/build/target/product/locales_full.mk" >> $CMC_DELETED
