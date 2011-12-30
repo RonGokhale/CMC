@@ -4,13 +4,13 @@ MH="$CMC_HOME/plugins/Lithid-Odex"
 H="$CMC_HOME/plugins/Lithid-Odex/.ODEX"
 CMD="adb shell"
 DW="dexopt-wrapper"
-OS="odex.sh"
+OS="odex"
 AP="system/app"
 FW="system/framework"
 DA="data/app"
 FL="$AP $FW $DA"
 
-if [ "$ADB_MSG" != "Running" ]; then
+if [ "$chk_adb" != "1" ]; then
 	clear
 	echo "Shit please, adb isn't running we can't do this. Going to the main menu."
 	sleep 1
@@ -29,7 +29,7 @@ function del_dex() {
 echo "Removing classes.dex files"
 ZIPS=$(find $H -type f -iname *.jar && find $H -type f -name *.apk)
 for i in $ZIPS; do
-	zip -d $i classes.dex >> /dev/null
+	zip -d $i classes.dex
 done
 echo "Done removing classes.dex files"
 }
@@ -37,9 +37,9 @@ echo "Done removing classes.dex files"
 function push_files() {
 adb remount
 echo "Pushing adb files"
-adb push $MH/t/$DW /system/bin/$DW &>> /dev/null
+adb push $MH/t/$DW /system/bin/$DW
 adb shell chmod 0755 /system/bin/$DW
-adb push $MH/s/$OS /sdcard/$OS &>> /dev/null
+adb push $MH/s/$OS /sdcard/$OS
 adb shell chmod 0755 /sdcard/$OS
 echo "Done pushing adb files"
 }
@@ -47,11 +47,11 @@ echo "Done pushing adb files"
 function pull_files() {
 echo "Pulling files from the phone"
 cd $H/$AP/
-adb pull /$AP/ &>> /dev/null
+adb pull /$AP/
 cd $H/$FW
-adb pull /$FW/ &>> /dev/null
+adb pull /$FW/
 cd $H/$DA/
-adb pull /$DA/ &>> /dev/null
+adb pull /$DA/
 cd $H
 echo "Done pulling files from the phone"
 }
@@ -59,21 +59,23 @@ echo "Done pulling files from the phone"
 function push_finished_files() {
 adb remount
 echo "Pushing adb files"
-adb push $H/$DA /$DA &>> /dev/null
-adb push $H/$OS /$OS &>> /dev/null
-adb push $H/$FW /$FW &>> /dev/null
+adb push $H/$AP /$AP
+adb push $H/$FW /$FW
+adb push $H/$DA /$DA
 echo "Done pushing adb files"
 }
 
 function clean_up() {
+echo "Cleaning up from a previous odex"
 if [ -d $H ]; then
-	rm -rf $H
+	rm -rf $H/$AP/*
+	rm -rf $H/$FW/*
+	rm -rf $H/$DA/*
 fi
-echo "Everything is cleaned up and the zips are in your home folder!"
 }
 
 clear
-echo -n "Do you want your "$CLR"/data/app"$toff" odexed too? > ("$CLR"Y"$toff"/n) "
+echo -ne "Do you want your "$CLR"/data"$toff" odexed too? ("$CLR"Y"$toff"/n) > "
 read response
 case $response in
 	[nN] | [n|N][O|o] )
@@ -83,11 +85,16 @@ case $response in
 esac
 
 # Process it all
+clean_up
 push_files
 $CMD $CODE
 pull_files
 del_dex
+push_finished_files
 
-clean_up
+clear
+echo "Odexing is complete!"
+echo "I have kept the odex files locally for your pleasure! "$CLR">"$toff" $H "$CLR"<"$toff" enjoy!"
+sleep 5
 
-exit 0
+$MAIN

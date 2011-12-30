@@ -2,19 +2,10 @@
 # Created by tommytomatoe
 
 rm /data/dalvik-cache/*;
-odex_core()
-{
-	rm /system/framework/*.odex;
-	dexopt-wrapper /system/framework/core.jar /system/framework/core.odex;
-	dexopt-wrapper /system/framework/ext.jar /system/framework/ext.odex;
-	dexopt-wrapper /system/framework/framework.jar /system/framework/framework.odex
-	dexopt-wrapper /system/framework/android.policy.jar /system/framework/android.policy.odex;
-	dexopt-wrapper /system/framework/services.jar /system/framework/services.odex;
-}
-
+rm /cache/dalvik-cache/*;
+FRAME=$(ls /system/framework |grep ".jar" |grep -v core |grep -v bouncycastle |grep -v ext |grep -v framework |grep -v android_policy |grep -v services |grep -v core-junit)
 odex_core_aosp_gb()
 {
-	rm /system/framework/*.odex;
 	dexopt-wrapper /system/framework/core.jar /system/framework/core.odex;
 	dexopt-wrapper /system/framework/bouncycastle.jar /system/framework/bouncycastle.odex
 	dexopt-wrapper /system/framework/ext.jar /system/framework/ext.odex;
@@ -26,7 +17,7 @@ odex_core_aosp_gb()
 
 odex_framework()
 {
-	for i in /system/framework/*
+	for i in $FRAME
 		do
 			odex=`echo $i | sed -e 's/.jar/.odex/g'`
 			dexopt-wrapper $i $odex
@@ -35,7 +26,6 @@ odex_framework()
 
 odex_system()
 {
-	rm system/app/*odex;
 	for i in /system/app/*.apk
 	do
 	odex=`echo $i | sed -e 's/.apk/.odex/g'`
@@ -45,7 +35,6 @@ odex_system()
 
 odex_data()
 {
-	rm data/app/*odex
 	for i in /data/app/*.apk
 		do
 			odex=`echo $i | sed -e 's/.apk/.odex/g'`
@@ -58,10 +47,10 @@ odex_data()
 			dexopt-wrapper $i $odex
 		done
 }
-															odex_core_aosp_gb;
+odex_core_aosp_gb;
 odex_framework;
 odex_system;
-if "$1" = "-Data" ]; then
+if [ "$1" = "-Data" ]; then
 	odex_data;
 fi
 exit;
