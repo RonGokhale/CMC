@@ -79,7 +79,6 @@ fi
 function chk_repo_path() {
 clear
 chk_tmp
-echo "Looking for currently installed repos..."
 if [ ! -f $CMC_CONFIG ]; then
 	touch $CMC_CONFIG
 fi
