@@ -15,6 +15,8 @@ Repos Found: "$CLR"$FOUND_NUM"$toff"
 	"$CLR"Note:"$toff"
 	Default is yes type \"n\" or \"no\" to stop this from happening.
 	You can also press \"0\" to return to the main menu without changes.
+
+	"$tred"NOTE:"$toff" You can FORCE a repo sync by typing \""$CLR"f"$toff"\"
 	-----
 	"$CLR"B"$toff") back to main menu
 	"$CLR"X"$toff") exit
@@ -32,6 +34,8 @@ case $option in
 		$MAIN;;
 	b|B)
 		$MAIN;;
+	f|F)
+		reposync;;
 	x|X)
 		echo "Goodbye!"
 		chk_tmp
