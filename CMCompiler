@@ -33,6 +33,7 @@ Repos Found: "$CLR"$FOUND_NUM"$toff"
 	-----
 	"$CLR"P"$toff") CMC Plugins
 	-----
+	"$CLR"97"$toff") Toggle git/https syncing
 	"$CLR"98"$toff") Change theme
 	"$CLR"99"$toff") Information about CMC
 	"$CLR"X"$toff") exit
@@ -59,6 +60,8 @@ case $option in
 		. $CMC_HOME/menu_items/update_cm_repo;;
 	8)
 		. $CMC_HOME/menu_items/compile_cm_repo;;
+	97)
+		. $CMC_HOME/menu_items/toggle_git_https;;
 	98)
 		. $CMC_HOME/menu_items/ch_theme;;
 	99)
