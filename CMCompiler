@@ -68,7 +68,7 @@ case $option in
 	x|X)
 		echo "Goodbye!"
 		chk_tmp
-		exit 1;;
+		exit 0;;
 	*)
 		$MAIN;;
 esac

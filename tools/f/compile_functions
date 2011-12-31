@@ -10,6 +10,8 @@ CMC_DELETED="/tmp/CMC_DELETED_FILES"
 REPO="$CMC_TOOLS/repo"
 TMPX="/tmp/CM_BUILD"
 TMP_REPO="/tmp/found_repos"
+TMP_C="/tmp/cm_compile.log"
+NULL="/dev/null"
 CM_GIT="git://github.com/CyanogenMod/android.git"
 DEFAULT_REPO_HOME="$HOME/Development/CM-GB"
 GOG_REPO="https://dl-ssl.google.com/dl/googlesource/git-repo/repo"
@@ -84,16 +86,34 @@ if [ ! -f $CMC_CONFIG ]; then
 fi
 CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
 CMC_CONFIG_REPO_CHK=$(grep REPO $CMC_CONFIG |wc -l)
-CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
 if [ "$CMC_CONFIG_REPO_CHK" != "1" ];then
+
+	export FUNCTIONX="  __Syncing__________________________________________   "
+	$CMC_FUNCTIONS/loading &
+	MYSELF=$!
+	CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
 	if [ "$CHK_4_REPO" = "0" ]; then
-		echo "No found repos creating a folder now."
-		echo "You might want to setup the repo before doing much!"
-		echo "Setting up a default repo for you here: $DEFAULT_REPO_HOME"
-		mkdir -p $DEFAULT_REPO_HOME
-		echo "REPO: $DEFAULT_REPO_HOME" >> $CMC_CONFIG
-		echo "REPO: $DEFAULT_REPO_HOME" >> $TMP_REPO
-		REPO_PATH=$DEFAULT_REPO_HOME
+		kill -9 $MYSELF &>> $NULL
+		echo "No found repos. Lets do this now."
+		echo "Please specify a repo path you would like:"
+		echo "Default: $DEFAULT_REPO_HOME"
+		echo -ne "REPO: > "
+		read reponse
+		CHK_RES=$(echo "$response" |wc -l)
+		if [ "$reponse" = "1" ]; then
+			echo "Setting up $resonse as repo."
+			mkdir -p $reponse
+			echo "REPO: $reponse" >> $CMC_CONFIG
+			echo "REPO: $reponse" >> $TMP_REPO
+			export REPO_PATH=$response
+			
+		else
+			echo "Setting up a default repo for you here: $DEFAULT_REPO_HOME"
+			mkdir -p $DEFAULT_REPO_HOME
+			echo "REPO: $DEFAULT_REPO_HOME" >> $CMC_CONFIG
+			echo "REPO: $DEFAULT_REPO_HOME" >> $TMP_REPO
+			export REPO_PATH=$DEFAULT_REPO_HOME
+		fi
 		sleep 2
 		. $CMC_HOME/menu_items/setup_cm_repo
 	fi
@@ -108,7 +128,9 @@ if [ "$CMC_CONFIG_REPO_CHK" != "1" ];then
 			echo "REPO: $repo" >> $CMC_CONFIG
 		fi
 	done
+	kill -9 $MYSELF &>> $NULL
 elif [ "$CMC_CONFIG_REPO_CHK" = "1" ] && [ "$CHK_4_REPO" = "0" ];then
+	kill -9 $MYSELF &>> $NULL
 	clear
 	echo "Found $CMC_CONFIG_REPO in $CMC_CONFIG, but no repo, you will need a repo to use this."
 	echo "Are you sure you want to use this path? No will remove this entry!"
@@ -119,7 +141,7 @@ elif [ "$CMC_CONFIG_REPO_CHK" = "1" ] && [ "$CHK_4_REPO" = "0" ];then
 			sed ""$(grep -n0 REPO $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
 			chk_repo_path;;
 		*)
-			REPO_PATH=$CMC_CONFIG_REPO
+			export REPO_PATH=$CMC_CONFIG_REPO
 			if [ ! -d $REPO_PATH ]; then
 				mkdir -p $REPO_PATH
 			fi
@@ -127,8 +149,9 @@ elif [ "$CMC_CONFIG_REPO_CHK" = "1" ] && [ "$CHK_4_REPO" = "0" ];then
 			. $CMC_HOME/menu_items/setup_cm_repo
 	esac
 else
-	REPO_PATH=$CMC_CONFIG_REPO
+	export REPO_PATH=$CMC_CONFIG_REPO
 	echo "REPO: $REPO_PATH" >> $TMP_REPO
+	kill -9 $MYSELF &>> $NULL
 fi
 FOUND_NUM=$(grep REPO $CMC_CONFIG |awk '{print $2}' |wc -l)
 }
@@ -234,7 +257,7 @@ $MAIN
 }
 
 function chk_adb_running() {
-chk_adb=$(adb devices 2>/dev/null |grep device |grep -v attached |wc -l)
+chk_adb=$(adb devices 2>$NULL |grep device |grep -v attached |wc -l)
 if [ "$chk_adb" != "1" ]; then
 	ADB_MSG=""$tred"N/A"$toff""
 else
@@ -243,16 +266,23 @@ fi
 }
 
 function reposync() {
+if [ -f /tmp/repo_sync.log ]; then
+	rm -rf /tmp/repo_sync.log
+fi
 clear
 REPO_PATH=$(cat $TMP_REPO |awk '{print $2}')
 cd $REPO_PATH
-$CMC_FUNCTIONS/loading 50 0.1 [ "SYNCING CYANOGENMOD" ] &
+export FUNCTIONX="  __Syncing__________________________________________   "
+$CMC_FUNCTIONS/loading &
 MYSELF=$!
 $REPO sync &>> /tmp/repo_sync.log
-kill -9 $MYSELF
+kill -9 $MYSELF &>> $NULL
 }
 
 function reposync_update() {
+if [ -f /tmp/repo_sync.log ]; then
+	rm -rf /tmp/repo_sync.log
+fi
 REPO_PATH=$(cat $TMP_REPO |awk '{print $2}')
 CHK_REPO_4_SYNC=$(ls $REPO_PATH |wc -l)
 if [ "$CHK_REPO_4_SYNC" -lt "5" ]; then
@@ -261,10 +291,11 @@ if [ "$CHK_REPO_4_SYNC" -lt "5" ]; then
 	sleep 2
 else
 	cd $REPO_PATH
-	$CMC_FUNCTIONS/loading 50 0.1 [ "SYNCING CYANOGENMOD" ] &
+	export FUNCTIONX="  __Syncing__________________________________________   "
+	$CMC_FUNCTIONS/loading &
 	MYSELF=$!
 	$REPO sync &>> /tmp/repo_sync.log
-	kill -9 $MYSELF
+	kill -9 $MYSELF &>> $NULL
 fi
 }
 
@@ -284,7 +315,7 @@ if [ -f $REPO ]; then
 else
 	clear
 	echo "Couldn't link repo correctly. Check your internet and try again."
-	rm -rf $REPO >> /dev/null
+	rm -rf $REPO >> $NULL
 	$MAIN
 fi
 cd $REPO_PATH
@@ -389,31 +420,41 @@ esac
 }
 
 function compile_cm() {
+if [ -f $TMP_C ];then
+	rm -rf $TMP_C
+fi
 WHICH_REPO=$(grep BRANCH $CMC_CONFIG |awk '{print $2}')
-
 if [ "$WHICH_REPO" = "gingerbread" ]; then
 	chk_adb_running
-	cd $REPO_PATH/devices/$DEVICE_MAN/$DEVICE_MOD
+	cd $REPO_PATH/device/$DEVICE_MAN/$DEVICE_MOD
 	if [ -f extract-files.sh ]; then
 		./extract-files.sh
 	fi
+
+	export FUNCTIONX="  __Compiling________________________________________   "
+	$CMC_FUNCTIONS/loading &
+	MYSELF=$!
 
 	cd $REPO_PATH
 	$REPO_PATH/vendor/cyanogen/get-rommanager
 
 	. build/envsetup.sh
-
 	make installclean
-	brunch $DEVICE_MOD
 
+	brunch $DEVICE_MOD &>> $TMP_C
+	kill -9 $MYSELF &>> $NULL
 	finish_the_repo
 
 elif [ "$WHICH_REPO" = "ics" ]; then
 	chk_adb_running
-	cd $REPO_PATH/devices/$DEVICE_MAN/$DEVICE_MOD
+	cd $REPO_PATH/device/$DEVICE_MAN/$DEVICE_MOD
 	if [ -f extract-files.sh ]; then
 		./extract-files.sh
 	fi
+
+	export FUNCTIONX="  __Compiling________________________________________   "
+	$CMC_FUNCTIONS/loading &
+	MYSELF=$!
 
 	cd $REPO_PATH/vendor/cm
 	./get-prebuilts
@@ -423,7 +464,9 @@ elif [ "$WHICH_REPO" = "ics" ]; then
 	. build/envsetup.sh
 
 	make installclean
-	brunch $DEVICE_MOD
+
+	brunch $DEVICE_MOD &>> $TMP_C
+	kill -9 $MYSELF &>> $NULL
 
 	finish_the_repo
 

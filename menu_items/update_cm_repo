@@ -35,11 +35,12 @@ case $option in
 	b|B)
 		$MAIN;;
 	f|F)
-		reposync;;
+		reposync
+		$MAIN;;
 	x|X)
 		echo "Goodbye!"
 		chk_tmp
-		exit 1;;
+		exit 0;;
 	*)
 		reposync_update
 		$MAIN;;

@@ -67,12 +67,16 @@ fi
 }
 
 # Process it all
-clean_up
-push_files
-$CMD $CODE
-pull_files
-del_dex
-push_finished_files
+export FUNCTIONX="  __Odexing__________________________________________   "
+$CMC_FUNCTIONS/loading &
+MYSELF=$!
+clean_up &>> /dev/null
+push_files &>> /dev/null
+$CMD $CODE &>> /dev/null
+pull_files &>> /dev/null
+del_dex &>> /dev/null
+push_finished_files &>> /dev/null
+kill -9 $MYSELF &>> /dev/null
 
 clear
 echo "Odexing is complete!"
