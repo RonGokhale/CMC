@@ -183,14 +183,12 @@ if [ "$GET_LIST_W" != "0" ]; then
 	else
 		echo "DEVICE_MAN: $DEVICE_MAN" >> $CMC_CONFIG
 	fi
-	chk_tmp
 	sleep 2
 	$MAIN
 else
 	DEVICE_MAN="Unknown"
 	clear
 	echo -e "Your Manufacturer is "$CLR"$DEVICE_MAN"$toff", please try again"
-	chk_tmp
 	sleep 2
 	. $CMC_HOME/menu_items/ch_manufacturer
 fi
@@ -211,14 +209,12 @@ if [ "$GET_LIST_W" != "0" ]; then
 	else
 		echo "DEVICE_MOD: $DEVICE_MOD" >> $CMC_CONFIG
 	fi
-	chk_tmp
 	sleep 2
 	$MAIN
 else
 	DEVICE_MOD="Unknown"
 	clear
 	echo -e "Your model is "$CLR"$DEVICE_MOD"$toff", please try again"
-	chk_tmp
 	sleep 2
 	. $CMC_HOME/menu_items/ch_model
 fi

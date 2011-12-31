@@ -8,6 +8,7 @@ then
 fi
 
 . $CMC_HOME/tools/f/compile_functions
+chk_tmp
 get_colors_set
 chk_cmc_config
 chk_adb_running

@@ -39,7 +39,6 @@ case $option in
 		$MAIN;;
 	x|X)
 		echo "Goodbye!"
-		chk_tmp
 		exit 0;;
 	*)
 		reposync_update

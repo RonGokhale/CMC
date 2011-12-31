@@ -27,7 +27,6 @@ case $option in
 		$MAIN;;
 	x|X)
 		echo "Goodbye!"
-		chk_tmp
 		exit 1;;
 	*)
 		process_plugin_list;;
