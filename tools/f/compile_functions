@@ -404,8 +404,8 @@ done
 repo sync
 chk_tmp
 
-mv $(find $REPO/out -type f -iname update-cm-*-signed.zip) $HOME
-mv $(find $REPO/out -type f -iname *.md5sum) $HOME
+mv $(find $REPO_PATH/out -type f -iname update-cm-*-signed.zip) $HOME
+mv $(find $REPO_PATH/out -type f -iname *.md5sum) $HOME
 H_ROM=$(ls $HOME/update-cm-*-signed.zip)
 clear
 echo "Your files are located:"
@@ -428,7 +428,7 @@ if [ "$WHICH_REPO" = "gingerbread" ]; then
 	chk_adb_running
 	cd $REPO_PATH/device/$DEVICE_MAN/$DEVICE_MOD
 	if [ -f extract-files.sh ]; then
-		./extract-files.sh
+		./extract-files.sh &>> $NULL
 	fi
 
 	export FUNCTIONX="  __Compiling________________________________________   "
@@ -436,10 +436,10 @@ if [ "$WHICH_REPO" = "gingerbread" ]; then
 	MYSELF=$!
 
 	cd $REPO_PATH
-	$REPO_PATH/vendor/cyanogen/get-rommanager
+	$REPO_PATH/vendor/cyanogen/get-rommanager &>> $NULL
 
-	. build/envsetup.sh
-	make installclean
+	. build/envsetup.sh &>> $NULL
+	make installclean &>> $NULL
 
 	brunch $DEVICE_MOD &>> $TMP_C
 	kill -9 $MYSELF &>> $NULL
@@ -449,7 +449,7 @@ elif [ "$WHICH_REPO" = "ics" ]; then
 	chk_adb_running
 	cd $REPO_PATH/device/$DEVICE_MAN/$DEVICE_MOD
 	if [ -f extract-files.sh ]; then
-		./extract-files.sh
+		./extract-files.sh &>> $NULL
 	fi
 
 	export FUNCTIONX="  __Compiling________________________________________   "
@@ -457,13 +457,12 @@ elif [ "$WHICH_REPO" = "ics" ]; then
 	MYSELF=$!
 
 	cd $REPO_PATH/vendor/cm
-	./get-prebuilts
+	./get-prebuilts &>> $NULL
 
 	cd $REPO_PATH
 
-	. build/envsetup.sh
-
-	make installclean
+	. build/envsetup.sh &>> $NULL
+	make installclean &>> $NULL
 
 	brunch $DEVICE_MOD &>> $TMP_C
 	kill -9 $MYSELF &>> $NULL
