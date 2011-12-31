@@ -1,6 +1,6 @@
 #!/bin/bash
 # By: noqqe (https://github.com/noqqe/bash-progress-bar)
-SLEEP="sleep .9"
+SLEEP="sleep 2"
 
 function cyanogenmod(){
 COLUMNS=$(tput cols)

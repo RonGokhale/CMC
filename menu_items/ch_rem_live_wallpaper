@@ -37,6 +37,6 @@ case $option in
 		exit 1;;
 	*)
 		MSG="Live wallpapers removed!"
-		SCRIPT="remove_live_wallpapers"
+		SCRIPT="$CMC_SCRIPTS/remove_live_wallpapers"
 		run_remove_function yes;;
 esac

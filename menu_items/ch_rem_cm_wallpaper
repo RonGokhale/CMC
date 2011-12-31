@@ -36,6 +36,6 @@ case $option in
 		exit 1;;
 	*)
 		MSG="Wallpaper application removed!"
-		SCRIPT="remove_cm_wallpapers"
+		SCRIPT="$CMC_SCRIPTS/remove_cm_wallpapers"
 		run_remove_function yes;;
 esac

@@ -1,10 +1,10 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
-CMC_HOME=${CMC_HOME:-$(dirname $0)}
+export CMC_HOME=${CMC_HOME:-$(dirname $0)}
 if [ -n "${CMC_HOME##*/*}" ];
 then
 	#dirname didn't give us a full path, try PWD
-	CMC_HOME=$(pwd -P)
+	export CMC_HOME=$(pwd -P)
 fi
 
 . $CMC_HOME/tools/f/compile_functions

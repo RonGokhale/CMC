@@ -6,7 +6,7 @@ CMC_TOOLS="$CMC_HOME/tools/t"
 CMC_SCRIPTS="$CMC_HOME/tools/s"
 CMC_FUNCTIONS="$CMC_HOME/tools/f"
 CMC_PLUGINS="$CMC_HOME/plugins"
-CMC_DELETED="/tmp/CMC_DELETED_FILES"
+CMC_DELETED="$HOME/.CMC_DELETED_FILES"
 REPO="$CMC_TOOLS/repo"
 TMPX="/tmp/CM_BUILD"
 TMP_REPO="/tmp/found_repos"
@@ -24,7 +24,6 @@ function chk_tmp() {
 if [ -f $TMPX ] || [ -f $TMP_REPO ] || [ -f $CMC_DELETED ]; then
 	rm -f $TMPX
 	rm -f $TMP_REPO
-	rm -rf $CMC_DELETED
 fi
 }
 
@@ -64,17 +63,17 @@ CONF_X="DEVICE_MAN"
 CHK_MAN_CONF=$(grep $CONF_X $CMC_CONFIG | awk '{print $2}')
 CHK_MAN_CONF_W=$(grep $CONF_X $CMC_CONFIG | awk '{print $2}' |wc -l)
 if [ "$CHK_MAN_CONF_W" = "1" ]; then
-	DEVICE_MAN=$CHK_MAN_CONF
+	export DEVICE_MAN=$CHK_MAN_CONF
 else
-	DEVICE_MAN="Unknown"
+	export DEVICE_MAN="Unknown"
 fi
 CONF_X2="DEVICE_MOD"
 CHK_MOD_CONF=$(grep $CONF_X2 $CMC_CONFIG | awk '{print $2}')
 CHK_MOD_CONF_W=$(grep $CONF_X2 $CMC_CONFIG | awk '{print $2}' |wc -l)
 if [ "$CHK_MOD_CONF_W" = "1" ]; then
-	DEVICE_MOD=$CHK_MOD_CONF
+	export DEVICE_MOD=$CHK_MOD_CONF
 else
-	DEVICE_MOD="Unknown"
+	export DEVICE_MOD="Unknown"
 fi
 }
 
@@ -393,6 +392,12 @@ $MAIN
 }
 
 function finish_the_repo(){
+FINISH=$(find $REPO_PATH/out/target/product -type f -iname update-cm*signed.zip.md5sum)
+ROM=$(awk '{print $2}' $FINISH)
+MD5=$(awk '{print $1}' $FINISH)
+OUT_PATH=$((pwd $FINISH))
+cp $OUT_PATH/$ROM $HOME
+
 cd $REPO_PATH
 make installclean
 
@@ -400,18 +405,16 @@ FILES=$(cat $CMC_DELETED)
 for i in $FILES; do
 	rm -rf $i
 done
+rm -rf $CMC_DELETED
 
-repo sync
+reposync_update
 chk_tmp
 
-mv $(find $REPO_PATH/out -type f -iname update-cm-*-signed.zip) $HOME
-mv $(find $REPO_PATH/out -type f -iname *.md5sum) $HOME
-H_ROM=$(ls $HOME/update-cm-*-signed.zip)
 clear
-echo "Your files are located:"
-echo "Rom: $H_ROM"
-md5sum $HOME/*.md5sum
 echo
+echo "Your files are located:"
+echo "Rom: $ROM"
+echo "md5sum: $MD5"
 echo -e "Press enter to continue..."
 read response
 case $response in
@@ -426,14 +429,14 @@ fi
 WHICH_REPO=$(grep BRANCH $CMC_CONFIG |awk '{print $2}')
 if [ "$WHICH_REPO" = "gingerbread" ]; then
 	chk_adb_running
+	export FUNCTIONX="  __Compiling________________________________________   "
+	$CMC_FUNCTIONS/loading &
+	MYSELF=$!
+
 	cd $REPO_PATH/device/$DEVICE_MAN/$DEVICE_MOD
 	if [ -f extract-files.sh ]; then
 		./extract-files.sh &>> $NULL
 	fi
-
-	export FUNCTIONX="  __Compiling________________________________________   "
-	$CMC_FUNCTIONS/loading &
-	MYSELF=$!
 
 	cd $REPO_PATH
 	$REPO_PATH/vendor/cyanogen/get-rommanager &>> $NULL
@@ -444,7 +447,6 @@ if [ "$WHICH_REPO" = "gingerbread" ]; then
 	brunch $DEVICE_MOD &>> $TMP_C
 	kill -9 $MYSELF &>> $NULL
 	finish_the_repo
-
 elif [ "$WHICH_REPO" = "ics" ]; then
 	chk_adb_running
 	cd $REPO_PATH/device/$DEVICE_MAN/$DEVICE_MOD
@@ -465,10 +467,9 @@ elif [ "$WHICH_REPO" = "ics" ]; then
 	make installclean &>> $NULL
 
 	brunch $DEVICE_MOD &>> $TMP_C
+
 	kill -9 $MYSELF &>> $NULL
-
 	finish_the_repo
-
 else
 	clear
 	echo "There appears to be an issue with your configuration."
