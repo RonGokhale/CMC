@@ -21,7 +21,7 @@ GOG_REPO="https://dl-ssl.google.com/dl/googlesource/git-repo/repo"
 #
 #######################################################
 function chk_tmp() {
-if [ -f $TMPX ] || [ -f $TMP_REPO ] || [ -f $CMC_DELETED ]; then
+if [ -f $TMPX ] || [ -f $TMP_REPO ]; then
 	rm -f $TMPX
 	rm -f $TMP_REPO
 fi
@@ -86,16 +86,13 @@ fi
 CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
 CMC_CONFIG_REPO_CHK=$(grep REPO $CMC_CONFIG |wc -l)
 if [ "$CMC_CONFIG_REPO_CHK" != "1" ];then
-
-	export FUNCTIONX="  __Syncing__________________________________________   "
-	$CMC_FUNCTIONS/loading &
-	MYSELF=$!
+	echo "Looking for repo..."
 	CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
 	if [ "$CHK_4_REPO" = "0" ]; then
-		kill -9 $MYSELF &>> $NULL
 		echo "No found repos. Lets do this now."
 		echo "Please specify a repo path you would like:"
 		echo "Default: $DEFAULT_REPO_HOME"
+		echo "Default is only used when none is specified."
 		echo -ne "REPO: > "
 		read reponse
 		CHK_RES=$(echo "$response" |wc -l)
@@ -127,9 +124,7 @@ if [ "$CMC_CONFIG_REPO_CHK" != "1" ];then
 			echo "REPO: $repo" >> $CMC_CONFIG
 		fi
 	done
-	kill -9 $MYSELF &>> $NULL
 elif [ "$CMC_CONFIG_REPO_CHK" = "1" ] && [ "$CHK_4_REPO" = "0" ];then
-	kill -9 $MYSELF &>> $NULL
 	clear
 	echo "Found $CMC_CONFIG_REPO in $CMC_CONFIG, but no repo, you will need a repo to use this."
 	echo "Are you sure you want to use this path? No will remove this entry!"
@@ -150,7 +145,6 @@ elif [ "$CMC_CONFIG_REPO_CHK" = "1" ] && [ "$CHK_4_REPO" = "0" ];then
 else
 	export REPO_PATH=$CMC_CONFIG_REPO
 	echo "REPO: $REPO_PATH" >> $TMP_REPO
-	kill -9 $MYSELF &>> $NULL
 fi
 FOUND_NUM=$(grep REPO $CMC_CONFIG |awk '{print $2}' |wc -l)
 }
@@ -248,7 +242,6 @@ else
 	echo "COLOR: $CUST_COLOR" >> $CMC_CONFIG
 fi
 sleep 1
-$MAIN
 }
 
 function chk_adb_running() {
@@ -261,24 +254,12 @@ fi
 }
 
 function reposync() {
-if [ -f /tmp/repo_sync.log ]; then
-	rm -rf /tmp/repo_sync.log
-fi
 clear
-REPO_PATH=$(cat $TMP_REPO |awk '{print $2}')
 cd $REPO_PATH
-export FUNCTIONX="  __Syncing__________________________________________   "
-$CMC_FUNCTIONS/loading &
-MYSELF=$!
-$REPO sync &>> /tmp/repo_sync.log
-kill -9 $MYSELF &>> $NULL
+$REPO sync
 }
 
 function reposync_update() {
-if [ -f /tmp/repo_sync.log ]; then
-	rm -rf /tmp/repo_sync.log
-fi
-REPO_PATH=$(cat $TMP_REPO |awk '{print $2}')
 CHK_REPO_4_SYNC=$(ls $REPO_PATH |wc -l)
 if [ "$CHK_REPO_4_SYNC" -lt "5" ]; then
 	clear
@@ -286,11 +267,7 @@ if [ "$CHK_REPO_4_SYNC" -lt "5" ]; then
 	sleep 2
 else
 	cd $REPO_PATH
-	export FUNCTIONX="  __Syncing__________________________________________   "
-	$CMC_FUNCTIONS/loading &
-	MYSELF=$!
-	$REPO sync &>> /tmp/repo_sync.log
-	kill -9 $MYSELF &>> $NULL
+	$REPO sync
 fi
 }
 
@@ -387,30 +364,44 @@ fi
 $MAIN
 }
 
+function extract_files_sh() {
+if [ "$DEVICE_MOD" = "Unknown" ]; then
+	echo "Your model is unknown, this won't work."
+	sleep 2
+	$MAIN
+elif [ "$DEVICE_MAN" = "Unknown" ]; then
+	echo "Your manufacturer is unknown, this won't work."
+	sleep 2
+	$MAIN
+else
+	chk_adb_running
+	if [ "$chk_adb" != "1" ]; then
+		clear
+		echo "Sorry adb isn't currently running. We can't do this right now."
+		sleep 2
+	else
+		cd $REPO_PATH/device/$DEVICE_MAN/$DEVICE_MOD
+		if [ -f extract-files.sh ]; then
+			./extract-files.sh
+		fi
+		clear
+		echo "Files for $DEVICE_MOD have been extracted!"
+		sleep 2
+		cd $REPO_PATH
+	fi
+fi
+}
+
 function finish_the_repo(){
-FINISH=$(find $REPO_PATH/out/target/product -type f -iname update-cm*signed.zip.md5sum)
-ROM=$(awk '{print $2}' $FINISH)
-MD5=$(awk '{print $1}' $FINISH)
-OUT_PATH=$((pwd $FINISH))
-cp $OUT_PATH/$ROM $HOME
-
 cd $REPO_PATH
-make installclean
 
-FILES=$(cat $CMC_DELETED)
-for i in $FILES; do
-	rm -rf $i
-done
-rm -rf $CMC_DELETED
+undo_repo_changes RM_NOW &>> $NULL
 
-reposync_update
-chk_tmp
+reposync &>> $NULL
+extract_files_sh &>> $NULL
+chk_tmp &>> $NULL
 
 clear
-echo
-echo "Your files are located:"
-echo "Rom: $ROM"
-echo "md5sum: $MD5"
 echo -e "Press enter to continue..."
 read response
 case $response in
@@ -419,52 +410,58 @@ esac
 }
 
 function compile_cm() {
-if [ -f $TMP_C ];then
-	rm -rf $TMP_C
+K_PATH="$REPO_PATH/vendor/cyanogen/products/common_versions.mk"
+if [ -f $K_PATH ]; then
+	CHK_KANG=$(grep kang $CMC_DELETED |wc -l)
+	if [ "$CHK_KANG" -eq "0" ]; then 
+		sed -i 's/KANG/CMC/g' $K_PATH
+		echo "$REPO_PATH/vendor/cyanogen Replace_kang_cmc" >> $CMC_DELETED
+	fi
 fi
 WHICH_REPO=$(grep BRANCH $CMC_CONFIG |awk '{print $2}')
 if [ "$WHICH_REPO" = "gingerbread" ]; then
 	chk_adb_running
-	export FUNCTIONX="  __Compiling________________________________________   "
-	$CMC_FUNCTIONS/loading &
-	MYSELF=$!
 
-	cd $REPO_PATH/device/$DEVICE_MAN/$DEVICE_MOD
-	if [ -f extract-files.sh ]; then
-		./extract-files.sh &>> $NULL
+	extract_files_sh
+	$REPO_PATH/vendor/cyanogen/get-rommanager
+
+	. build/envsetup.sh
+	make installclean
+
+	brunch $DEVICE_MOD
+	if [ "$!" -ne "0" ]; then
+		echo "There was an error while building."
+		echo -ne"Press "$CLR"enter"$toff" when you are ready to try again."
+		read response
+		case $response in
+			*)
+				cd $REPO_PATH
+				compile_cm;;
+		esac
 	fi
-
-	cd $REPO_PATH
-	$REPO_PATH/vendor/cyanogen/get-rommanager &>> $NULL
-
-	. build/envsetup.sh &>> $NULL
-	make installclean &>> $NULL
-
-	brunch $DEVICE_MOD &>> $TMP_C
-	kill -9 $MYSELF &>> $NULL
 	finish_the_repo
 elif [ "$WHICH_REPO" = "ics" ]; then
 	chk_adb_running
-	cd $REPO_PATH/device/$DEVICE_MAN/$DEVICE_MOD
-	if [ -f extract-files.sh ]; then
-		./extract-files.sh &>> $NULL
-	fi
-
-	export FUNCTIONX="  __Compiling________________________________________   "
-	$CMC_FUNCTIONS/loading &
-	MYSELF=$!
+	extract_files_sh
 
 	cd $REPO_PATH/vendor/cm
-	./get-prebuilts &>> $NULL
-
+	./get-prebuilts
 	cd $REPO_PATH
 
-	. build/envsetup.sh &>> $NULL
-	make installclean &>> $NULL
+	. build/envsetup.sh
+	make installclean
 
-	brunch $DEVICE_MOD &>> $TMP_C
-
-	kill -9 $MYSELF &>> $NULL
+	brunch $DEVICE_MOD
+	if [ "$!" -ne "0" ]; then
+		echo "There was an error while building."
+		echo -ne"Press "$CLR"enter"$toff" when you are ready to try again."
+		read response
+		case $response in
+			*)
+				cd $REPO_PATH
+				compile_cm;;
+		esac
+	fi
 	finish_the_repo
 else
 	clear
@@ -500,6 +497,37 @@ else
 	clear
 	echo "Something went wrong!"
 	sleep 1
+fi
+}
+
+function undo_repo_changes() {
+if [ ! -f $CMC_DELETED ]; then
+	CHANGE_COUNT="0"
+	CHANGE_LIST="	None"
+else
+	CHANGE_COUNT=$(awk '{print $2}' $CMC_DELETED | wc -l)
+	CHANGE_LIST=$(for i in $(cut -d" " -f2- $CMC_DELETED); do echo "	$i"; done)
+	CHANGE_PATH=$(awk '{print $1}' $CMC_DELETED)
+	if [ "$CHANGE_COUNT" -lt "1" ]; then
+		CHANGE_COUNT="0"
+		CHANGE_LIST="	None"
+	fi
+fi
+if [ "$1" = "RM_NOW" ]; then
+	if [ ! -f $CMC_DELETED ]; then
+		clear
+		echo "No File Nothing to do."
+		sleep 2
+	else
+		clear
+		echo "Removing changes now."
+		sleep 2
+		for i in $CHANGE_PATH; do
+			rm -rf $i
+		done
+		rm -rf $CMC_DELETED
+		reposync
+	fi
 fi
 }
 #######################################################

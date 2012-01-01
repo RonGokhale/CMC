@@ -12,6 +12,7 @@ chk_tmp
 get_colors_set
 chk_cmc_config
 chk_adb_running
+undo_repo_changes
 
 if [ ! -f $TMP_REPO ]; then
 	chk_repo_path
@@ -22,15 +23,17 @@ echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 "$CLR"Main"$toff"
 Repos Found: "$CLR"$FOUND_NUM"$toff"
 
-	"$CLR"1"$toff") Choose your Manufacturer
-	"$CLR"2"$toff") Choose your Model
+	"$CLR"1"$toff") Choose your manufacturer
+	"$CLR"2"$toff") Choose your model
+	"$CLR"3"$toff") Extract Files: "$CLR"$DEVICE_MOD"$toff"
 	-----
-	"$CLR"3"$toff") Remove Languages (GB/ICS)
-	"$CLR"4"$toff") Remove Live Wallpapers (GB/ICS)
-	"$CLR"5"$toff") Remove CM Wallpapers (GB)
-	"$CLR"6"$toff") Setup Cyanogenmod Repo (GB/ICS)
-	"$CLR"7"$toff") Update Repo (GB/ICS)
-	"$CLR"8"$toff") Compile Cyanogenmod (GB/ICS)
+	"$CLR"4"$toff") Remove languages (GB/ICS)
+	"$CLR"5"$toff") Remove live wallpapers (GB/ICS)
+	"$CLR"6"$toff") Remove cm wallpapers (GB)
+	"$CLR"7"$toff") Setup cyanogenmod repo (GB/ICS)
+	"$CLR"8"$toff") Update repo (GB/ICS)
+	"$CLR"9"$toff") Compile cyanogenmod (GB/ICS)
+	"$CLR"10"$toff") Undo current changes: "$CLR"$CHANGE_COUNT"$toff"
 	-----
 	"$CLR"P"$toff") CMC Plugins
 	-----
@@ -46,25 +49,29 @@ echo -n "> "
 read option
 case $option in
 	1)
-		. $CMC_HOME/menu_items/ch_manufacturer ;;
+		. $CMC_HOME/menu_items/ch_manufacturer.menu ;;
 	2)
-		. $CMC_HOME/menu_items/ch_model;;
+		. $CMC_HOME/menu_items/ch_model.menu;;
 	3)
-		. $CMC_HOME/menu_items/ch_rem_languages;;
+		. $CMC_HOME/menu_items/extract_files.menu;;
 	4)
-		. $CMC_HOME/menu_items/ch_rem_live_wallpaper;;
+		. $CMC_HOME/menu_items/ch_rem_languages.menu;;
 	5)
-		. $CMC_HOME/menu_items/ch_rem_cm_wallpaper;;
+		. $CMC_HOME/menu_items/ch_rem_live_wallpaper.menu;;
 	6)
-		. $CMC_HOME/menu_items/setup_cm_repo;;
+		. $CMC_HOME/menu_items/ch_rem_cm_wallpaper.menu;;
 	7)
-		. $CMC_HOME/menu_items/update_cm_repo;;
+		. $CMC_HOME/menu_items/setup_cm_repo.menu;;
 	8)
-		. $CMC_HOME/menu_items/compile_cm_repo;;
+		. $CMC_HOME/menu_items/update_cm_repo.menu;;
+	9)
+		. $CMC_HOME/menu_items/compile_cm_repo.menu;;
+	10)
+		. $CMC_HOME/menu_items/undo_repo_changes.menu;;
 	97)
-		. $CMC_HOME/menu_items/toggle_git_https;;
+		. $CMC_HOME/menu_items/toggle_git_https.menu;;
 	98)
-		. $CMC_HOME/menu_items/ch_theme;;
+		. $CMC_HOME/menu_items/ch_theme.menu;;
 	99)
 		;;
 	p|P)

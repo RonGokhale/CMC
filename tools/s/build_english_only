@@ -1,9 +1,7 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
 . $CMC_HOME/tools/f/compile_functions
-echo "$REPO_PATH/build/target/product/languages_full.mk" >> $CMC_DELETED
-echo "$REPO_PATH/build/target/product/full_base.mk" >> $CMC_DELETED
-echo "$REPO_PATH/build/target/product/locales_full.mk" >> $CMC_DELETED
+echo "$REPO_PATH/build Removed_languages" >> $CMC_DELETED
 if [ "$BRANCH" = "ics" ]; then
 	echo "$REPO_PATH/build/target/product/languages_small.mk" >> $CMC_DELETED
 fi

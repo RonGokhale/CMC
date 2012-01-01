@@ -81,7 +81,9 @@ case $option in
 		echo "Goodbye!"
 		exit 1;;
 	*)
-		. $CMC_HOME/menu_items/ch_theme;;
+		CUST_COLOR="$ltgrn"
+		COLOR_DESC="Light Green";;
 esac
 
 apply_theme_process
+$MAIN
