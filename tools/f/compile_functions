@@ -430,7 +430,8 @@ if [ "$WHICH_REPO" = "gingerbread" ]; then
 	make installclean
 
 	brunch $DEVICE_MOD
-	if [ "$!" -ne "0" ]; then
+	STATUS=$(echo $?)
+	if [ "$STATUS" -ne "0" ]; then
 		echo "There was an error while building."
 		echo -ne"Press "$CLR"enter"$toff" when you are ready to try again."
 		read response
@@ -453,7 +454,8 @@ elif [ "$WHICH_REPO" = "ics" ]; then
 	make installclean
 
 	brunch $DEVICE_MOD
-	if [ "$!" -ne "0" ]; then
+	STATUS=$(echo $?)
+	if [ "$STATUS" -ne "0" ]; then
 		echo "There was an error while building."
 		echo -ne"Press "$CLR"enter"$toff" when you are ready to try again."
 		read response
