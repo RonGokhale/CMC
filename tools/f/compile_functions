@@ -84,10 +84,10 @@ if [ ! -f $CMC_CONFIG ]; then
 	touch $CMC_CONFIG
 fi
 CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
+CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
 CMC_CONFIG_REPO_CHK=$(grep REPO $CMC_CONFIG |wc -l)
 if [ "$CMC_CONFIG_REPO_CHK" -ne "1" ];then
 	echo "Looking for repo..."
-	CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
 	if [ "$CHK_4_REPO" -eq "0" ]; then
 		echo "No found repos. Lets do this now."
 		echo "Please specify a repo path you would like:"
