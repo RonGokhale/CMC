@@ -49,7 +49,7 @@ ltcyn="\e[1;36m" # Cyan
 CLR="$ltgrn"
 CONF_COLOR_CHK=$(grep COLOR $CMC_CONFIG |wc -l)
 CONF_COLOR_SET=$(grep COLOR $CMC_CONFIG |awk '{print $2}')
-if [ "$CONF_COLOR_CHK" = "1" ]; then
+if [ "$CONF_COLOR_CHK" -eq "1" ]; then
 	CLR="$CONF_COLOR_SET"
 fi
 }
@@ -62,7 +62,7 @@ fi
 CONF_X="DEVICE_MAN"
 CHK_MAN_CONF=$(grep $CONF_X $CMC_CONFIG | awk '{print $2}')
 CHK_MAN_CONF_W=$(grep $CONF_X $CMC_CONFIG | awk '{print $2}' |wc -l)
-if [ "$CHK_MAN_CONF_W" = "1" ]; then
+if [ "$CHK_MAN_CONF_W" -eq "1" ]; then
 	export DEVICE_MAN=$CHK_MAN_CONF
 else
 	export DEVICE_MAN="Unknown"
@@ -70,7 +70,7 @@ fi
 CONF_X2="DEVICE_MOD"
 CHK_MOD_CONF=$(grep $CONF_X2 $CMC_CONFIG | awk '{print $2}')
 CHK_MOD_CONF_W=$(grep $CONF_X2 $CMC_CONFIG | awk '{print $2}' |wc -l)
-if [ "$CHK_MOD_CONF_W" = "1" ]; then
+if [ "$CHK_MOD_CONF_W" -eq "1" ]; then
 	export DEVICE_MOD=$CHK_MOD_CONF
 else
 	export DEVICE_MOD="Unknown"
@@ -85,10 +85,10 @@ if [ ! -f $CMC_CONFIG ]; then
 fi
 CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
 CMC_CONFIG_REPO_CHK=$(grep REPO $CMC_CONFIG |wc -l)
-if [ "$CMC_CONFIG_REPO_CHK" != "1" ];then
+if [ "$CMC_CONFIG_REPO_CHK" -ne "1" ];then
 	echo "Looking for repo..."
 	CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
-	if [ "$CHK_4_REPO" = "0" ]; then
+	if [ "$CHK_4_REPO" -eq "0" ]; then
 		echo "No found repos. Lets do this now."
 		echo "Please specify a repo path you would like:"
 		echo "Default: $DEFAULT_REPO_HOME"
@@ -96,7 +96,7 @@ if [ "$CMC_CONFIG_REPO_CHK" != "1" ];then
 		echo -ne "REPO: > "
 		read response
 		CHK_RES=$(echo "$response" |wc -l)
-		if [ "$CHK_RES" = "1" ]; then
+		if [ "$CHK_RES" -eq "1" ]; then
 			echo "Setting up $response as repo."
 			mkdir -p $response
 			echo "REPO: $response" >> $CMC_CONFIG
@@ -117,14 +117,14 @@ if [ "$CMC_CONFIG_REPO_CHK" != "1" ];then
 	CHK_4_REPO_LST="$CHK_4_REPO"
 	for repo in $CHK_4_REPO_LST; do
 		CHK_REPO_SIZE=$(du -sh $repo)
-		if [ "$CHK_REPO_SIZE" < "15" ]; then
+		if [ "$CHK_REPO_SIZE" -gt "15" ]; then
 			echo "SMALL: $repo" >> $TMP_REPO
 		else
 			echo "REPO: $repo" >> $TMP_REPO
 			echo "REPO: $repo" >> $CMC_CONFIG
 		fi
 	done
-elif [ "$CMC_CONFIG_REPO_CHK" = "1" ] && [ "$CHK_4_REPO" = "0" ];then
+elif [ "$CMC_CONFIG_REPO_CHK" -eq "1" ] && [ "$CHK_4_REPO" -eq "0" ];then
 	clear
 	echo "Found $CMC_CONFIG_REPO in $CMC_CONFIG, but no repo, you will need a repo to use this."
 	echo "Are you sure you want to use this path? No will remove this entry!"
@@ -165,12 +165,12 @@ function process_man_list() {
 GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
 GET_LIST_CMC_SED=$(grep DEVICE_MAN $CMC_CONFIG)
-if [ "$GET_LIST_W" != "0" ]; then
+if [ "$GET_LIST_W" -ne "0" ]; then
 	DEVICE_MAN=$(echo "$GET_LIST")
 	clear
 	echo -e "Your Manufacturer is "$CLR"$DEVICE_MAN"$toff""
 	GET_LIST_CMC=$(grep DEVICE_MAN $CMC_CONFIG |wc -l)
-	if [ "$GET_LIST_CMC" = "1" ]; then
+	if [ "$GET_LIST_CMC" -eq "1" ]; then
 		sed s/"$GET_LIST_CMC_SED"/"DEVICE_MAN: $DEVICE_MAN"/g $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
 		sed ""$(grep -n0 DEVICE_MOD $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
 	else
@@ -192,7 +192,7 @@ function process_mod_list() {
 GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
 GET_LIST_CMC_SED=$(grep DEVICE_MOD $CMC_CONFIG)
-if [ "$GET_LIST_W" != "0" ]; then
+if [ "$GET_LIST_W" -ne "0" ]; then
 	DEVICE_MOD=$(echo "$GET_LIST")
 	clear
 	echo -e "Your model is "$CLR"$DEVICE_MOD"$toff""
@@ -216,7 +216,7 @@ fi
 function process_plugin_list() {
 GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
-if [ "$GET_LIST_W" != "0" ]; then
+if [ "$GET_LIST_W" -ne "0" ]; then
 	PLUGIN=$(echo "$GET_LIST")
 	. $CMC_PLUGINS/$PLUGIN/main.plug
 	chk_tmp
@@ -232,7 +232,7 @@ fi
 function apply_theme_process() {
 CHK_THEME_CONF=$(grep COLOR $CMC_CONFIG)
 CHK_THEME_CONF_W=$(grep COLOR $CMC_CONFIG |wc -l)
-if [ "$CHK_THEME_CONF_W" = "1" ]; then
+if [ "$CHK_THEME_CONF_W" -eq "1" ]; then
 	X=$(echo "$CHK_THEME_CONF" |awk '{print $2}')
 	echo -e "Your new theme is "$CLR"$COLOR_DESC"$toff""
 	sed "s/COLOR: .*/COLOR: \\$CUST_COLOR/g" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
@@ -272,11 +272,7 @@ fi
 
 function setup_cm_repo() {
 if [ ! -d $REPO_PATH ]; then
-	clear
-	echo "Something is very wrong, send an email to mrlithid@gmail.com"
-	echo "error code 4"
-	echo "Please try again."
-	exit 4
+	mkdir -p $REPO_PATH
 fi
 
 clear
@@ -374,7 +370,7 @@ elif [ "$DEVICE_MAN" = "Unknown" ]; then
 	$MAIN
 else
 	chk_adb_running
-	if [ "$chk_adb" != "1" ]; then
+	if [ "$chk_adb" -ne "1" ]; then
 		clear
 		echo "Sorry adb isn't currently running. We can't do this right now."
 		sleep 2
