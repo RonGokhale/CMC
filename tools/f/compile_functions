@@ -7,7 +7,12 @@ CMC_SCRIPTS="$CMC_HOME/tools/s"
 CMC_FUNCTIONS="$CMC_HOME/tools/f"
 CMC_PLUGINS="$CMC_HOME/plugins"
 CMC_DELETED="$HOME/.CMC_DELETED_FILES"
-REPO="$CMC_TOOLS/repo"
+hash repo &> /dev/null
+if [ $? -eq 1 ]; then
+	REPO="$CMC_TOOLS/repo"
+else
+	REPO="$(which repo)"
+fi
 TMPX="/tmp/CM_BUILD"
 TMP_REPO="/tmp/found_repos"
 TMP_C="/tmp/cm_compile.log"
@@ -276,7 +281,9 @@ if [ ! -d $REPO_PATH ]; then
 fi
 
 clear
-curl -# $GOG_REPO > $REPO
+if [ ! -f $REPO ]; then
+	curl -# $GOG_REPO > $REPO
+fi
 if [ -f $REPO ]; then
 	chmod a+x $REPO
 else
