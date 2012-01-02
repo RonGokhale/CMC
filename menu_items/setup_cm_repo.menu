@@ -12,8 +12,8 @@ Repos Found: "$CLR"$FOUND_NUM"$toff"
 	"$CLR"Y"$toff"/n)This will download and install the repo from CyanogenMod.
 	Are you sure you want to do this?
 
-	Always Default "$CLR"Location:"$toff" 
-	$REPO_PATH
+	Repo location: 
+	"$CLR"$REPO_PATH"$toff"
 
 	"$CLR"Note:"$toff"
 	Default is yes type \"n\" or \"no\" to stop this from happening.

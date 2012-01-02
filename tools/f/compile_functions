@@ -94,13 +94,13 @@ if [ "$CMC_CONFIG_REPO_CHK" != "1" ];then
 		echo "Default: $DEFAULT_REPO_HOME"
 		echo "Default is only used when none is specified."
 		echo -ne "REPO: > "
-		read reponse
+		read response
 		CHK_RES=$(echo "$response" |wc -l)
-		if [ "$reponse" = "1" ]; then
-			echo "Setting up $resonse as repo."
-			mkdir -p $reponse
-			echo "REPO: $reponse" >> $CMC_CONFIG
-			echo "REPO: $reponse" >> $TMP_REPO
+		if [ "$CHK_RES" = "1" ]; then
+			echo "Setting up $response as repo."
+			mkdir -p $response
+			echo "REPO: $response" >> $CMC_CONFIG
+			echo "REPO: $response" >> $TMP_REPO
 			export REPO_PATH=$response
 			
 		else
@@ -111,7 +111,7 @@ if [ "$CMC_CONFIG_REPO_CHK" != "1" ];then
 			export REPO_PATH=$DEFAULT_REPO_HOME
 		fi
 		sleep 2
-		. $CMC_HOME/menu_items/setup_cm_repo
+		. $CMC_HOME/menu_items/setup_cm_repo.menu
 	fi
 	CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |cut -d"." -f"1")
 	CHK_4_REPO_LST="$CHK_4_REPO"
@@ -140,7 +140,7 @@ elif [ "$CMC_CONFIG_REPO_CHK" = "1" ] && [ "$CHK_4_REPO" = "0" ];then
 				mkdir -p $REPO_PATH
 			fi
 			echo "REPO: $REPO_PATH" >> $TMP_REPO
-			. $CMC_HOME/menu_items/setup_cm_repo
+			. $CMC_HOME/menu_items/setup_cm_repo.menu
 	esac
 else
 	export REPO_PATH=$CMC_CONFIG_REPO
@@ -164,13 +164,12 @@ chmod a+x $TMPX
 function process_man_list() {
 GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
-GET_LIST_CMC=$(grep DEVICE_MAN $CMC_CONFIG |wc -l)
 GET_LIST_CMC_SED=$(grep DEVICE_MAN $CMC_CONFIG)
-#GET_LIST_CMC_SED_MOD=$(grep -n0 DEVICE_MON $CMC_CONFIG |cut -d":" -f"1")
 if [ "$GET_LIST_W" != "0" ]; then
 	DEVICE_MAN=$(echo "$GET_LIST")
 	clear
 	echo -e "Your Manufacturer is "$CLR"$DEVICE_MAN"$toff""
+	GET_LIST_CMC=$(grep DEVICE_MAN $CMC_CONFIG |wc -l)
 	if [ "$GET_LIST_CMC" = "1" ]; then
 		sed s/"$GET_LIST_CMC_SED"/"DEVICE_MAN: $DEVICE_MAN"/g $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
 		sed ""$(grep -n0 DEVICE_MOD $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
@@ -184,7 +183,7 @@ else
 	clear
 	echo -e "Your Manufacturer is "$CLR"$DEVICE_MAN"$toff", please try again"
 	sleep 2
-	. $CMC_HOME/menu_items/ch_manufacturer
+	. $CMC_HOME/menu_items/ch_manufacturer.menu
 fi
 chk_tmp
 }
@@ -192,12 +191,12 @@ chk_tmp
 function process_mod_list() {
 GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
-GET_LIST_CMC=$(grep DEVICE_MOD $CMC_CONFIG |wc -l)
 GET_LIST_CMC_SED=$(grep DEVICE_MOD $CMC_CONFIG)
 if [ "$GET_LIST_W" != "0" ]; then
 	DEVICE_MOD=$(echo "$GET_LIST")
 	clear
 	echo -e "Your model is "$CLR"$DEVICE_MOD"$toff""
+	GET_LIST_CMC=$(grep DEVICE_MOD $CMC_CONFIG |wc -l)
 	if [ "$GET_LIST_CMC" = "1" ]; then
 		sed s/"$GET_LIST_CMC_SED"/"DEVICE_MOD: $DEVICE_MOD"/g $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
 	else
@@ -210,7 +209,7 @@ else
 	clear
 	echo -e "Your model is "$CLR"$DEVICE_MOD"$toff", please try again"
 	sleep 2
-	. $CMC_HOME/menu_items/ch_model
+	. $CMC_HOME/menu_items/ch_model.menu
 fi
 }
 
@@ -226,7 +225,7 @@ else
 	echo -e ""$CLR"Unable"$toff" to find that plugin, please try again"
 	chk_tmp
 	sleep 2
-	. $CMC_HOME/menu_items/run_plugins
+	. $CMC_HOME/menu_items/run_plugins.menu
 fi
 }
 
