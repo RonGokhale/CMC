@@ -281,7 +281,9 @@ if [ ! -d $REPO_PATH ]; then
 fi
 
 clear
-curl -# $GOG_REPO > $REPO
+if [ ! -f $REPO ]; then
+	curl -# $GOG_REPO > $REPO
+fi
 if [ -f $REPO ]; then
 	chmod a+x $REPO
 else
