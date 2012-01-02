@@ -405,7 +405,14 @@ esac
 }
 
 function compile_cm() {
-K_PATH="$REPO_PATH/vendor/cyanogen/products/common_versions.mk"
+export WHICH_REPO=$(grep BRANCH $CMC_CONFIG |awk '{print $2}')
+if [ "$WHICH_REPO" = "gingerbread" ]; then
+	K_PATH="$REPO_PATH/vendor/cyanogen/products/common_versions.mk"
+elif [ "$WHICH_REPO" = "ics" ]; then
+	K_PATH="$REPO_PATH/vendor/cm/config/common.mk"
+else
+	K_PATH="null"
+fi
 if [ -f $K_PATH ]; then
 	CHK_KANG=$(grep kang $CMC_DELETED |wc -l)
 	if [ "$CHK_KANG" -eq "0" ]; then 
@@ -413,7 +420,6 @@ if [ -f $K_PATH ]; then
 		echo "$REPO_PATH/vendor/cyanogen Replace_kang_cmc" >> $CMC_DELETED
 	fi
 fi
-WHICH_REPO=$(grep BRANCH $CMC_CONFIG |awk '{print $2}')
 if [ "$WHICH_REPO" = "gingerbread" ]; then
 	chk_adb_running
 
