@@ -75,7 +75,7 @@ case $option in
 	99)
 		;;
 	p|P)
-		. $CMC_HOME/menu_items/run_plugins;;
+		. $CMC_HOME/menu_items/run_plugins.menu;;
 	x|X)
 		echo "Goodbye!"
 		chk_tmp
