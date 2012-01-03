@@ -7,7 +7,7 @@ chk_adb_running
 clear
 echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 Main > "$CLR"Extract files for $DEVICE_MOD"$toff"
-Repos Found: "$CLR"$FOUND_NUM"$toff"
+Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIGED"$toff"
 
 	"$CLR"Y"$toff"/n) This will extract the needed files for you to build. This is needed
 	for some tools like \"Removing Live Wallpapers\".

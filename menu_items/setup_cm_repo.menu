@@ -7,7 +7,7 @@ chk_adb_running
 clear
 echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 Main > "$CLR"Setting up CyanogenMod Repo"$toff"
-Repos Found: "$CLR"$FOUND_NUM"$toff"
+Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIGED"$toff"
 
 	"$CLR"Y"$toff"/n)This will download and install the repo from CyanogenMod.
 	Are you sure you want to do this?
