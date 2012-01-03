@@ -168,7 +168,7 @@ fi
 function process_plugin_list() {
 GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
-if [ "$GET_LIST_W" -ne "0" ]; then
+if [ "$GET_LIST_W" != "0" ]; then
 	PLUGIN=$(echo "$GET_LIST")
 	. $CMC_PLUGINS/$PLUGIN/main.plug
 	chk_tmp
