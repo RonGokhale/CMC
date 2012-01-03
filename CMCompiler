@@ -13,15 +13,12 @@ get_colors_set
 chk_cmc_config
 chk_adb_running
 undo_repo_changes
-
-if [ ! -f $TMP_REPO ]; then
-	chk_repo_path
-fi
+chk_repo_path_conf
 
 clear
 echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 "$CLR"Main"$toff"
-Repos Found: "$CLR"$FOUND_NUM"$toff"
+Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIGED"$toff"
 
 	"$CLR"1"$toff") Setup cyanogenmod repo (GB/ICS)
 	"$CLR"2"$toff") Update repo (GB/ICS)

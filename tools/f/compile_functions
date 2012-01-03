@@ -82,74 +82,23 @@ else
 fi
 }
 
-function chk_repo_path() {
+function chk_repo_path_conf() {
 clear
 chk_tmp
 if [ ! -f $CMC_CONFIG ]; then
 	touch $CMC_CONFIG
 fi
-CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
-CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
 CMC_CONFIG_REPO_CHK=$(grep REPO $CMC_CONFIG |wc -l)
-if [ "$CMC_CONFIG_REPO_CHK" -ne "1" ];then
-	echo "Looking for repo..."
-	if [ "$CHK_4_REPO" -eq "0" ]; then
-		echo "No found repos. Lets do this now."
-		echo "Please specify a repo path you would like:"
-		echo "Default: $DEFAULT_REPO_HOME"
-		echo "Default is only used when none is specified."
-		echo -ne "REPO: > "
-		read response
-		if [ ! -z "$response" ]; then
-			echo "Setting up $response as repo."
-			mkdir -p $response
-			echo "REPO: $response" >> $CMC_CONFIG
-			echo "REPO: $response" >> $TMP_REPO
-			export REPO_PATH=$response
-		else
-			echo "Setting up a default repo for you here: $DEFAULT_REPO_HOME"
-			mkdir -p $DEFAULT_REPO_HOME
-			echo "REPO: $DEFAULT_REPO_HOME" >> $CMC_CONFIG
-			echo "REPO: $DEFAULT_REPO_HOME" >> $TMP_REPO
-			export REPO_PATH=$DEFAULT_REPO_HOME
-		fi
-		sleep 2
-		. $CMC_HOME/menu_items/setup_cm_repo.menu
-	fi
-	CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |cut -d"." -f"1")
-	CHK_4_REPO_LST="$CHK_4_REPO"
-	for repo in $CHK_4_REPO_LST; do
-		CHK_REPO_SIZE=$(du -sh $repo)
-		if [ "$CHK_REPO_SIZE" -gt "15" ]; then
-			echo "SMALL: $repo" >> $TMP_REPO
-		else
-			echo "REPO: $repo" >> $TMP_REPO
-			echo "REPO: $repo" >> $CMC_CONFIG
-		fi
-	done
-elif [ "$CMC_CONFIG_REPO_CHK" -eq "1" ] && [ "$CHK_4_REPO" -eq "0" ];then
-	clear
-	echo "Found $CMC_CONFIG_REPO in $CMC_CONFIG, but no repo, you will need a repo to use this."
-	echo "Are you sure you want to use this path? No will remove this entry!"
-	echo -n "( Y/n) default: yes > "
-	read response
-	case $response in
-		[nN] | [n|N][O|o] )
-			sed ""$(grep -n0 REPO $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
-			chk_repo_path;;
-		*)
-			export REPO_PATH=$CMC_CONFIG_REPO
-			if [ ! -d $REPO_PATH ]; then
-				mkdir -p $REPO_PATH
-			fi
-			echo "REPO: $REPO_PATH" >> $TMP_REPO
-			. $CMC_HOME/menu_items/setup_cm_repo.menu
-	esac
-else
+if [ "$CMC_CONFIG_REPO_CHK" -eq "1" ];then
+	CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
 	export REPO_PATH=$CMC_CONFIG_REPO
-	echo "REPO: $REPO_PATH" >> $TMP_REPO
+	FOUND_NUM=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
+	export CONFIGED="$CMC_CONFIG_REPO_CHK"
+else
+	export REPO_PATH="None"
+	export FOUND_NUM="None"
+	export CONFIGED="No"
 fi
-FOUND_NUM=$(grep REPO $CMC_CONFIG |awk '{print $2}' |wc -l)
 }
 
 function list_em() {
@@ -274,8 +223,67 @@ fi
 }
 
 function setup_cm_repo() {
-if [ ! -d $REPO_PATH ]; then
-	mkdir -p $REPO_PATH
+CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
+CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
+CMC_CONFIG_REPO_CHK=$(grep REPO $CMC_CONFIG |wc -l)
+if [ "$REPO_PATH" = "None" ] && [ "$FOUND_NUM" = "None" ];then
+	clear
+	echo "Looking for repo..."
+	CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
+	CHK_4_REPO_PATH=$(find $CMC_CONFIG_REPO -type d -iname .repo |cut -d"." -f"1")
+	if [ "$CHK_4_REPO" -eq "0" ]; then
+		echo "No found repos. Lets do this now."
+		echo "Please specify a repo path you would like:"
+		echo "Default: $DEFAULT_REPO_HOME"
+		echo "Default is only used when none is specified."
+		echo -ne "REPO: > "
+		read response
+		if [ ! -z "$response" ]; then
+			echo "Setting up $response as repo."
+			mkdir -p $response
+			echo "REPO: $response" >> $CMC_CONFIG
+			export REPO_PATH=$response
+		else
+			echo "Setting up a default repo for you here: $DEFAULT_REPO_HOME"
+			mkdir -p $DEFAULT_REPO_HOME
+			echo "REPO: $DEFAULT_REPO_HOME" >> $CMC_CONFIG
+			export REPO_PATH=$DEFAULT_REPO_HOME
+		fi
+		sleep 2
+	elif [ "$CHK_4_REPO" -eq "1" ]; then
+		clear
+		echo "Found repo: $CHK_4_REPO_PATH"
+		echo "REPO: $CHK_4_REPO_PATH" >> $CMC_CONFIG
+		export REPO_PATH=$CHK_4_REPO_PATH
+		sleep 2
+	elif [ "$CHK_4_REPO" -eq "1" ]; then
+		CHK_4_REPO_PATH_LIST="$CHK_4_REPO_PATH"
+		NUM=1
+		echo "Found mulitple repo paths:"
+		echo "$CHK_4_REPO_PATH_LIST"
+		for x in $CHK_4_REPO_PATH_LIST; do
+			echo "REPO_$NUM $x" >> $CMC_CONFIG
+			let NUM=NUM+1
+		done
+	fi	
+elif [ "$CMC_CONFIG_REPO_CHK" -eq "1" ] && [ "$CHK_4_REPO" -eq "0" ];then
+	clear
+	echo "Found $CMC_CONFIG_REPO in $CMC_CONFIG, but no repo, you will need a repo to use this."
+	echo "Are you sure you want to use this path? No will remove this entry!"
+	echo -n "( Y/n) default: yes > "
+	read response
+	case $response in
+		[nN] | [n|N][O|o] )
+			sed ""$(grep -n0 REPO $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
+			$MAIN;;
+		*)
+			export REPO_PATH=$CMC_CONFIG_REPO
+			if [ ! -d $REPO_PATH ]; then
+				mkdir -p $REPO_PATH
+			fi
+	esac
+else
+	export REPO_PATH=$CMC_CONFIG_REPO
 fi
 
 clear
