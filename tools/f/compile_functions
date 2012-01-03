@@ -100,14 +100,12 @@ if [ "$CMC_CONFIG_REPO_CHK" -ne "1" ];then
 		echo "Default is only used when none is specified."
 		echo -ne "REPO: > "
 		read response
-		CHK_RES=$(echo "$response" |wc -l)
-		if [ "$CHK_RES" -eq "1" ]; then
+		if [ ! -z "$response" ]; then
 			echo "Setting up $response as repo."
 			mkdir -p $response
 			echo "REPO: $response" >> $CMC_CONFIG
 			echo "REPO: $response" >> $TMP_REPO
 			export REPO_PATH=$response
-			
 		else
 			echo "Setting up a default repo for you here: $DEFAULT_REPO_HOME"
 			mkdir -p $DEFAULT_REPO_HOME
