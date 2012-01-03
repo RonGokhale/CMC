@@ -23,16 +23,19 @@ echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 "$CLR"Main"$toff"
 Repos Found: "$CLR"$FOUND_NUM"$toff"
 
-	"$CLR"1"$toff") Choose your manufacturer
-	"$CLR"2"$toff") Choose your model
-	"$CLR"3"$toff") Extract Files: "$CLR"$DEVICE_MOD"$toff"
+	"$CLR"1"$toff") Setup cyanogenmod repo (GB/ICS)
+	"$CLR"2"$toff") Update repo (GB/ICS)
 	-----
-	"$CLR"4"$toff") Remove languages (GB/ICS)
-	"$CLR"5"$toff") Remove live wallpapers (GB/ICS)
-	"$CLR"6"$toff") Remove cm wallpapers (GB)
-	"$CLR"7"$toff") Setup cyanogenmod repo (GB/ICS)
-	"$CLR"8"$toff") Update repo (GB/ICS)
+	"$CLR"3"$toff") Choose your manufacturer
+	"$CLR"4"$toff") Choose your model
+	"$CLR"5"$toff") Extract Files: "$CLR"$DEVICE_MOD"$toff"
+	-----
+	"$CLR"6"$toff") Remove languages (GB/ICS)
+	"$CLR"7"$toff") Remove live wallpapers (GB/ICS)
+	"$CLR"8"$toff") Remove cm wallpapers (GB)
+	-----
 	"$CLR"9"$toff") Compile cyanogenmod (GB/ICS)
+	-----
 	"$CLR"10"$toff") Undo current changes: "$CLR"$CHANGE_COUNT"$toff"
 	-----
 	"$CLR"P"$toff") CMC Plugins
@@ -49,21 +52,21 @@ echo -n "> "
 read option
 case $option in
 	1)
-		. $CMC_HOME/menu_items/ch_manufacturer.menu ;;
-	2)
-		. $CMC_HOME/menu_items/ch_model.menu;;
-	3)
-		. $CMC_HOME/menu_items/extract_files.menu;;
-	4)
-		. $CMC_HOME/menu_items/ch_rem_languages.menu;;
-	5)
-		. $CMC_HOME/menu_items/ch_rem_live_wallpaper.menu;;
-	6)
-		. $CMC_HOME/menu_items/ch_rem_cm_wallpaper.menu;;
-	7)
 		. $CMC_HOME/menu_items/setup_cm_repo.menu;;
-	8)
+	2)
 		. $CMC_HOME/menu_items/update_cm_repo.menu;;
+	3)
+		. $CMC_HOME/menu_items/ch_manufacturer.menu;;
+	4)
+		. $CMC_HOME/menu_items/ch_model.menu;;
+	5)
+		. $CMC_HOME/menu_items/extract_files.menu;;
+	6)
+		. $CMC_HOME/menu_items/ch_rem_languages.menu;;
+	7)
+		. $CMC_HOME/menu_items/ch_rem_live_wallpaper.menu;;
+	8)
+		. $CMC_HOME/menu_items/ch_rem_cm_wallpaper.menu;;
 	9)
 		. $CMC_HOME/menu_items/compile_cm_repo.menu;;
 	10)
