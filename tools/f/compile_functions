@@ -168,7 +168,7 @@ function process_man_list() {
 GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
 GET_LIST_CMC_SED=$(grep DEVICE_MAN $CMC_CONFIG)
-if [ "$GET_LIST_W" -ne "0" ]; then
+if [ "$GET_LIST_W" != "0" ]; then
 	DEVICE_MAN=$(echo "$GET_LIST")
 	clear
 	echo -e "Your Manufacturer is "$CLR"$DEVICE_MAN"$toff""
@@ -195,7 +195,7 @@ function process_mod_list() {
 GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
 GET_LIST_CMC_SED=$(grep DEVICE_MOD $CMC_CONFIG)
-if [ "$GET_LIST_W" -ne "0" ]; then
+if [ "$GET_LIST_W" != "0" ]; then
 	DEVICE_MOD=$(echo "$GET_LIST")
 	clear
 	echo -e "Your model is "$CLR"$DEVICE_MOD"$toff""
