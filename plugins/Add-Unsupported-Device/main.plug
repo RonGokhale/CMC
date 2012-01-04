@@ -31,10 +31,10 @@ case $option in
 		MSG="Nothing has been done!"
 		chk_tmp
 		sleep 1
-		. $CMC_HOME/menu_items/run_plugins;;
+		. $CMC_HOME/menu_items/run_plugins.menu;;
 	b|B)
 		chk_tmp
-		. $CMC_HOME/menu_items/run_plugins;;
+		. $CMC_HOME/menu_items/run_plugins.menu;;
 	x|X)
 		echo "Goodbye!"
 		chk_tmp
