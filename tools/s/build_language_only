@@ -60,7 +60,7 @@ PRODUCT_PROPERTY_OVERRIDES := \\
     ro.config.notification_sound=pixiedust.ogg
 
 # Put en_US first in the list, so make it default.
-PRODUCT_LOCALES := en_US
+PRODUCT_LOCALES := $LANGS
 
 # Get some sounds
 \$(call inherit-product-if-exists, frameworks/base/data/sounds/AllAudio.mk)
@@ -103,7 +103,7 @@ PRODUCT_PROPERTY_OVERRIDES := \\
     keyguard.no_require_sim=true
 
 # Put en_US first in the list, to make it default.
-PRODUCT_LOCALES := en_US
+PRODUCT_LOCALES := $LANGS
 
 # Pick up some sounds - stick with the short list to save space
 # on smaller devices.
@@ -140,14 +140,14 @@ EOF
 # See external/icu4c/stubdata.
 # This is distinct from "languages_full.mk", which contains those locales for
 # which we have translations. If you like, this file is i18n rather than l18n.
-PRODUCT_LOCALES := en_US
+PRODUCT_LOCALES := $LANGS
 EOF
 (cat << EOF) > $REPO_PATH/build/target/product/languages_full.mk
 # The locales from the ICU "-large.dat" data set.
 # See external/icu4c/stubdata.
 # This is distinct from "languages_full.mk", which contains those locales for
 # which we have translations. If you like, this file is i18n rather than l18n.
-PRODUCT_LOCALES := en_US
+PRODUCT_LOCALES := $LANGS
 EOF
 if [ "$BRANCH" = "ics" ]; then
 (cat << EOF) > $REPO_PATH/build/target/product/languages_small.mk
@@ -155,7 +155,7 @@ if [ "$BRANCH" = "ics" ]; then
 # See external/icu4c/stubdata.
 # This is distinct from "languages_full.mk", which contains those locales for
 # which we have translations. If you like, this file is i18n rather than l18n.
-PRODUCT_LOCALES := en_US
+PRODUCT_LOCALES := $LANGS
 EOF
 fi
 exit 0

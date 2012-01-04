@@ -27,7 +27,7 @@ Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIG
 	"$CLR"4"$toff") Choose your model
 	"$CLR"5"$toff") Extract Files: "$CLR"$DEVICE_MOD"$toff"
 	-----
-	"$CLR"6"$toff") Remove languages (GB/ICS)
+	"$CLR"6"$toff") Remove extra languages (GB/ICS)
 	"$CLR"7"$toff") Remove live wallpapers (GB/ICS)
 	"$CLR"8"$toff") Remove cm wallpapers (GB)
 	-----

@@ -372,6 +372,32 @@ fi
 $MAIN
 }
 
+function use_custom_languages() {
+clear
+echo "Please specify the languages you would like to enclude.
+Separate each language with a space. Nothing more nothing less!
+
+Note: I have added en_US by default, do not added it yourself!!
+
+"
+echo -n "> "
+read response
+if [ ! -z "$response" ]; then
+	clear
+	export LANGS="$response en_US"
+	echo "Languages are set for \"$LANGS\""
+else
+	clear
+	export LANGS="en_US"
+	echo "Nothing specified, only using \"$LANGS\""
+fi
+
+clear
+MSG="Languages have been removed!"
+SCRIPT="$CMC_SCRIPTS/build_language_only"
+run_remove_function yes
+}
+
 function extract_files_sh() {
 if [ "$DEVICE_MOD" = "Unknown" ]; then
 	echo "Your model is unknown, this won't work."
