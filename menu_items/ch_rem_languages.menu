@@ -12,7 +12,7 @@ Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIG
 	"$CLR"Y"$toff"/n) This will remove all languages except english. (en_US)
 	Should we proceed with this?
 
-	To apply custom entries for languages please press \"f\"
+	To apply custom entries for languages please press \"c\"
 
 	"$CLR"Note:"$toff"
 	Default is yes type \"n\" or \"no\" to stop this from happening.
