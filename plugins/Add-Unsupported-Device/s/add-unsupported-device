@@ -52,6 +52,7 @@ clear
 echo "Cloning $add_mod to $REPO_PATH/device/$add_man"
 sleep 1
 cd $REPO_PATH/device/$add_man
+#git clone $dev_repo_url $add_mod &>> /dev/null
 git clone $dev_repo_url $add_mod
 
 if [ ! -d $REPO_PATH/device/$add_man/$add_mod ]; then
