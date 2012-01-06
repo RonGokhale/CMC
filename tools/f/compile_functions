@@ -422,7 +422,8 @@ else
 		else
 			echo -e "Attention: "$CLR"$DEVICE_MOD"$toff" is an unsupported device, can't extract files from device!"
 		fi
-		read -sn 1 -p "Press any key to go back to main menu..."
+		echo
+		read -sn 1 -p "Press any key to continue..."
 		cd $REPO_PATH
 	fi
 fi
@@ -474,12 +475,15 @@ if [ "$WHICH_REPO" = "gingerbread" ]; then
 	STATUS=$(echo $?)
 	if [ "$STATUS" -ne "0" ]; then
 		echo "There was an error while building."
-		echo -ne"Press "$CLR"enter"$toff" when you are ready to try again."
+		echo -ne "Do you want to try again? ("$CLR"Y"$toff"/n)"
+		echo -n "> "
 		read response
 		case $response in
-			*)
+			y | Y )
 				cd $REPO_PATH
 				compile_cm;;
+			n | N )
+				$MAIN;;
 		esac
 	fi
 	finish_the_repo
@@ -498,12 +502,15 @@ elif [ "$WHICH_REPO" = "ics" ]; then
 	STATUS=$(echo $?)
 	if [ "$STATUS" -ne "0" ]; then
 		echo "There was an error while building."
-		echo -ne"Press "$CLR"enter"$toff" when you are ready to try again."
+		echo -ne "Do you want to try again? ("$CLR"Y"$toff"/n)"
+		echo -n "> "
 		read response
 		case $response in
-			*)
+			y | Y )
 				cd $REPO_PATH
 				compile_cm;;
+			n | N )
+				$MAIN;;
 		esac
 	fi
 	finish_the_repo
