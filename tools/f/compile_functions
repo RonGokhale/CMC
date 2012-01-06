@@ -418,12 +418,11 @@ else
 		if [ -f extract-files.sh ]; then
 			./extract-files.sh
 			clear
-			echo "Files for "$CLR"$DEVICE_MAN"$toff" have been extracted!"
-			read -sn 1 -p "Press any key to go back to main menu..."
+			echo -e "Files for "$CLR"$DEVICE_MOD"$toff" have been extracted!"
 		else
-			echo "Attention: "$CLR"$DEVICE_MAN"$toff" is an unsupported device, can't extract files from device!"
-			read -sn 1 -p "Press any key to go back to main menu..."
+			echo -e "Attention: "$CLR"$DEVICE_MOD"$toff" is an unsupported device, can't extract files from device!"
 		fi
+		read -sn 1 -p "Press any key to go back to main menu..."
 		cd $REPO_PATH
 	fi
 fi
