@@ -52,7 +52,7 @@ clear
 echo "Cloning $add_mod to $REPO_PATH/device/$add_man"
 sleep 1
 cd $REPO_PATH/device/$add_man
-git clone $dev_repo_url $add_mod &>> /dev/null
+git clone $dev_repo_url $add_mod
 
 if [ ! -d $REPO_PATH/device/$add_man/$add_mod ]; then
 	echo "Something isn't right. Path isn't there anymore!"
@@ -64,6 +64,6 @@ clear
 echo "Your device is now located "$CLR"$REPO_PATH/device/$add_man/$add_mod"$toff""
 echo "You should be able to go and assign this manufacturer/model from
 the "$CLR"main menu!"$toff""
-sleep 2
+read -sn 1 -p "Press any key to go back to main menu..."
 
 $MAIN

@@ -31,7 +31,6 @@ echo -n "> "
 read option
 case $option in
 	[nN] | [n|N][O|o] )
-		extract_files_sh
 		$MAIN;;
 	b|B)
 		$MAIN;;

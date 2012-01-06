@@ -417,10 +417,13 @@ else
 		cd $REPO_PATH/device/$DEVICE_MAN/$DEVICE_MOD
 		if [ -f extract-files.sh ]; then
 			./extract-files.sh
+			clear
+			echo "Files for "$CLR"$DEVICE_MAN"$toff" have been extracted!"
+			read -sn 1 -p "Press any key to go back to main menu..."
+		else
+			echo "Attention: "$CLR"$DEVICE_MAN"$toff" is an unsupported device, can't extract files from device!"
+			read -sn 1 -p "Press any key to go back to main menu..."
 		fi
-		clear
-		echo "Files for $DEVICE_MOD have been extracted!"
-		sleep 2
 		cd $REPO_PATH
 	fi
 fi

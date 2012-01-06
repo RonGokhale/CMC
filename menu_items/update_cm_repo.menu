@@ -42,5 +42,6 @@ case $option in
 		exit 0;;
 	*)
 		reposync_update
+		read -sn 1 -p "Press any key to go back to main menu..."
 		$MAIN;;
 esac
