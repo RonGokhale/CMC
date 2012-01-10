@@ -23,6 +23,7 @@ CM_GIT="git://github.com/CyanogenMod/android.git"
 AOSP_GIT="https://android.googlesource.com/platform/manifest"
 DEFAULT_REPO_HOME="$HOME/Development/CM-GB"
 GOG_REPO="https://dl-ssl.google.com/dl/googlesource/git-repo/repo"
+REDO_COMP="0"
 #######################################################
 #
 # Start of the functions
@@ -211,6 +212,8 @@ function reposync() {
 clear
 cd $REPO_PATH
 $REPO sync
+# Get time to read reposync_update messages
+read -sn 1 -p "Press any key to go back to main menu..."
 }
 
 function reposync_update() {
@@ -220,8 +223,11 @@ if [ "$CHK_REPO_4_SYNC" -lt "5" ]; then
 	echo "You need to setup the repo first"
 	sleep 2
 else
+	clear
 	cd $REPO_PATH
 	$REPO sync
+	# Get time to read reposync_update messages
+        read -sn 1 -p "Press any key to go back to main menu..."
 fi
 }
 
@@ -317,10 +323,6 @@ case $response in
 	*)
 		BRANCH="master";;
 esac
-clear
-echo "You are now going to go into the repo script and this interface will not exist, 
-don't worry though. You will be back!"
-read -sn 1 -p "Press any key to continue..."
 CHK_BRANCH=$(grep BRANCH $PIKNAC_CONFIG |wc -l)
 if [ "$CHK_BRANCH" -eq "1" ]; then
 	sed ""$(grep -n0 BRANCH $PIKNAC_CONFIG |cut -d":" -f"1")"d" $PIKNAC_CONFIG > .tmp && mv .tmp $PIKNAC_CONFIG
@@ -351,16 +353,16 @@ if [ -z $response ]; then
 		echo "SOURCE: CM" >> $PIKNAC_CONFIG;;
 	[a/A])
 		$REPO init -u $AOSP_GIT -b $BRANCH
-		echo "SOURCE: AOSP" -b $PIKNAC_CONFIG;;
+		echo "SOURCE: AOSP" >> $PIKNAC_CONFIG;;
 	*)
 		clear
 		echo "Response was $response, using AOSP."
 		$REPO init -u $AOSP_GIT -b $BRANCH
-		echo "SOURCE: AOSP" -b $PIKNAC_CONFIG;;
+		echo "SOURCE: AOSP" >> $PIKNAC_CONFIG;;
 	esac
 else
 	$REPO init -u $AOSP_GIT -b $BRANCH
-	echo "SOURCE: AOSP" -b $PIKNAC_CONFIG
+	echo "SOURCE: AOSP" >> $PIKNAC_CONFIG
 fi
 clear
 echo "Please go into the update repo main menu option and sync the repo."
@@ -447,12 +449,12 @@ fi
 function finish_the_repo(){
 cd $REPO_PATH
 
+if [ "$REDO_COMP" = "0" ]; then
 undo_repo_changes RM_NOW &>> $NULL
-
 reposync &>> $NULL
 extract_files_sh &>> $NULL
 chk_tmp &>> $NULL
-
+fi
 clear
 read -sn 1 -p "Press any key to continue..."
 }
@@ -460,6 +462,7 @@ read -sn 1 -p "Press any key to continue..."
 function compile_cm() {
 export WHICH_REPO=$(grep BRANCH $PIKNAC_CONFIG |awk '{print $2}')
 export WHICH_SOURCE=$(grep SOURCE $PIKNAC_CONFIG |awk '{print $2}')
+export AOSP_COMBO=$(grep add_lunch_combo $REPO_PATH/device/$DEVICE_MAN/$DEVICE_MOD/vendorsetup.sh |grep -v "#" |awk '{print $2}' |tail -n1)
 if [ "$WHICH_SOURCE" = "CM" ]; then
 	if [ "$WHICH_REPO" = "gingerbread" ]; then
 		K_PATH="$REPO_PATH/vendor/cyanogen/products/common_versions.mk"
@@ -477,9 +480,6 @@ if [ "$WHICH_SOURCE" = "CM" ]; then
 	fi
 fi
 if [ "$WHICH_REPO" = "gingerbread" ]; then
-	chk_adb_running
-
-	extract_files_sh
 
 	if [ "$WHICH_SOURCE" = "CM" ]; then
 		$REPO_PATH/vendor/cyanogen/get-rommanager
@@ -491,7 +491,8 @@ if [ "$WHICH_REPO" = "gingerbread" ]; then
         if [ "$WHICH_SOURCE" = "CM" ]; then
 		brunch $DEVICE_MOD
 	elif [ "$WHICH_SOURCE" = "AOSP" ]; then
-		lunch $DEVICE_MOD
+		lunch $AOSP_COMBO
+		time make -j$(grep -ic ^processor /proc/cpuinfo) otapackage
 	else
 		clear
 		echo "I was not able to find your sources in $PIKNAC_CONFIG"
@@ -507,16 +508,14 @@ if [ "$WHICH_REPO" = "gingerbread" ]; then
 		case $response in
 			y | Y )
 				cd $REPO_PATH
+				REDO_COMP="1"
 				compile_cm;;
 			n | N )
 				$MAIN;;
 		esac
 	fi
 	finish_the_repo
-elif [ "$WHICH_REPO" = "ics" ]; then
-	chk_adb_running
-
-	extract_files_sh
+elif [ "$WHICH_REPO" = "ics" ] || [ "$WHICH_REPO" = "master" ]; then
 
 	if [ "$WHICH_SOURCE" = "CM" ]; then
 		cd $REPO_PATH/vendor/cm
@@ -530,7 +529,8 @@ elif [ "$WHICH_REPO" = "ics" ]; then
         if [ "$WHICH_SOURCE" = "CM" ]; then
                 brunch $DEVICE_MOD
         elif [ "$WHICH_SOURCE" = "AOSP" ]; then
-                lunch $DEVICE_MOD
+                lunch $AOSP_COMBO
+		time make -j$(grep -ic ^processor /proc/cpuinfo) otapackage
         else
                 clear
                 echo "I was not able to find your sources in $PIKNAC_CONFIG"
@@ -547,6 +547,7 @@ elif [ "$WHICH_REPO" = "ics" ]; then
 		case $response in
 			y | Y )
 				cd $REPO_PATH
+				REDO_COMP="1"
 				compile_cm;;
 			n | N )
 				$MAIN;;

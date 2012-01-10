@@ -52,7 +52,6 @@ clear
 echo "Cloning $add_mod to $REPO_PATH/device/$add_man"
 sleep 1
 cd $REPO_PATH/device/$add_man
-#git clone $dev_repo_url $add_mod &>> /dev/null
 git clone $dev_repo_url $add_mod
 
 if [ ! -d $REPO_PATH/device/$add_man/$add_mod ]; then
@@ -60,11 +59,9 @@ if [ ! -d $REPO_PATH/device/$add_man/$add_mod ]; then
 	exit 1
 fi
 
-echo "$REPO_PATH/device/$add_man/$add_mod" >> $PIKNAC_DELETED
 clear
-echo "Your device is now located "$CLR"$REPO_PATH/device/$add_man/$add_mod"$toff""
-echo "You should be able to go and assign this manufacturer/model from
-the "$CLR"main menu!"$toff""
+echo -e "Your device is now located "$CLR"$REPO_PATH/device/$add_man/$add_mod"$toff", you 
+should be able to go and assign this manufacturer/model from the "$CLR"main menu!"$toff""
 read -sn 1 -p "Press any key to go back to main menu..."
 
 $MAIN
