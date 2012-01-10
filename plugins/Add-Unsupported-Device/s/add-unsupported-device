@@ -60,7 +60,7 @@ if [ ! -d $REPO_PATH/device/$add_man/$add_mod ]; then
 	exit 1
 fi
 
-echo "$REPO_PATH/device/$add_man/$add_mod" >> $CMC_DELETED
+echo "$REPO_PATH/device/$add_man/$add_mod" >> $PIKNAC_DELETED
 clear
 echo "Your device is now located "$CLR"$REPO_PATH/device/$add_man/$add_mod"$toff""
 echo "You should be able to go and assign this manufacturer/model from

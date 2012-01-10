@@ -1,7 +1,7 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
-$CMC_HOME/tools/f/compile_functions
-LITHID_HOME="$CMC_PLUGINS/Lithid-Odex"
+$PIKNAC_HOME/tools/f/compile_functions
+LITHID_HOME="$PIKNAC_PLUGINS/Lithid-Odex"
 chk_cmc_config
 chk_adb_running
 
@@ -29,10 +29,10 @@ case $option in
 		MSG="Nothing has been done!"
 		chk_tmp
 		sleep 1
-		. $CMC_HOME/menu_items/run_plugins.menu;;
+		. $PIKNAC_HOME/menu_items/run_plugins.menu;;
 	b|B)
 		chk_tmp
-		. $CMC_HOME/menu_items/run_plugins.menu;;
+		. $PIKNAC_HOME/menu_items/run_plugins.menu;;
 	x|X)
 		echo "Goodbye!"
 		chk_tmp

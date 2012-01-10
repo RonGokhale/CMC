@@ -1,6 +1,6 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
-. $CMC_HOME/tools/f/compile_functions
+. $PIKNAC_HOME/tools/f/compile_functions
 chk_cmc_config
 chk_adb_running
 
@@ -8,7 +8,7 @@ clear
 MORE_PATH=$REPO_PATH/device/$DEVICE_MAN
 list_em
 LIST_MOD=$(cat $TMPX)
-echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
+echo -e "<<< "$CLR"$HEADLINE"$toff" >>>
 Main > "$CLR"Choose your model"$toff"
 Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIGED"$toff"
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
-. $CMC_HOME/tools/f/compile_functions
-echo "$REPO_PATH/vendor/cyanogen Removed_cm_wallpapers" >> $CMC_DELETED
+. $PIKNAC_HOME/tools/f/compile_functions
+echo "$REPO_PATH/vendor/cyanogen Removed_cm_wallpapers" >> $PIKNAC_DELETED
 
 rm -rf $REPO_PATH/vendor/cyanogen/products/common_full.mk
 touch $REPO_PATH/vendor/cyanogen/products/common_full.mk
