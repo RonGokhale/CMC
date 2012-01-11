@@ -472,8 +472,11 @@ if [ -f $K_PATH ]; then
 fi
 if [ "$WHICH_REPO" = "gingerbread" ]; then
 
-	$REPO_PATH/vendor/cyanogen/get-rommanager
+	if [ ! -f $REPO_PATH/vendor/cyanogen/proprietary/RomManager.apk ]; then
+		$REPO_PATH/vendor/cyanogen/get-rommanager
+	fi
 
+	cd $REPO_PATH
 	. build/envsetup.sh
 	make installclean
 
