@@ -459,9 +459,16 @@ else
 fi
 if [ -f $K_PATH ]; then
 	CHK_KANG=$(grep kang $CMC_DELETED |wc -l)
-	if [ "$CHK_KANG" -eq "0" ]; then 
+	if [ "$CHK_KANG" -eq "0" ]; then
+		REM_BACK="$CMC_BACKUP/remove_cmc_kang"
+		if [ ! -d $REM_BACK ]; then
+			mkdir -p $REM_BACK
+		fi
+		UNIQ=$(echo `</dev/urandom tr -dc A-Za-z0-9 | head -c20`)
+		cp $K_PATH $REM_BACK/$UNIQ
 		sed -i 's/KANG/CMC/g' $K_PATH
-		echo "$REPO_PATH/vendor/cyanogen Replace_kang_cmc" >> $CMC_DELETED
+		echo "Replaced kang with cmc" >> $CMC_DELETED
+		echo "cp $REM_BACK/$UNIQ $K_PATH" >> $CMC_RESTORE
 	fi
 fi
 if [ "$WHICH_REPO" = "gingerbread" ]; then
