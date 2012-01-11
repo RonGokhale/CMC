@@ -230,6 +230,7 @@ fi
 }
 
 function setup_cm_repo() {
+echo "Checking for repo installation..."
 CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
 CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
 CMC_CONFIG_REPO_CHK=$(grep REPO $CMC_CONFIG |wc -l)
@@ -347,14 +348,12 @@ case $input in
 		clear
 		$REPO init -u $CM_GIT -b $BRANCH
 		clear
-		echo "Now we are going to sync the repo. This will take some time. Go play some MW3."
+		echo "Complete!. Please sync from the main menu!"
 		echo -n "Press enter to continue..."
 		read input
 		case $input in
 			*)
-				cd $REPO_PATH
-				reposync
-				cd $CMC_HOME;;
+				$MAIN;;
 		esac;;
 esac
 $MAIN
