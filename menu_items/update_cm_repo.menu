@@ -49,5 +49,7 @@ case $option in
 		exit 0;;
 	*)
 		reposync_update
+		# Get time to read reposync_update messages
+		read -sn 1 -p "Press any key to go back to main menu..."
 		$MAIN;;
 esac
