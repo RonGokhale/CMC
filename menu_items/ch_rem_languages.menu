@@ -1,11 +1,11 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
-. $PIKNAC_HOME/tools/f/compile_functions
+. $CMC_HOME/tools/f/compile_functions
 chk_cmc_config
 chk_adb_running
 
 clear
-echo -e "<<< "$CLR"$HEADLINE"$toff" >>>
+echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 Main > "$CLR"Removing extra languages"$toff"
 Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIGED"$toff"
 
@@ -41,7 +41,7 @@ case $option in
 		exit 0;;
 	*)
 		MSG="Languages have been removed!"
-		SCRIPT="$PIKNAC_SCRIPTS/build_language_only"
+		SCRIPT="$CMC_SCRIPTS/build_language_only"
 		run_remove_function yes
 		$MAIN;;
 esac

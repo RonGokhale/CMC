@@ -1,9 +1,9 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
-. $PIKNAC_HOME/tools/f/compile_functions
-echo "$REPO_PATH/build Removed_languages" >> $PIKNAC_DELETED
+. $CMC_HOME/tools/f/compile_functions
+echo "$REPO_PATH/build Removed_languages" >> $CMC_DELETED
 if [ "$BRANCH" = "ics" ]; then
-	echo "$REPO_PATH/build/target/product/languages_small.mk" >> $PIKNAC_DELETED
+	echo "$REPO_PATH/build/target/product/languages_small.mk" >> $CMC_DELETED
 fi
 
 rm -rf $REPO_PATH/build/target/product/full_base.mk

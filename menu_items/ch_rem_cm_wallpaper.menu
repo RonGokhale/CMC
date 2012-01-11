@@ -1,11 +1,11 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
-. $PIKNAC_HOME/tools/f/compile_functions
+. $CMC_HOME/tools/f/compile_functions
 chk_cmc_config
 chk_adb_running
 
 clear
-echo -e "<<< "$CLR"$HEADLINE"$toff" >>>
+echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 Main > "$CLR"Removing cyanogenmod wallpapers app"$toff"
 Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIGED"$toff"
 
@@ -36,7 +36,7 @@ case $option in
 		exit 1;;
 	*)
 		MSG="Wallpaper application removed!"
-		SCRIPT="$PIKNAC_SCRIPTS/remove_cm_wallpapers"
+		SCRIPT="$CMC_SCRIPTS/remove_cm_wallpapers"
 		run_remove_function yes
 		$MAIN;;
 esac

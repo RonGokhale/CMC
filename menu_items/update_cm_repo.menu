@@ -1,20 +1,16 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
-. $PIKNAC_HOME/tools/f/compile_functions
+. $CMC_HOME/tools/f/compile_functions
 chk_cmc_config
 chk_adb_running
 
 clear
-echo -e "<<< "$CLR"$HEADLINE"$toff" >>>
+echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 Main > "$CLR"Update Cyanogenmod"$toff"
 Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIGED"$toff"
 
 	"$CLR"Y"$toff"/n) This will update the Cyanogenmod Repo.
 	Should we proceed with this?
-
-	"$CLR"U"$toff") Update the repo
-	"$CLR"S"$toff") Initial sync
-	"$CLR"F"$toff") Force repo sync
 
 	"$CLR"Note:"$toff"
 	Default is yes type \"n\" or \"no\" to stop this from happening.
@@ -39,9 +35,6 @@ case $option in
 	b|B)
 		$MAIN;;
 	f|F)
-		reposync
-		$MAIN;;
-	s|S)
 		reposync
 		$MAIN;;
 	x|X)

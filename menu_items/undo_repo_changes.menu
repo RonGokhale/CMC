@@ -1,12 +1,12 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
-. $PIKNAC_HOME/tools/f/compile_functions
+. $CMC_HOME/tools/f/compile_functions
 chk_cmc_config
 chk_adb_running
 undo_repo_changes
 
 clear
-echo -e "<<< "$CLR"$HEADLINE"$toff" >>>
+echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 Main > "$CLR"Undo recent repo changes"$toff"
 Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIGED"$toff"
 

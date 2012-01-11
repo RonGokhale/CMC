@@ -1,26 +1,23 @@
 #!/bin/bash
-# Functions for PIKNAC
 # Written by lithid (mrlithid@gmail.com)
-MAIN="$PIKNAC_HOME/piknac"
-HEADLINE="PIKNAC - Piknac is a kang, not an android compiler"
-PIKNAC_CONFIG="$HOME/.piknacrc"
-PIKNAC_TOOLS="$PIKNAC_HOME/tools/t"
-PIKNAC_SCRIPTS="$PIKNAC_HOME/tools/s"
-PIKNAC_FUNCTIONS="$PIKNAC_HOME/tools/f"
-PIKNAC_PLUGINS="$PIKNAC_HOME/plugins"
-PIKNAC_DELETED="$HOME/.PIKNAC_DELETED_FILES"
+MAIN="$CMC_HOME/CMCompiler"
+CMC_CONFIG="$HOME/.cmcrc"
+CMC_TOOLS="$CMC_HOME/tools/t"
+CMC_SCRIPTS="$CMC_HOME/tools/s"
+CMC_FUNCTIONS="$CMC_HOME/tools/f"
+CMC_PLUGINS="$CMC_HOME/plugins"
+CMC_DELETED="$HOME/.CMC_DELETED_FILES"
 hash repo &> /dev/null
 if [ $? -eq 1 ]; then
-	REPO="$PIKNAC_TOOLS/repo"
+	REPO="$CMC_TOOLS/repo"
 else
 	REPO="$(which repo)"
 fi
-TMPX="/tmp/REPO_BUILD"
+TMPX="/tmp/CM_BUILD"
 TMP_REPO="/tmp/found_repos"
-TMP_C="/tmp/repo_compile.log"
+TMP_C="/tmp/cm_compile.log"
 NULL="/dev/null"
 CM_GIT="git://github.com/CyanogenMod/android.git"
-AOSP_GIT="https://android.googlesource.com/platform/manifest"
 DEFAULT_REPO_HOME="$HOME/Development/CM-GB"
 GOG_REPO="https://dl-ssl.google.com/dl/googlesource/git-repo/repo"
 #######################################################
@@ -55,29 +52,29 @@ ltprpl="\e[1;35m" # Purple
 ltcyn="\e[1;36m" # Cyan
 
 CLR="$ltgrn"
-CONF_COLOR_CHK=$(grep COLOR $PIKNAC_CONFIG |wc -l)
-CONF_COLOR_SET=$(grep COLOR $PIKNAC_CONFIG |awk '{print $2}')
+CONF_COLOR_CHK=$(grep COLOR $CMC_CONFIG |wc -l)
+CONF_COLOR_SET=$(grep COLOR $CMC_CONFIG |awk '{print $2}')
 if [ "$CONF_COLOR_CHK" -eq "1" ]; then
 	CLR="$CONF_COLOR_SET"
 fi
 }
 
 function chk_cmc_config() {
-if [ ! -f $PIKNAC_CONFIG ]; then
-	touch $PIKNAC_CONFIG
+if [ ! -f $CMC_CONFIG ]; then
+	touch $CMC_CONFIG
 fi
 
 CONF_X="DEVICE_MAN"
-CHK_MAN_CONF=$(grep $CONF_X $PIKNAC_CONFIG | awk '{print $2}')
-CHK_MAN_CONF_W=$(grep $CONF_X $PIKNAC_CONFIG | awk '{print $2}' |wc -l)
+CHK_MAN_CONF=$(grep $CONF_X $CMC_CONFIG | awk '{print $2}')
+CHK_MAN_CONF_W=$(grep $CONF_X $CMC_CONFIG | awk '{print $2}' |wc -l)
 if [ "$CHK_MAN_CONF_W" -eq "1" ]; then
 	export DEVICE_MAN=$CHK_MAN_CONF
 else
 	export DEVICE_MAN="Unknown"
 fi
 CONF_X2="DEVICE_MOD"
-CHK_MOD_CONF=$(grep $CONF_X2 $PIKNAC_CONFIG | awk '{print $2}')
-CHK_MOD_CONF_W=$(grep $CONF_X2 $PIKNAC_CONFIG | awk '{print $2}' |wc -l)
+CHK_MOD_CONF=$(grep $CONF_X2 $CMC_CONFIG | awk '{print $2}')
+CHK_MOD_CONF_W=$(grep $CONF_X2 $CMC_CONFIG | awk '{print $2}' |wc -l)
 if [ "$CHK_MOD_CONF_W" -eq "1" ]; then
 	export DEVICE_MOD=$CHK_MOD_CONF
 else
@@ -88,15 +85,15 @@ fi
 function chk_repo_path_conf() {
 clear
 chk_tmp
-if [ ! -f $PIKNAC_CONFIG ]; then
-	touch $PIKNAC_CONFIG
+if [ ! -f $CMC_CONFIG ]; then
+	touch $CMC_CONFIG
 fi
-PIKNAC_CONFIG_REPO_CHK=$(grep REPO $PIKNAC_CONFIG |wc -l)
-if [ "$PIKNAC_CONFIG_REPO_CHK" -eq "1" ];then
-	PIKNAC_CONFIG_REPO=$(grep REPO $PIKNAC_CONFIG |awk '{print $2}')
-	export REPO_PATH=$PIKNAC_CONFIG_REPO
-	FOUND_NUM=$(find $PIKNAC_CONFIG_REPO -type d -iname .repo |wc -l)
-	export CONFIGED="$PIKNAC_CONFIG_REPO_CHK"
+CMC_CONFIG_REPO_CHK=$(grep REPO $CMC_CONFIG |wc -l)
+if [ "$CMC_CONFIG_REPO_CHK" -eq "1" ];then
+	CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
+	export REPO_PATH=$CMC_CONFIG_REPO
+	FOUND_NUM=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
+	export CONFIGED="$CMC_CONFIG_REPO_CHK"
 else
 	export REPO_PATH="None"
 	export FOUND_NUM="None"
@@ -119,17 +116,17 @@ chmod a+x $TMPX
 function process_man_list() {
 GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
-GET_LIST_PIKNAC_SED=$(grep DEVICE_MAN $PIKNAC_CONFIG)
+GET_LIST_CMC_SED=$(grep DEVICE_MAN $CMC_CONFIG)
 if [ "$GET_LIST_W" != "0" ]; then
 	DEVICE_MAN=$(echo "$GET_LIST")
 	clear
 	echo -e "Your Manufacturer is "$CLR"$DEVICE_MAN"$toff""
-	GET_LIST_PIKNAC=$(grep DEVICE_MAN $PIKNAC_CONFIG |wc -l)
-	if [ "$GET_LIST_PIKNAC" -eq "1" ]; then
-		sed s/"$GET_LIST_PIKNAC_SED"/"DEVICE_MAN: $DEVICE_MAN"/g $PIKNAC_CONFIG > .tmp && mv .tmp $PIKNAC_CONFIG
-		sed ""$(grep -n0 DEVICE_MOD $PIKNAC_CONFIG |cut -d":" -f"1")"d" $PIKNAC_CONFIG > .tmp && mv .tmp $PIKNAC_CONFIG
+	GET_LIST_CMC=$(grep DEVICE_MAN $CMC_CONFIG |wc -l)
+	if [ "$GET_LIST_CMC" -eq "1" ]; then
+		sed s/"$GET_LIST_CMC_SED"/"DEVICE_MAN: $DEVICE_MAN"/g $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
+		sed ""$(grep -n0 DEVICE_MOD $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
 	else
-		echo "DEVICE_MAN: $DEVICE_MAN" >> $PIKNAC_CONFIG
+		echo "DEVICE_MAN: $DEVICE_MAN" >> $CMC_CONFIG
 	fi
 	sleep 2
 	$MAIN
@@ -138,7 +135,7 @@ else
 	clear
 	echo -e "Your Manufacturer is "$CLR"$DEVICE_MAN"$toff", please try again"
 	sleep 2
-	. $PIKNAC_HOME/menu_items/ch_manufacturer.menu
+	. $CMC_HOME/menu_items/ch_manufacturer.menu
 fi
 chk_tmp
 }
@@ -146,16 +143,16 @@ chk_tmp
 function process_mod_list() {
 GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
-GET_LIST_PIKNAC_SED=$(grep DEVICE_MOD $PIKNAC_CONFIG)
+GET_LIST_CMC_SED=$(grep DEVICE_MOD $CMC_CONFIG)
 if [ "$GET_LIST_W" != "0" ]; then
 	DEVICE_MOD=$(echo "$GET_LIST")
 	clear
 	echo -e "Your model is "$CLR"$DEVICE_MOD"$toff""
-	GET_LIST_PIKNAC=$(grep DEVICE_MOD $PIKNAC_CONFIG |wc -l)
-	if [ "$GET_LIST_PIKNAC" = "1" ]; then
-		sed s/"$GET_LIST_PIKNAC_SED"/"DEVICE_MOD: $DEVICE_MOD"/g $PIKNAC_CONFIG > .tmp && mv .tmp $PIKNAC_CONFIG
+	GET_LIST_CMC=$(grep DEVICE_MOD $CMC_CONFIG |wc -l)
+	if [ "$GET_LIST_CMC" = "1" ]; then
+		sed s/"$GET_LIST_CMC_SED"/"DEVICE_MOD: $DEVICE_MOD"/g $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
 	else
-		echo "DEVICE_MOD: $DEVICE_MOD" >> $PIKNAC_CONFIG
+		echo "DEVICE_MOD: $DEVICE_MOD" >> $CMC_CONFIG
 	fi
 	sleep 2
 	$MAIN
@@ -164,7 +161,7 @@ else
 	clear
 	echo -e "Your model is "$CLR"$DEVICE_MOD"$toff", please try again"
 	sleep 2
-	. $PIKNAC_HOME/menu_items/ch_model.menu
+	. $CMC_HOME/menu_items/ch_model.menu
 fi
 }
 
@@ -173,27 +170,27 @@ GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
 if [ "$GET_LIST_W" != "0" ]; then
 	PLUGIN=$(echo "$GET_LIST")
-	. $PIKNAC_PLUGINS/$PLUGIN/main.plug
+	. $CMC_PLUGINS/$PLUGIN/main.plug
 	chk_tmp
 else
 	clear
 	echo -e ""$CLR"Unable"$toff" to find that plugin, please try again"
 	chk_tmp
 	sleep 2
-	. $PIKNAC_HOME/menu_items/run_plugins.menu
+	. $CMC_HOME/menu_items/run_plugins.menu
 fi
 }
 
 function apply_theme_process() {
-CHK_THEME_CONF=$(grep COLOR $PIKNAC_CONFIG)
-CHK_THEME_CONF_W=$(grep COLOR $PIKNAC_CONFIG |wc -l)
+CHK_THEME_CONF=$(grep COLOR $CMC_CONFIG)
+CHK_THEME_CONF_W=$(grep COLOR $CMC_CONFIG |wc -l)
 if [ "$CHK_THEME_CONF_W" -eq "1" ]; then
 	X=$(echo "$CHK_THEME_CONF" |awk '{print $2}')
 	echo -e "Your new theme is "$CLR"$COLOR_DESC"$toff""
-	sed "s/COLOR: .*/COLOR: \\$CUST_COLOR/g" $PIKNAC_CONFIG > .tmp && mv .tmp $PIKNAC_CONFIG
+	sed "s/COLOR: .*/COLOR: \\$CUST_COLOR/g" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
 else
 	echo -e "Your new theme is "$CLR"$COLOR_DESC"$toff""
-	echo "COLOR: $CUST_COLOR" >> $PIKNAC_CONFIG
+	echo "COLOR: $CUST_COLOR" >> $CMC_CONFIG
 fi
 sleep 1
 }
@@ -226,14 +223,14 @@ fi
 }
 
 function setup_cm_repo() {
-PIKNAC_CONFIG_REPO=$(grep REPO $PIKNAC_CONFIG |awk '{print $2}')
-CHK_4_REPO=$(find $PIKNAC_CONFIG_REPO -type d -iname .repo |wc -l)
-PIKNAC_CONFIG_REPO_CHK=$(grep REPO $PIKNAC_CONFIG |wc -l)
+CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
+CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
+CMC_CONFIG_REPO_CHK=$(grep REPO $CMC_CONFIG |wc -l)
 if [ "$REPO_PATH" = "None" ] && [ "$FOUND_NUM" = "None" ];then
 	clear
 	echo "Looking for repo..."
-	CHK_4_REPO=$(find $PIKNAC_CONFIG_REPO -type d -iname .repo |wc -l)
-	CHK_4_REPO_PATH=$(find $PIKNAC_CONFIG_REPO -type d -iname .repo |cut -d"." -f"1")
+	CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
+	CHK_4_REPO_PATH=$(find $CMC_CONFIG_REPO -type d -iname .repo |cut -d"." -f"1")
 	if [ "$CHK_4_REPO" -eq "0" ]; then
 		echo "No found repos. Lets do this now."
 		echo "Please specify a repo path you would like:"
@@ -244,19 +241,19 @@ if [ "$REPO_PATH" = "None" ] && [ "$FOUND_NUM" = "None" ];then
 		if [ ! -z "$response" ]; then
 			echo "Setting up $response as repo."
 			mkdir -p $response
-			echo "REPO: $response" >> $PIKNAC_CONFIG
+			echo "REPO: $response" >> $CMC_CONFIG
 			export REPO_PATH=$response
 		else
 			echo "Setting up a default repo for you here: $DEFAULT_REPO_HOME"
 			mkdir -p $DEFAULT_REPO_HOME
-			echo "REPO: $DEFAULT_REPO_HOME" >> $PIKNAC_CONFIG
+			echo "REPO: $DEFAULT_REPO_HOME" >> $CMC_CONFIG
 			export REPO_PATH=$DEFAULT_REPO_HOME
 		fi
 		sleep 2
 	elif [ "$CHK_4_REPO" -eq "1" ]; then
 		clear
 		echo "Found repo: $CHK_4_REPO_PATH"
-		echo "REPO: $CHK_4_REPO_PATH" >> $PIKNAC_CONFIG
+		echo "REPO: $CHK_4_REPO_PATH" >> $CMC_CONFIG
 		export REPO_PATH=$CHK_4_REPO_PATH
 		sleep 2
 	elif [ "$CHK_4_REPO" -eq "1" ]; then
@@ -265,28 +262,28 @@ if [ "$REPO_PATH" = "None" ] && [ "$FOUND_NUM" = "None" ];then
 		echo "Found mulitple repo paths:"
 		echo "$CHK_4_REPO_PATH_LIST"
 		for x in $CHK_4_REPO_PATH_LIST; do
-			echo "REPO_$NUM $x" >> $PIKNAC_CONFIG
+			echo "REPO_$NUM $x" >> $CMC_CONFIG
 			let NUM=NUM+1
 		done
-	fi
-elif [ "$PIKNAC_CONFIG_REPO_CHK" -eq "1" ] && [ "$CHK_4_REPO" -eq "0" ];then
+	fi	
+elif [ "$CMC_CONFIG_REPO_CHK" -eq "1" ] && [ "$CHK_4_REPO" -eq "0" ];then
 	clear
-	echo "Found $PIKNAC_CONFIG_REPO in $PIKNAC_CONFIG, but no repo, you will need a repo to use this."
+	echo "Found $CMC_CONFIG_REPO in $CMC_CONFIG, but no repo, you will need a repo to use this."
 	echo "Are you sure you want to use this path? No will remove this entry!"
 	echo -n "( Y/n) default: yes > "
 	read response
 	case $response in
 		[nN] | [n|N][O|o] )
-			sed ""$(grep -n0 REPO $PIKNAC_CONFIG |cut -d":" -f"1")"d" $PIKNAC_CONFIG > .tmp && mv .tmp $PIKNAC_CONFIG
+			sed ""$(grep -n0 REPO $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
 			$MAIN;;
 		*)
-			export REPO_PATH=$PIKNAC_CONFIG_REPO
+			export REPO_PATH=$CMC_CONFIG_REPO
 			if [ ! -d $REPO_PATH ]; then
 				mkdir -p $REPO_PATH
 			fi
 	esac
 else
-	export REPO_PATH=$PIKNAC_CONFIG_REPO
+	export REPO_PATH=$CMC_CONFIG_REPO
 fi
 
 clear
@@ -303,11 +300,11 @@ else
 fi
 cd $REPO_PATH
 clear
-echo -e "Is this new repo going to be ICS, gingerbread or the master branch? ("$CLR"M"$toff"/i/g)
-Default is "$CLR"master"$toff".
+echo -e "Is this new repo going to be ICS or GB? (i/"$CLR"G"$toff")
+Default is GB.
 "$CLR"NOTE:"$toff"
-This will include all repos to the best of my ability at a future date."
-echo -n "(M/i/g) > "
+This will include all cyanogenmod repos to the best of my ability at a future date."
+echo -n "> "
 read response
 case $response in
 	[g|G])
@@ -315,56 +312,44 @@ case $response in
 	[i/I])
 		BRANCH="ics";;
 	*)
-		BRANCH="master";;
+		BRANCH="gingerbread";;
 esac
 clear
 echo "You are now going to go into the repo script and this interface will not exist, 
 don't worry though. You will be back!"
-read -sn 1 -p "Press any key to continue..."
-CHK_BRANCH=$(grep BRANCH $PIKNAC_CONFIG |wc -l)
-if [ "$CHK_BRANCH" -eq "1" ]; then
-	sed ""$(grep -n0 BRANCH $PIKNAC_CONFIG |cut -d":" -f"1")"d" $PIKNAC_CONFIG > .tmp && mv .tmp $PIKNAC_CONFIG
-	echo "BRANCH: $BRANCH" >> $PIKNAC_CONFIG
-elif [ "$CHK_BRANCH" -gt "1" ]; then
-	LIST_BRANCH=$(grep BRANCH $PIKNAC_CONFIG | awk '{print $2}')
-	for i in $LIST_BRANCH; do
-		sed ""$(grep -n0 $i $PIKNAC_CONFIG |cut -d":" -f"1")"d" $PIKNAC_CONFIG > .tmp && mv .tmp $PIKNAC_CONFIG
-	done
-	echo "BRANCH: $BRANCH" >> $PIKNAC_CONFIG
-elif [ "$CHK_BRANCH" -eq "0" ]; then
-	echo "BRANCH: $BRANCH" >> $PIKNAC_CONFIG
-else
-	echo "Branch config in $PIKNAC_CONFIG isn't configured correctly"
-	exit 6
-fi
-clear
-echo "Are you going to be building:
-Cyanogenmod
-AOSP
-Default: "$CLR"AOSP"$toff""
-echo -n "(c/"$CLR"A"$toff") > "
-read response
-if [ -z $response ]; then
-	case $response in
-	[c/C])
-		$REPO init -u $CM_GIT -b $BRANCH
-		echo "SOURCE: CM" >> $PIKNAC_CONFIG;;
-	[a/A])
-		$REPO init -u $AOSP_GIT -b $BRANCH
-		echo "SOURCE: AOSP" -b $PIKNAC_CONFIG;;
+echo -n "Press enter to continue..."
+read input
+case $input in
 	*)
+		CHK_BRANCH=$(grep BRANCH $CMC_CONFIG |wc -l)
+		if [ "$CHK_BRANCH" -eq "1" ]; then
+			sed ""$(grep -n0 BRANCH $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
+			echo "BRANCH: $BRANCH" >> $CMC_CONFIG
+		elif [ "$CHK_BRANCH" -gt "1" ]; then
+			LIST_BRANCH=$(grep BRANCH $CMC_CONFIG | awk '{print $2}')
+			for i in $LIST_BRANCH; do
+				sed ""$(grep -n0 $i $CMC_CONFIG |cut -d":" -f"1")"d" $CMC_CONFIG > .tmp && mv .tmp $CMC_CONFIG
+			done
+			echo "BRANCH: $BRANCH" >> $CMC_CONFIG
+		elif [ "$CHK_BRANCH" -eq "0" ]; then
+			echo "BRANCH: $BRANCH" >> $CMC_CONFIG
+		else
+			echo "Branch config in $CMC_CONFIG isn't configured correctly"
+			exit 6
+		fi
 		clear
-		echo "Response was $response, using AOSP."
-		$REPO init -u $AOSP_GIT -b $BRANCH
-		echo "SOURCE: AOSP" -b $PIKNAC_CONFIG;;
-	esac
-else
-	$REPO init -u $AOSP_GIT -b $BRANCH
-	echo "SOURCE: AOSP" -b $PIKNAC_CONFIG
-fi
-clear
-echo "Please go into the update repo main menu option and sync the repo."
-read -sn 1 -p "Press any key to continue..."
+		$REPO init -u $CM_GIT -b $BRANCH
+		clear
+		echo "Now we are going to sync the repo. This will take some time. Go play some MW3."
+		echo -n "Press enter to continue..."
+		read input
+		case $input in
+			*)
+				cd $REPO_PATH
+				reposync
+				cd $CMC_HOME;;
+		esac;;
+esac
 $MAIN
 }
 
@@ -409,7 +394,7 @@ fi
 
 clear
 MSG="Languages have been removed!"
-SCRIPT="$PIKNAC_SCRIPTS/build_language_only"
+SCRIPT="$CMC_SCRIPTS/build_language_only"
 run_remove_function yes
 }
 
@@ -454,50 +439,39 @@ extract_files_sh &>> $NULL
 chk_tmp &>> $NULL
 
 clear
-read -sn 1 -p "Press any key to continue..."
+echo -e "Press enter to continue..."
+read response
+case $response in
+	*)$MAIN;;
+esac
 }
 
 function compile_cm() {
-export WHICH_REPO=$(grep BRANCH $PIKNAC_CONFIG |awk '{print $2}')
-export WHICH_SOURCE=$(grep SOURCE $PIKNAC_CONFIG |awk '{print $2}')
-if [ "$WHICH_SOURCE" = "CM" ]; then
-	if [ "$WHICH_REPO" = "gingerbread" ]; then
-		K_PATH="$REPO_PATH/vendor/cyanogen/products/common_versions.mk"
-	elif [ "$WHICH_REPO" = "ics" ]; then
-		K_PATH="$REPO_PATH/vendor/cm/config/common.mk"
-	else
-		K_PATH="null"
-	fi
-	if [ -f $K_PATH ]; then
-		CHK_KANG=$(grep kang $PIKNAC_DELETED |wc -l)
-		if [ "$CHK_KANG" -eq "0" ]; then
-			sed -i 's/KANG/PIKNAC/g' $K_PATH
-			echo "$REPO_PATH/vendor/cyanogen Replace_kang_cmc" >> $PIKNAC_DELETED
-		fi
+export WHICH_REPO=$(grep BRANCH $CMC_CONFIG |awk '{print $2}')
+if [ "$WHICH_REPO" = "gingerbread" ]; then
+	K_PATH="$REPO_PATH/vendor/cyanogen/products/common_versions.mk"
+elif [ "$WHICH_REPO" = "ics" ]; then
+	K_PATH="$REPO_PATH/vendor/cm/config/common.mk"
+else
+	K_PATH="null"
+fi
+if [ -f $K_PATH ]; then
+	CHK_KANG=$(grep kang $CMC_DELETED |wc -l)
+	if [ "$CHK_KANG" -eq "0" ]; then 
+		sed -i 's/KANG/CMC/g' $K_PATH
+		echo "$REPO_PATH/vendor/cyanogen Replace_kang_cmc" >> $CMC_DELETED
 	fi
 fi
 if [ "$WHICH_REPO" = "gingerbread" ]; then
 	chk_adb_running
 
 	extract_files_sh
-
-	if [ "$WHICH_SOURCE" = "CM" ]; then
-		$REPO_PATH/vendor/cyanogen/get-rommanager
-	fi
+	$REPO_PATH/vendor/cyanogen/get-rommanager
 
 	. build/envsetup.sh
 	make installclean
 
-        if [ "$WHICH_SOURCE" = "CM" ]; then
-		brunch $DEVICE_MOD
-	elif [ "$WHICH_SOURCE" = "AOSP" ]; then
-		lunch $DEVICE_MOD
-	else
-		clear
-		echo "I was not able to find your sources in $PIKNAC_CONFIG"
-		read -sn 1 -p "Press any key to continue..."
-		$MAIN
-	fi
+	brunch $DEVICE_MOD
 	STATUS=$(echo $?)
 	if [ "$STATUS" -ne "0" ]; then
 		echo "There was an error while building."
@@ -515,29 +489,16 @@ if [ "$WHICH_REPO" = "gingerbread" ]; then
 	finish_the_repo
 elif [ "$WHICH_REPO" = "ics" ]; then
 	chk_adb_running
-
 	extract_files_sh
 
-	if [ "$WHICH_SOURCE" = "CM" ]; then
-		cd $REPO_PATH/vendor/cm
-		./get-prebuilts
-		cd $REPO_PATH
-	fi
+	cd $REPO_PATH/vendor/cm
+	./get-prebuilts
+	cd $REPO_PATH
 
 	. build/envsetup.sh
 	make installclean
 
-        if [ "$WHICH_SOURCE" = "CM" ]; then
-                brunch $DEVICE_MOD
-        elif [ "$WHICH_SOURCE" = "AOSP" ]; then
-                lunch $DEVICE_MOD
-        else
-                clear
-                echo "I was not able to find your sources in $PIKNAC_CONFIG"
-                read -sn 1 -p "Press any key to continue..."
-                $MAIN
-        fi
-
+	brunch $DEVICE_MOD
 	STATUS=$(echo $?)
 	if [ "$STATUS" -ne "0" ]; then
 		echo "There was an error while building."
@@ -556,7 +517,7 @@ elif [ "$WHICH_REPO" = "ics" ]; then
 else
 	clear
 	echo "There appears to be an issue with your configuration."
-	echo "Please look at $PIKNAC_CONFIG."
+	echo "Please look at $CMC_CONFIG."
 	sleep 2
 	$MAIN
 fi
@@ -591,20 +552,20 @@ fi
 }
 
 function undo_repo_changes() {
-if [ ! -f $PIKNAC_DELETED ]; then
+if [ ! -f $CMC_DELETED ]; then
 	CHANGE_COUNT="0"
 	CHANGE_LIST="	None"
 else
-	CHANGE_COUNT=$(awk '{print $2}' $PIKNAC_DELETED | wc -l)
-	CHANGE_LIST=$(for i in $(cut -d" " -f2- $PIKNAC_DELETED); do echo "	$i"; done)
-	CHANGE_PATH=$(awk '{print $1}' $PIKNAC_DELETED)
+	CHANGE_COUNT=$(awk '{print $2}' $CMC_DELETED | wc -l)
+	CHANGE_LIST=$(for i in $(cut -d" " -f2- $CMC_DELETED); do echo "	$i"; done)
+	CHANGE_PATH=$(awk '{print $1}' $CMC_DELETED)
 	if [ "$CHANGE_COUNT" -lt "1" ]; then
 		CHANGE_COUNT="0"
 		CHANGE_LIST="	None"
 	fi
 fi
 if [ "$1" = "RM_NOW" ]; then
-	if [ ! -f $PIKNAC_DELETED ]; then
+	if [ ! -f $CMC_DELETED ]; then
 		clear
 		echo "No File Nothing to do."
 		sleep 2
@@ -615,7 +576,7 @@ if [ "$1" = "RM_NOW" ]; then
 		for i in $CHANGE_PATH; do
 			rm -rf $i
 		done
-		rm -rf $PIKNAC_DELETED
+		rm -rf $CMC_DELETED
 		reposync
 	fi
 fi

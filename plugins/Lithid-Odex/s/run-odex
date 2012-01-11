@@ -1,7 +1,7 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
-MH="$PIKNAC_HOME/plugins/Lithid-Odex"
-H="$PIKNAC_HOME/plugins/Lithid-Odex/.ODEX"
+MH="$CMC_HOME/plugins/Lithid-Odex"
+H="$CMC_HOME/plugins/Lithid-Odex/.ODEX"
 CODE="sh /sdcard/odex"
 CMD="adb shell"
 DW="dexopt-wrapper"
@@ -68,7 +68,7 @@ fi
 
 # Process it all
 export FUNCTIONX="  __Odexing__________________________________________   "
-$PIKNAC_FUNCTIONS/loading &
+$CMC_FUNCTIONS/loading &
 MYSELF=$!
 clean_up &>> /dev/null
 push_files &>> /dev/null
