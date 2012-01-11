@@ -215,6 +215,8 @@ function reposync() {
 clear
 cd $REPO_PATH
 $REPO sync
+echo
+read -sn 1 -p "Press any key to continue..."
 }
 
 function reposync_update() {
@@ -222,10 +224,12 @@ CHK_REPO_4_SYNC=$(ls $REPO_PATH |wc -l)
 if [ "$CHK_REPO_4_SYNC" -lt "5" ]; then
 	clear
 	echo "You need to setup the repo first"
-	sleep 2
+	read -sn 1 -p "Press any key to continue..."
 else
+	clear
 	cd $REPO_PATH
 	$REPO sync
+	read -sn 1 -p "Press any key to continue..."
 fi
 }
 
@@ -349,12 +353,8 @@ case $input in
 		$REPO init -u $CM_GIT -b $BRANCH
 		clear
 		echo "Complete!. Please sync from the main menu!"
-		echo -n "Press enter to continue..."
-		read input
-		case $input in
-			*)
-				$MAIN;;
-		esac;;
+		read -sn 1 -p "Press any key to continue..."
+		$MAIN
 esac
 $MAIN
 }
