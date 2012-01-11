@@ -213,10 +213,19 @@ fi
 
 function reposync() {
 clear
-cd $REPO_PATH
-$REPO sync
-echo
-read -sn 1 -p "Press any key to continue..."
+echo "This will remove any modifications done by the CMC, like removing languages or wallpapers."
+echo -n "Are you sure? (Y/n) > "
+read response
+case $response in
+	[n|N])
+		$MAIN;;
+	*)
+		undo_repo_changes RM_NOW
+		cd $REPO_PATH
+		$REPO sync
+		echo
+		read -sn 1 -p "Press any key to continue...";;
+esac
 }
 
 function reposync_update() {
@@ -226,10 +235,7 @@ if [ "$CHK_REPO_4_SYNC" -lt "5" ]; then
 	echo "You need to setup the repo first"
 	read -sn 1 -p "Press any key to continue..."
 else
-	clear
-	cd $REPO_PATH
-	$REPO sync
-	read -sn 1 -p "Press any key to continue..."
+	reposync
 fi
 }
 
