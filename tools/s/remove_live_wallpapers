@@ -1,10 +1,22 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
 . $CMC_HOME/tools/f/compile_functions
-echo "$REPO_PATH/vendor/$DEVICE_MAN Removed_live_wallpapers" >> $CMC_DELETED
+REM_BACK="$CMC_BACKUP/remove_live_wallpapers"
+if [ ! -d $REM_BACK ]; then
+	mkdir -p $REM_BACK
+fi
+echo "	Removed live wallpapers" >> $CMC_DELETED
 
-rm -rf $REPO_PATH/vendor/$DEVICE_MAN/$DEVICE_MOD/$DEVICE_MOD-vendor.mk
-touch $REPO_PATH/vendor/$DEVICE_MAN/$DEVICE_MOD/$DEVICE_MOD-vendor.mk
+function backup_file() {
+cp $F_EDIT $REM_BACK/$UNIQ
+rm -rf $F_EDIT
+touch $F_EDIT
+echo "cp $REM_BACK/$UNIQ $F_EDIT" >> $CMC_RESTORE
+}
+
+UNIQ=$(echo `</dev/urandom tr -dc A-Za-z0-9 | head -c20`)
+F_EDIT="$REPO_PATH/vendor/$DEVICE_MAN/$DEVICE_MOD/$DEVICE_MOD-vendor.mk"
+backup_file
 
 (cat << EOF) > $REPO_PATH/vendor/$DEVICE_MAN/$DEVICE_MOD/$DEVICE_MOD-vendor.mk
 # Copyright (C) 2010 The Android Open Source Project

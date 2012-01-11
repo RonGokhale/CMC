@@ -1,12 +1,15 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
 MAIN="$CMC_HOME/CMCompiler"
-CMC_CONFIG="$HOME/.cmcrc"
+CMC_LOCAL="$HOME/.cmc"
+CMC_CONFIG="$CMC_LOCAL/cmc-config"
 CMC_TOOLS="$CMC_HOME/tools/t"
 CMC_SCRIPTS="$CMC_HOME/tools/s"
 CMC_FUNCTIONS="$CMC_HOME/tools/f"
 CMC_PLUGINS="$CMC_HOME/plugins"
-CMC_DELETED="$HOME/.CMC_DELETED_FILES"
+CMC_DELETED="$CMC_LOCAL/CMC_DELETED_FILES"
+CMC_RESTORE="$CMC_LOCAL/CMC_RESTORE_FILES"
+CMC_BACKUP="$CMC_LOCAL/BACKUP"
 hash repo &> /dev/null
 if [ $? -eq 1 ]; then
 	REPO="$CMC_TOOLS/repo"
@@ -25,6 +28,10 @@ GOG_REPO="https://dl-ssl.google.com/dl/googlesource/git-repo/repo"
 # Start of the functions
 #
 #######################################################
+if [ ! -f $CMC_LOCAL ]; then
+	mkdir -p $CMC_LOCAL
+fi
+
 function chk_tmp() {
 if [ -f $TMPX ] || [ -f $TMP_REPO ]; then
 	rm -f $TMPX
@@ -369,7 +376,6 @@ else
 	sleep 1
 	exit 5
 fi
-$MAIN
 }
 
 function use_custom_languages() {
@@ -432,14 +438,10 @@ fi
 function finish_the_repo(){
 cd $REPO_PATH
 
-undo_repo_changes RM_NOW &>> $NULL
-
-reposync &>> $NULL
-extract_files_sh &>> $NULL
 chk_tmp &>> $NULL
 
 clear
-echo -e "Press enter to continue..."
+echo -e "Complete! Press enter to continue..."
 read response
 case $response in
 	*)$MAIN;;
@@ -553,7 +555,7 @@ if [ ! -f $CMC_DELETED ]; then
 	CHANGE_LIST="	None"
 else
 	CHANGE_COUNT=$(awk '{print $2}' $CMC_DELETED | wc -l)
-	CHANGE_LIST=$(for i in $(cut -d" " -f2- $CMC_DELETED); do echo "	$i"; done)
+	CHANGE_LIST=$(cat $CMC_DELETED)
 	CHANGE_PATH=$(awk '{print $1}' $CMC_DELETED)
 	if [ "$CHANGE_COUNT" -lt "1" ]; then
 		CHANGE_COUNT="0"
@@ -561,19 +563,18 @@ else
 	fi
 fi
 if [ "$1" = "RM_NOW" ]; then
-	if [ ! -f $CMC_DELETED ]; then
+	if [ ! -f $CMC_RESTORE ]; then
 		clear
 		echo "No File Nothing to do."
 		sleep 2
 	else
 		clear
 		echo "Removing changes now."
-		sleep 2
-		for i in $CHANGE_PATH; do
-			rm -rf $i
-		done
+		chmod a+x $CMC_RESTORE
+		bash $CMC_RESTORE
+		rm -rf $CMC_RESTORE
+		rm -rf $CMC_BACKUP
 		rm -rf $CMC_DELETED
-		reposync
 	fi
 fi
 }

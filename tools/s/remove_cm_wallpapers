@@ -1,10 +1,22 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
 . $CMC_HOME/tools/f/compile_functions
-echo "$REPO_PATH/vendor/cyanogen Removed_cm_wallpapers" >> $CMC_DELETED
+REM_BACK="$CMC_BACKUP/remove_cyanogenmod_wallpapers"
+if [ ! -d $REM_BACK ]; then
+	mkdir -p $REM_BACK
+fi
+echo "	Removed cyanogen wallpapers" >> $CMC_DELETED
 
-rm -rf $REPO_PATH/vendor/cyanogen/products/common_full.mk
-touch $REPO_PATH/vendor/cyanogen/products/common_full.mk
+function backup_file() {
+cp $F_EDIT $REM_BACK/$UNIQ
+rm -rf $F_EDIT
+touch $F_EDIT
+echo "cp $REM_BACK/$UNIQ $F_EDIT" >> $CMC_RESTORE
+}
+
+UNIQ=$(echo `</dev/urandom tr -dc A-Za-z0-9 | head -c20`)
+F_EDIT="$REPO_PATH/vendor/cyanogen/products/common_full.mk"
+backup_file
 
 (cat << EOF) > $REPO_PATH/vendor/cyanogen/products/common_full.mk
 

@@ -1,25 +1,39 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
 . $CMC_HOME/tools/f/compile_functions
-echo "$REPO_PATH/build Removed_languages" >> $CMC_DELETED
-if [ "$BRANCH" = "ics" ]; then
-	echo "$REPO_PATH/build/target/product/languages_small.mk" >> $CMC_DELETED
+REM_BACK="$CMC_BACKUP/remove_languages"
+if [ ! -d $REM_BACK ]; then
+	mkdir -p $REM_BACK
 fi
+echo "	Removed languages" >> $CMC_DELETED
 
-rm -rf $REPO_PATH/build/target/product/full_base.mk
-rm -rf $REPO_PATH/build/target/product/languages_full.mk
-rm -rf $REPO_PATH/external/svox/pico/lang/all_pico_languages.mk
-rm -rf $REPO_PATH/build/target/product/locales_full.mk
-if [ "$BRANCH" = "ics" ]; then
-	rm -rf $REPO_PATH/build/target/product/languages_small.mk
-fi
+function backup_file() {
+cp $F_EDIT $REM_BACK/$UNIQ
+rm -rf $F_EDIT
+touch $F_EDIT
+echo "cp $REM_BACK/$UNIQ $F_EDIT" >> $CMC_RESTORE
+}
 
-touch $REPO_PATH/build/target/product/full_base.mk
-touch $REPO_PATH/build/target/product/languages_full.mk
-touch $REPO_PATH/build/target/product/locales_full.mk
-touch $REPO_PATH/external/svox/pico/lang/all_pico_languages.mk
+UNIQ=$(echo `</dev/urandom tr -dc A-Za-z0-9 | head -c20`)
+F_EDIT="$REPO_PATH/build/target/product/full_base.mk"
+backup_file
+
+UNIQ=$(echo `</dev/urandom tr -dc A-Za-z0-9 | head -c20`)
+F_EDIT="$REPO_PATH/build/target/product/languages_full.mk"
+backup_file
+
+UNIQ=$(echo `</dev/urandom tr -dc A-Za-z0-9 | head -c20`)
+F_EDIT="$REPO_PATH/external/svox/pico/lang/all_pico_languages.mk"
+backup_file
+
+UNIQ=$(echo `</dev/urandom tr -dc A-Za-z0-9 | head -c20`)
+F_EDIT="$REPO_PATH/build/target/product/locales_full.mk"
+backup_file
+
 if [ "$BRANCH" = "ics" ]; then
-	touch $REPO_PATH/build/target/product/languages_small.mk
+	F_NAME="languages_small.mk"
+	F_EDIT="$REPO_PATH/build/target/product/languages_small.mk"
+	backup_file
 fi
 
 if [ "$BRANCH" = "ics" ]; then
@@ -158,4 +172,3 @@ if [ "$BRANCH" = "ics" ]; then
 PRODUCT_LOCALES := $LANGS
 EOF
 fi
-exit 0
