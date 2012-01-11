@@ -443,6 +443,13 @@ fi
 function finish_the_repo(){
 cd $REPO_PATH
 
+if [ "$(ps -ef|grep X |grep $USER |wc -l)" -gt "1" ]; then
+	if [ -f $(which notify-send) ]; then
+		notify-send -i terminal "CMC Complete" "CMC completed the cyanogenmod rom
+
+Path: $(find $REPO_PATH/out -type f -iname update-*-signed.zip)"
+	fi
+fi
 chk_tmp &>> $NULL
 
 clear
