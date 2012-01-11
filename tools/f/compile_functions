@@ -463,9 +463,7 @@ if [ -f $K_PATH ]; then
 	fi
 fi
 if [ "$WHICH_REPO" = "gingerbread" ]; then
-	chk_adb_running
 
-	extract_files_sh
 	$REPO_PATH/vendor/cyanogen/get-rommanager
 
 	. build/envsetup.sh
@@ -488,8 +486,6 @@ if [ "$WHICH_REPO" = "gingerbread" ]; then
 	fi
 	finish_the_repo
 elif [ "$WHICH_REPO" = "ics" ]; then
-	chk_adb_running
-	extract_files_sh
 
 	cd $REPO_PATH/vendor/cm
 	./get-prebuilts
