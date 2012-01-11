@@ -17,7 +17,7 @@ TMPX="/tmp/CM_BUILD"
 TMP_REPO="/tmp/found_repos"
 TMP_C="/tmp/cm_compile.log"
 NULL="/dev/null"
-CM_GIT="git://github.com/CyanogenMod/android.git"
+CM_GIT="https://github.com/CyanogenMod/android.git"
 DEFAULT_REPO_HOME="$HOME/Development/CM-GB"
 GOG_REPO="https://dl-ssl.google.com/dl/googlesource/git-repo/repo"
 #######################################################

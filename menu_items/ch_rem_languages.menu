@@ -42,6 +42,7 @@ case $option in
 	*)
 		MSG="Languages have been removed!"
 		SCRIPT="$CMC_SCRIPTS/build_language_only"
+		export LANGS="en_US"
 		run_remove_function yes
 		$MAIN;;
 esac
