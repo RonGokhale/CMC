@@ -14,6 +14,7 @@ chk_cmc_config
 chk_adb_running
 undo_repo_changes
 chk_repo_path_conf
+check_update_fn
 
 clear
 echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
@@ -39,7 +40,7 @@ Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIG
 	-----
 	"$CLR"97"$toff") Toggle git/https syncing
 	"$CLR"98"$toff") Change theme
-	"$CLR"99"$toff") Information about CMC
+	"$CLR"99"$toff") CMC Updates: $UPDATE_MSG
 	"$CLR"X"$toff") exit
 
 Device Info: "$CLR"$DEVICE_MAN"$toff"/"$CLR"$DEVICE_MOD"$toff" ADB: $ADB_MSG
@@ -73,7 +74,7 @@ case $option in
 	98)
 		. $CMC_HOME/menu_items/ch_theme.menu;;
 	99)
-		;;
+		. $CMC_HOME/menu_items/update_cmc.menu;;
 	p|P)
 		. $CMC_HOME/menu_items/run_plugins.menu;;
 	x|X)

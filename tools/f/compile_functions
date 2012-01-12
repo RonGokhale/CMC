@@ -32,6 +32,21 @@ if [ ! -f $CMC_LOCAL ]; then
 	mkdir -p $CMC_LOCAL
 fi
 
+function check_update_fn() {
+export NVER="$(cd $CMC_HOME; git log -1 --numstat | grep commit | awk '{print $2}')"
+export RVER="$(cd $CMC_HOME; git ls-remote https://github.com/lithid/CMC.git HEAD 2>/dev/null | awk '{print $1}')"
+if [ -n "$NVER" -a -n "$RVER" ]; then
+	if [ "$NVER" != "$RVER" ]; then
+		UPDATE_MSG=""$CLR"Available"$toff""
+	else
+		UPDATE_MSG="Up-to-date"
+	fi
+else
+	UPDATE_MSG=""$tred"Error"$toff""
+fi
+
+}
+
 function chk_tmp() {
 if [ -f $TMPX ] || [ -f $TMP_REPO ]; then
 	rm -f $TMPX
