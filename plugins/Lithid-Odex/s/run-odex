@@ -72,5 +72,5 @@ push_finished_files
 clear
 echo "Odexing is complete!"
 echo -e "I have kept the odex files locally for your pleasure! "$CLR">"$toff" $H "$CLR"<"$toff" enjoy!"
-read -sn 1 -p "Press any key to go back to main menu...";;
+read -sn 1 -p "Press any key to go back to main menu..."
 $MAIN
