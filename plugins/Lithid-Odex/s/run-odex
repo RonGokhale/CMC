@@ -8,8 +8,7 @@ DW="dexopt-wrapper"
 OS="odex"
 AP="system/app"
 FW="system/framework"
-DA="data/app"
-FL="$AP $FW $DA"
+FL="$AP $FW"
 
 if [ "$chk_adb" != "1" ]; then
 	clear
@@ -46,8 +45,6 @@ cd $H/$AP/
 adb pull /$AP/
 cd $H/$FW
 adb pull /$FW/
-cd $H/$DA/
-adb pull /$DA/
 cd $H
 }
 
@@ -55,14 +52,12 @@ function push_finished_files() {
 adb remount
 adb push $H/$AP /$AP
 adb push $H/$FW /$FW
-adb push $H/$DA /$DA
 }
 
 function clean_up() {
 if [ -d $H ]; then
 	rm -rf $H/$AP/*
 	rm -rf $H/$FW/*
-	rm -rf $H/$DA/*
 fi
 }
 
