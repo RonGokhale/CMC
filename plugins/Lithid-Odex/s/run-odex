@@ -67,20 +67,15 @@ fi
 }
 
 # Process it all
-export FUNCTIONX="  __Odexing__________________________________________   "
-$CMC_FUNCTIONS/loading &
-MYSELF=$!
-clean_up &>> /dev/null
-push_files &>> /dev/null
-$CMD $CODE &>> /dev/null
-pull_files &>> /dev/null
-del_dex &>> /dev/null
-push_finished_files &>> /dev/null
-kill -9 $MYSELF &>> /dev/null
+clean_up
+push_files
+$CMD $CODE
+pull_files
+del_dex
+push_finished_files
 
 clear
 echo "Odexing is complete!"
 echo -e "I have kept the odex files locally for your pleasure! "$CLR">"$toff" $H "$CLR"<"$toff" enjoy!"
-sleep 5
-
+read -sn 1 -p "Press any key to go back to main menu...";;
 $MAIN
