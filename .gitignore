@@ -1,3 +1,4 @@
 #ignore files for git
 tools/t/repo
 *~
+plugins/Lithid-Odex/.ODEX/*
