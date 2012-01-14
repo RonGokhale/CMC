@@ -4,30 +4,6 @@
 
 AOSP_GIT="https://android.googlesource.com/platform/manifest"
 DEFAULT_REPO_HOME="$HOME/Development/AOSP"
-TMP_AF="/tmp/AOSP_BRANCH"
-TEMPA="/tmp/A_BUILD"
-
-function get_branch_list() {
-mkdir $TMP_AF
-cd $TMP_AF
-git clone $AOSP_GIT &>> /dev/null
-cd manifest
-git branch -a |cut -d"/" -f3 |grep -v "*" |grep -v HEAD >> $TEMPA
-cd $REPO_PATH
-rm -rf $TMP_AF
-}
-
-function list_aosp_branch() {
-chk_tmp
-COUNT=1
-ls_files=$(cat $TEMPA)
-for x in $ls_files; do
-	echo_list=$(echo -e ""$CLR"${COUNT}"$toff") $x")
-        echo "	"$echo_list"" >> $TMPX
-        let COUNT=COUNT+1
-done
-chmod a+x $TMPX
-}
 
 function compile_aosp() {
 export WHICH_REPO=$(grep BRANCH $CMC_CONFIG |awk '{print $2}')
@@ -61,20 +37,10 @@ else
 fi
 }
 
-function process_branch_list() {
-GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
-GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
-if [ ! -z "$option" ]; then
-	BRANCH=$(echo "$GET_LIST")
-	chk_tmp
-else
-	BRANCH="android-4.0.3_r1"
-	chk_tmp
-fi
-}
-
-
 function setup_aosp_repo() {
+if [ -f $TEMPA ]; then
+	rm -rf $TEMPA
+fi
 echo "Checking for repo installation..."
 CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
 CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
@@ -153,11 +119,14 @@ else
 fi
 cd $REPO_PATH
 clear
-get_branch_list
-list_aosp_branch
+
+SP_GIT=$AOSP_GIT
+get_sp_branch_list
+list_sp_branch
 LIST_BRANCH=$(cat $TMPX)
+D_BRANCH="android-4.0.3_r1"
 echo -e "Please choose the branch:
-Default is "$CLR"android-4.0.3_r1"$toff".
+Default is "$CLR"$D_BRANCH"$toff".
 
 $LIST_BRANCH"
 
@@ -193,4 +162,5 @@ case $input in
 		echo "Complete!. Please sync from the main menu!"
 		read -sn 1 -p "Press any key to continue..."
 esac
+rm -rf $TEMPA
 }
