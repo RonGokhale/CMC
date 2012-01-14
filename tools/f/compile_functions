@@ -32,21 +32,6 @@ if [ ! -f $CMC_LOCAL ]; then
 	mkdir -p $CMC_LOCAL
 fi
 
-function check_update_fn() {
-export NVER="$(cd $CMC_HOME; git log -1 --numstat | grep commit | awk '{print $2}')"
-export RVER="$(cd $CMC_HOME; git ls-remote https://github.com/lithid/CMC.git HEAD 2>/dev/null | awk '{print $1}')"
-if [ -n "$NVER" -a -n "$RVER" ]; then
-	if [ "$NVER" != "$RVER" ]; then
-		UPDATE_MSG=""$CLR"Available"$toff""
-	else
-		UPDATE_MSG="Up-to-date"
-	fi
-else
-	UPDATE_MSG=""$tred"Error"$toff""
-fi
-
-}
-
 function chk_tmp() {
 if [ -f $TMPX ] || [ -f $TMP_REPO ]; then
 	rm -f $TMPX
@@ -81,6 +66,21 @@ if [ "$CONF_COLOR_CHK" -eq "1" ]; then
 fi
 }
 
+function check_update_fn() {
+export NVER="$(cd $CMC_HOME; git log -1 --numstat | grep commit | awk '{print $2}')"
+export RVER="$(cd $CMC_HOME; git ls-remote https://github.com/lithid/CMC.git HEAD 2>/dev/null | awk '{print $1}')"
+if [ -n "$NVER" -a -n "$RVER" ]; then
+	if [ "$NVER" != "$RVER" ]; then
+		UPDATE_MSG=""$CLR"Available"$toff""
+	else
+		UPDATE_MSG="Up-to-date"
+	fi
+else
+	UPDATE_MSG=""$tred"Error"$toff""
+fi
+
+}
+
 function chk_cmc_config() {
 if [ ! -f $CMC_CONFIG ]; then
 	touch $CMC_CONFIG
@@ -106,6 +106,8 @@ fi
 
 function chk_repo_path_conf() {
 clear
+echo "Checking for current repos..."
+clear
 chk_tmp
 if [ ! -f $CMC_CONFIG ]; then
 	touch $CMC_CONFIG
@@ -114,7 +116,12 @@ CMC_CONFIG_REPO_CHK=$(grep REPO $CMC_CONFIG |wc -l)
 if [ "$CMC_CONFIG_REPO_CHK" -eq "1" ];then
 	CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
 	export REPO_PATH=$CMC_CONFIG_REPO
-	FOUND_NUM=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
+	if [ -z "$FOUND_NUM" ]; then
+		echo "Repos: $FOUND_NUM"
+	else
+		export FOUND_NUM=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
+		echo "Repos: $FOUND_NUM"
+	fi
 	export CONFIGED="$CMC_CONFIG_REPO_CHK"
 else
 	export REPO_PATH="None"
