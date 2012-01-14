@@ -12,9 +12,9 @@ CMC_RESTORE="$CMC_LOCAL/CMC_RESTORE_FILES"
 CMC_BACKUP="$CMC_LOCAL/BACKUP"
 hash repo &> /dev/null
 if [ $? -eq 1 ]; then
-	REPO="$CMC_TOOLS/repo"
+	export REPO="$CMC_TOOLS/repo"
 else
-	REPO="$(which repo)"
+	export REPO="$(which repo)"
 fi
 TMPX="/tmp/CM_BUILD"
 TMP_REPO="/tmp/found_repos"
@@ -22,7 +22,7 @@ TMP_C="/tmp/cm_compile.log"
 NULL="/dev/null"
 CM_GIT="https://github.com/CyanogenMod/android.git"
 DEFAULT_REPO_HOME="$HOME/Development/CM-GB"
-GOG_REPO="https://dl-ssl.google.com/dl/googlesource/git-repo/repo"
+export GOG_REPO="https://dl-ssl.google.com/dl/googlesource/git-repo/repo"
 #######################################################
 #
 # Start of the functions
@@ -117,9 +117,9 @@ if [ "$CMC_CONFIG_REPO_CHK" -eq "1" ];then
 	CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
 	export REPO_PATH=$CMC_CONFIG_REPO
 	if [ -z "$FOUND_NUM" ]; then
+		export FOUND_NUM=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
 		echo "Repos: $FOUND_NUM"
 	else
-		export FOUND_NUM=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
 		echo "Repos: $FOUND_NUM"
 	fi
 	export CONFIGED="$CMC_CONFIG_REPO_CHK"
