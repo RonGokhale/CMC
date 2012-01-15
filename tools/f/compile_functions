@@ -141,7 +141,7 @@ if [ "$CMC_CONFIG_REPO_CHK" -eq "1" ];then
 	CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
 	export REPO_PATH=$CMC_CONFIG_REPO
 	if [ -z "$FOUND_NUM" ]; then
-		export FOUND_NUM=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
+		export FOUND_NUM=$(find $CMC_CONFIG_REPO -maxdepth 2 -type d -iname .repo |wc -l)
 		echo "Repos: $FOUND_NUM"
 	else
 		echo "Repos: $FOUND_NUM"
@@ -303,12 +303,11 @@ if [ -f $TEMPA ]; then
 fi
 echo "Checking for repo installation..."
 CMC_CONFIG_REPO=$(grep REPO $CMC_CONFIG |awk '{print $2}')
-CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
+CHK_4_REPO=$(find $CMC_CONFIG_REPO -maxdepth 2 -type d -iname .repo |wc -l)
 CMC_CONFIG_REPO_CHK=$(grep REPO $CMC_CONFIG |wc -l)
 if [ "$REPO_PATH" = "None" ] && [ "$FOUND_NUM" = "None" ];then
 	clear
 	echo "Looking for repo..."
-	CHK_4_REPO=$(find $CMC_CONFIG_REPO -type d -iname .repo |wc -l)
 	CHK_4_REPO_PATH=$(find $CMC_CONFIG_REPO -type d -iname .repo |cut -d"." -f"1")
 	if [ "$CHK_4_REPO" -eq "0" ]; then
 		echo "No found repos. Lets do this now."
