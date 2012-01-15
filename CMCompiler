@@ -56,9 +56,9 @@ case $option in
 		. $CMC_HOME/menu_items/extract_files.menu;;
 	6)
 		. $CMC_HOME/menu_items/extra_repo_settings.menu;;
-	9)
+	7)
 		. $CMC_HOME/menu_items/compile_cm_repo.menu;;
-	10)
+	8)
 		. $CMC_HOME/menu_items/undo_repo_changes.menu;;
 	97)
 		. $CMC_HOME/menu_items/toggle_git_https.menu;;
