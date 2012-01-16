@@ -1,5 +1,6 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
+# Modded by Jonathan aka Dope M.S.R.
 export CMC_HOME=${CMC_HOME:-$(dirname $0)}
 if [ -n "${CMC_HOME##*/*}" ];
 then
@@ -22,7 +23,7 @@ echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIGED"$toff"
 
 	"$CLR"1"$toff") Setup cyanogenmod repo (GB/ICS)
-	"$CLR"2"$toff") Update repo (GB/ICS)
+	"$CLR"2"$toff") Sync/Update repo (GB/ICS)
 	"$CLR"3"$toff") Choose your manufacturer
 	"$CLR"4"$toff") Choose your model
 	"$CLR"5"$toff") Extract Files: "$CLR"$DEVICE_MOD"$toff"

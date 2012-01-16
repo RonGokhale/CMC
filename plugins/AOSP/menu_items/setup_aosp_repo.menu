@@ -29,9 +29,9 @@ case $option in
 	[nN] | [n|N][O|o] )
 		MSG="Languages have not been removed!"
 		run_remove_function no
-		$CMC_PLUGINS/AOSP/main.plug;;
+		. $CMC_PLUGINS/AOSP/main.plug;;
 	b|B)
-		$CMC_PLUGINS/AOSP/main.plug;;
+		. $CMC_PLUGINS/AOSP/main.plug;;
 	x|X)
 		echo "Goodbye!"
 		exit 0;;
