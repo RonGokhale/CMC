@@ -37,7 +37,7 @@ case $option in
 	u|U)
 		reposync_update
 		# Get time to read reposync_update messages
-		$SYNC;;
+		$MAIN;;
 	*)
 		clear
 		echo "You need to choose an option first"
