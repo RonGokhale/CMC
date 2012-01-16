@@ -1,6 +1,9 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
+# Modded by Jonathan aka Dope M.S.R.
 MAIN="$CMC_HOME/CMCompiler"
+SETUP=". $CMC_HOME/menu_items/setup_cm_repo.menu"
+SYNC=". $CMC_HOME/menu_items/update_cm_repo.menu"
 CMC_LOCAL="$HOME/.cmc"
 CMC_CONFIG="$CMC_LOCAL/cmc-config"
 CMC_TOOLS="$CMC_HOME/tools/t"
@@ -279,7 +282,7 @@ CHK_REPO_4_SYNC=$(ls $REPO_PATH |wc -l)
 if [ "$CHK_REPO_4_SYNC" -lt "5" ]; then
 	clear
 	echo "You need to setup the repo first"
-	read -sn 1 -p "Press any key to go back to main menu..."
+	read -sn 1 -p "Press any key to go back to sync/update menu..."
 else
 	reposync
 fi
@@ -418,7 +421,7 @@ case $input in
 		clear
 		$REPO init -u $CM_GIT -b $BRANCH
 		clear
-		echo "Complete!. Please sync from the main menu!"
+		echo "Complete!. Please sync from the sync/update menu!"
 		read -sn 1 -p "Press any key to continue..."
 esac
 rm -rf $TEMPA
