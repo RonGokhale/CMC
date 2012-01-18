@@ -8,7 +8,7 @@ DEFAULT_REPO_HOME="$HOME/Development/AOSP"
 function compile_aosp() {
 export WHICH_REPO=$(grep BRANCH $CMC_CONFIG |awk '{print $2}')
 
-if [ -z "$WHICH_REPO" ]; then
+if [ ! -z "$WHICH_REPO" ]; then
 	cd $REPO_PATH
 	. build/envsetup.sh
 	make installclean
