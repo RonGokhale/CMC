@@ -8,7 +8,7 @@ chk_adb_running
 clear
 echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 Main > Plugins > "$CLR"AOSP"$toff"
-Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIGED"$toff"
+Repos found: "$CLR"$FOUND_NUM"$toff"
 
 	"$CLR"1"$toff") Setup aosp repo
 	"$CLR"2"$toff") Compile aosp repo
