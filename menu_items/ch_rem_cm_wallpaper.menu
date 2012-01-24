@@ -7,7 +7,7 @@ chk_adb_running
 clear
 echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 Main > "$CLR"Removing cyanogenmod wallpapers app"$toff"
-Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIGED"$toff"
+Repos found: "$CLR"$FOUND_NUM"$toff"	
 
 	"$CLR"Y"$toff"/n) This will remove the Cyanogenmod wallpaper application.
 	Should we proceed with this?

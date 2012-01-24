@@ -8,7 +8,7 @@ find_toggle_git_https
 clear
 echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 Main > "$CLR"Toggle git/https syncing"$toff"
-Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIGED"$toff"
+Repos found: "$CLR"$FOUND_NUM"$toff"	
 
 	"$CLR"Y"$toff"/n) This will toggle git/https for syncing the repo.
 	Currently set to: "$CLR"$CHK_TOGGLE"$toff"

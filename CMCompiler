@@ -20,7 +20,7 @@ check_update_fn
 clear
 echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
 "$CLR"Main"$toff"
-Repos found: "$CLR"$FOUND_NUM"$toff"	Repos configured in ~/.cmcrc: "$CLR"$CONFIGED"$toff"
+Repos found: "$CLR"$FOUND_NUM"$toff"
 
 	"$CLR"1"$toff") Setup cyanogenmod repo (GB/ICS)
 	"$CLR"2"$toff") Sync/Update repo (GB/ICS)
