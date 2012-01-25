@@ -6,17 +6,16 @@ chk_cmc_config
 chk_adb_running
 
 clear
-echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
-Main > Plugins > "$CLR"AOSP"$toff"
-Repos found: "$CLR"$FOUND_NUM"$toff"
+echo -e "<<< ${CLR}Cyanogenmod Compiler${toff} :: Main :: Plugins :: ${CLR}AOSP${toff} >>>
+Repos found: ${CLR}$FOUND_NUM${toff}
 
-	"$CLR"1"$toff") Setup aosp repo
-	"$CLR"2"$toff") Compile aosp repo
+	${CLR}1${toff}) Setup aosp repo
+	${CLR}2${toff}) Compile aosp repo
 	-----
-	"$CLR"B"$toff") back to plugins
-	"$CLR"X"$toff") exit
+	${CLR}B${toff}) back to plugins
+	${CLR}X${toff}) exit
 
-Device Info: "$CLR"$DEVICE_MAN"$toff"/"$CLR"$DEVICE_MOD"$toff" ADB: $ADB_MSG
+Device Info: ${CLR}$DEVICE_MAN${toff}/${CLR}$DEVICE_MOD${toff} ADB: $ADB_MSG
 Please choose an option to continue"
 echo -n "> "
 
