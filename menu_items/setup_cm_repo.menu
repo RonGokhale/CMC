@@ -1,24 +1,24 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
-# Modded by Jonathan aka Dope M.S.R.
+
 . $CMC_HOME/tools/f/compile_functions
 chk_cmc_config
 chk_adb_running
+. $CMC_FUNCTIONS/chk_build_packages
 
 clear
-echo -e "<<< ${CLR}Cyanogenmod Compiler${toff} :: Main :: ${CLR}Choose your plugin${toff} >>>
+echo -e "<<< ${CLR}Cyanogenmod Compiler${toff} :: Main :: ${CLR}Setup repo${toff} >>>
 Repos found: ${CLR}$FOUND_NUM${toff}	
 
+	Repo configured: ${CLR}$CONFIGED${toff} 
 	Repo location: 
 	${CLR}$REPO_PATH${toff}
 	
-	Repos configured in $CMC_CONFIG: ${CLR}$CONFIGED${toff}
-
-	${CLR}Y${toff}) This will download and install the repo from CyanogenMod.
-
-	${CLR}N/B${toff}) This will "$tred"NOT${toff} download and install the repo from Cyanogenmod
-	   and will return you to the main menu without any changes.
-
+	${CLR}1${toff}) Setup the cyanogenmod repo
+	${CLR}2${toff}) Setup packages for building :: ${PKG_COUNT}
+	
+	Default will "$tred"NOT${toff} download and install the repo from Cyanogenmod
+	and will return you to the main menu without any changes.
 	-----
 	${CLR}B${toff}) back to main menu
 	${CLR}X${toff}) exit
@@ -29,22 +29,20 @@ echo -n "> "
 
 read option
 case $option in
-	[nN] | [n|N] )
-		clear
-		echo "Nothing has been done."
-		read -sn 1 -p "Press any key to go back to the main menu..."
+	1)
+		setup_cm_repo
 		$MAIN;;
+	2)
+		. $CMC_FUNCTIONS/install_${OSVER}_packages --install
+		$SETUP;;
 	b|B)
 		$MAIN;;
 	x|X)
 		echo "Goodbye!"
 		exit 1;;
-	y|Y)
-		setup_cm_repo
-		$MAIN;;
 	*)
 		clear
-		echo "You need to choose an option first"
+		echo "Nothing has been done."
 		read -sn 1 -p "Press any key to go back to setup menu..."
 		$SETUP;;
 esac

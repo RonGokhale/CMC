@@ -1,6 +1,5 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
-# Modded by Jonathan aka Dope M.S.R.
 MAIN="$CMC_HOME/CMCompiler"
 SETUP=". $CMC_HOME/menu_items/setup_cm_repo.menu"
 SYNC=". $CMC_HOME/menu_items/update_cm_repo.menu"
