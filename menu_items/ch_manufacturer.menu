@@ -8,16 +8,15 @@ clear
 MORE_PATH=$REPO_PATH/device
 list_em
 LIST_MANU=$(cat $TMPX)
-echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
-Main > "$CLR"Choose your Manufacturer"$toff"
-Repos found: "$CLR"$FOUND_NUM"$toff"	
+echo -e "<<< ${CLR}Cyanogenmod Compiler${toff} :: Main :: ${CLR}Choose your Manufacturer${toff} >>>
+Repos found: ${CLR}$FOUND_NUM${toff}	
 
 $LIST_MANU
 	-----
-	"$CLR"B"$toff") back to main menu
-	"$CLR"X"$toff") exit
+	${CLR}B${toff}) back to main menu
+	${CLR}X${toff}) exit
 
-Device Info: "$CLR"$DEVICE_MAN"$toff"/"$CLR"$DEVICE_MOD"$toff" ADB: $ADB_MSG
+Device Info: ${CLR}$DEVICE_MAN${toff}/${CLR}$DEVICE_MOD${toff} ADB: $ADB_MSG
 Please choose an option to continue"
 echo -n "> "
 

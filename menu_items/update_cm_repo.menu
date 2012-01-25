@@ -6,21 +6,20 @@ chk_cmc_config
 chk_adb_running
 
 clear
-echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
-Main > "$CLR"Sync/Update Cyanogenmod"$toff"
-Repos found: "$CLR"$FOUND_NUM"$toff"	
+echo -e "<<< ${CLR}Cyanogenmod Compiler${toff} :: Main :: ${CLR}Sync/Update Cyanogenmod${toff} >>>
+Repos found: ${CLR}$FOUND_NUM${toff}	
 
-	"$CLR"S"$toff") "$CLR"S"$toff"ync - This will sync the Cyanogenmod Repo.
-		  "$tred"NOTE:"$toff" This can also be used to FORCE a repo sync
+	${CLR}S${toff}) ${CLR}S${toff}ync - This will sync the Cyanogenmod Repo.
+		  "$tred"NOTE:${toff} This can also be used to FORCE a repo sync
 			and will remove any modifications done by CMC.
 
-	"$CLR"U"$toff") "$CLR"U"$toff"pdate - this will update the Cyanogenmod Repo.
+	${CLR}U${toff}) ${CLR}U${toff}pdate - this will update the Cyanogenmod Repo.
 
 	-----
-	"$CLR"B"$toff") Back to the Main Menu
-	"$CLR"X"$toff") Exit
+	${CLR}B${toff}) Back to the Main Menu
+	${CLR}X${toff}) Exit
 
-Device Info: "$CLR"$DEVICE_MAN"$toff"/"$CLR"$DEVICE_MOD"$toff" ADB: $ADB_MSG
+Device Info: ${CLR}$DEVICE_MAN${toff}/${CLR}$DEVICE_MOD${toff} ADB: $ADB_MSG
 Please choose an option to continue:"
 echo -n "> "
 

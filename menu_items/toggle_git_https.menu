@@ -6,22 +6,21 @@ chk_adb_running
 find_toggle_git_https
 
 clear
-echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
-Main > "$CLR"Toggle git/https syncing"$toff"
-Repos found: "$CLR"$FOUND_NUM"$toff"	
+echo -e "<<< ${CLR}Cyanogenmod Compiler${toff} :: Main :: ${CLR}Toggle git/https syncing${toff} >>>
+Repos found: ${CLR}$FOUND_NUM${toff}	
 
-	"$CLR"Y"$toff"/n) This will toggle git/https for syncing the repo.
-	Currently set to: "$CLR"$CHK_TOGGLE"$toff"
+	${CLR}Y${toff}/n) This will toggle git/https for syncing the repo.
+	Currently set to: ${CLR}$CHK_TOGGLE${toff}
 
-	"$CLR"Note:"$toff"
+	${CLR}Note:${toff}
 	Default is yes type \"n\" or \"no\" to stop this from happening.
 	You can also press \"0\" to return to the main menu without changes.
 	-----
-	"$CLR"B"$toff") back to main menu
-	"$CLR"X"$toff") exit
+	${CLR}B${toff}) back to main menu
+	${CLR}X${toff}) exit
 
-Device Info: "$CLR"$DEVICE_MAN"$toff"/"$CLR"$DEVICE_MOD"$toff" ADB: $ADB_MSG
-Please choose an option to continue ("$CLR"Y"$toff"/n)"
+Device Info: ${CLR}$DEVICE_MAN${toff}/${CLR}$DEVICE_MOD${toff} ADB: $ADB_MSG
+Please choose an option to continue (${CLR}Y${toff}/n)"
 echo -n "> "
 
 read option

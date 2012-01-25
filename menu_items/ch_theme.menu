@@ -5,29 +5,28 @@ chk_cmc_config
 chk_adb_running
 
 clear
-echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
-"$CLR"Main"$toff"
-Repos found: "$CLR"$FOUND_NUM"$toff"	
+echo -e "<<< ${CLR}Cyanogenmod Compiler${toff} :: Main :: ${CLR}Change theme${toff}>>>
+Repos found: ${CLR}$FOUND_NUM${toff}	
 
-	"$CLR"1"$toff") Black
-	"$CLR"2"$toff") Red
-	"$CLR"3"$toff") Green
-	"$CLR"4"$toff") Yellow
-	"$CLR"5"$toff") Blue
-	"$CLR"6"$toff") Purple
-	"$CLR"7"$toff") Cyan
-	"$CLR"8"$toff") Light Black
-	"$CLR"9"$toff") Light Red
-	"$CLR"10"$toff") Light Green
-	"$CLR"11"$toff") Light Yellow
-	"$CLR"12"$toff") Light Blue
-	"$CLR"13"$toff") Light Purple
-	"$CLR"14"$toff") Light Cyan
+	${CLR}1${toff}) Black
+	${CLR}2${toff}) Red
+	${CLR}3${toff}) Green
+	${CLR}4${toff}) Yellow
+	${CLR}5${toff}) Blue
+	${CLR}6${toff}) Purple
+	${CLR}7${toff}) Cyan
+	${CLR}8${toff}) Light Black
+	${CLR}9${toff}) Light Red
+	${CLR}10${toff}) Light Green
+	${CLR}11${toff}) Light Yellow
+	${CLR}12${toff}) Light Blue
+	${CLR}13${toff}) Light Purple
+	${CLR}14${toff}) Light Cyan
 	-----
-	"$CLR"B"$toff") back to main menu
-	"$CLR"X"$toff") exit
+	${CLR}B${toff}) back to main menu
+	${CLR}X${toff}) exit
 
-Device Info: "$CLR"$DEVICE_MAN"$toff"/"$CLR"$DEVICE_MOD"$toff" ADB: $ADB_MSG
+Device Info: ${CLR}$DEVICE_MAN${toff}/${CLR}$DEVICE_MOD${toff} ADB: $ADB_MSG
 Please choose an option to continue"
 echo -n "> "
 

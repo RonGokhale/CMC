@@ -18,30 +18,30 @@ chk_repo_path_conf
 check_update_fn
 
 clear
-echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
-"$CLR"Main"$toff"
-Repos found: "$CLR"$FOUND_NUM"$toff"
+echo -e "<<< ${CLR}Cyanogenmod Compiler${toff} :: ${CLR}Main${toff} >>>
+Repos found: ${CLR}$FOUND_NUM${toff} 
 
-	"$CLR"1"$toff") Setup cyanogenmod repo (GB/ICS)
-	"$CLR"2"$toff") Sync/Update repo (GB/ICS)
-	"$CLR"3"$toff") Choose your manufacturer
-	"$CLR"4"$toff") Choose your model
-	"$CLR"5"$toff") Extract Files: "$CLR"$DEVICE_MOD"$toff"
+	${CLR}1${toff}) Setup cyanogenmod repo (GB/ICS)
+	${CLR}2${toff}) Sync/Update repo (GB/ICS)
+	${CLR}3${toff}) Choose your manufacturer
+	${CLR}4${toff}) Choose your model
+	${CLR}5${toff}) Extract Files: ${CLR}$DEVICE_MOD${toff}
 	-----
-	"$CLR"6"$toff") Extra Repo Settings
-	"$CLR"7"$toff") Compile cyanogenmod (GB/ICS)
+	${CLR}6${toff}) Extra Repo Settings
+	${CLR}7${toff}) Compile cyanogenmod (GB/ICS)
 	-----
-	"$CLR"8"$toff") Undo current changes: "$CLR"$CHANGE_COUNT"$toff"
+	${CLR}8${toff}) Undo current changes: ${CLR}$CHANGE_COUNT${toff}
 	-----
-	"$CLR"P"$toff") CMC Plugins
-	"$CLR"97"$toff") Toggle git/https syncing
-	"$CLR"98"$toff") Change theme
-	"$CLR"99"$toff") CMC Updates: $UPDATE_MSG
-	"$CLR"X"$toff") exit
+	${CLR}P${toff}) CMC Plugins
+	${CLR}97${toff}) Toggle git/https syncing
+	${CLR}98${toff}) Change theme
+	${CLR}99${toff}) CMC Updates: $UPDATE_MSG
+	-----
+	${CLR}X${toff}) exit
 
-Device Info: "$CLR"$DEVICE_MAN"$toff"/"$CLR"$DEVICE_MOD"$toff" ADB: $ADB_MSG
+Device Info: ${CLR}$DEVICE_MAN${toff}/${CLR}$DEVICE_MOD${toff} ADB: $ADB_MSG
 Please choose an option to continue"
-echo -n "> "
+echo -ne "${CLR}>${toff} "
 
 read option
 case $option in

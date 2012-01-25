@@ -6,18 +6,17 @@ chk_adb_running
 
 
 clear
-echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
-"$CLR"Main"$toff"
-Repos found: "$CLR"$FOUND_NUM"$toff"	
+echo -e "<<< ${CLR}Cyanogenmod Compiler${toff} :: Main :: ${CLR}Repo Settings${toff}>>>
+Repos found: ${CLR}$FOUND_NUM${toff}	
 
-	"$CLR"1"$toff") Remove extra languages (GB/ICS)
-	"$CLR"2"$toff") Remove live wallpapers (GB/ICS)
-	"$CLR"3"$toff") Remove cm wallpapers (GB)
+	${CLR}1${toff}) Remove extra languages (GB/ICS)
+	${CLR}2${toff}) Remove live wallpapers (GB/ICS)
+	${CLR}3${toff}) Remove cm wallpapers (GB)
 	-----
-	"$CLR"B"$toff") back to main menu
-	"$CLR"X"$toff") exit
+	${CLR}B${toff}) back to main menu
+	${CLR}X${toff}) exit
 
-Device Info: "$CLR"$DEVICE_MAN"$toff"/"$CLR"$DEVICE_MOD"$toff" ADB: $ADB_MSG
+Device Info: ${CLR}$DEVICE_MAN${toff}/${CLR}$DEVICE_MOD${toff} ADB: $ADB_MSG
 Please choose an option to continue"
 echo -n "> "
 

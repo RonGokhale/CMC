@@ -6,25 +6,24 @@ chk_cmc_config
 chk_adb_running
 
 clear
-echo -e "<<< "$CLR"Welcome to the Cyanogenmod Compiler"$toff" >>>
-Main > "$CLR"Setting up CyanogenMod Repo"$toff"
-Repos found: "$CLR"$FOUND_NUM"$toff"	
+echo -e "<<< ${CLR}Cyanogenmod Compiler${toff} :: Main :: ${CLR}Choose your plugin${toff} >>>
+Repos found: ${CLR}$FOUND_NUM${toff}	
 
 	Repo location: 
-	"$CLR"$REPO_PATH"$toff"
+	${CLR}$REPO_PATH${toff}
 	
-	Repos configured in $CMC_CONFIG: "$CLR"$CONFIGED"$toff"
+	Repos configured in $CMC_CONFIG: ${CLR}$CONFIGED${toff}
 
-	"$CLR"Y"$toff") This will download and install the repo from CyanogenMod.
+	${CLR}Y${toff}) This will download and install the repo from CyanogenMod.
 
-	"$CLR"N/B"$toff") This will "$tred"NOT"$toff" download and install the repo from Cyanogenmod
+	${CLR}N/B${toff}) This will "$tred"NOT${toff} download and install the repo from Cyanogenmod
 	   and will return you to the main menu without any changes.
 
 	-----
-	"$CLR"B"$toff") back to main menu
-	"$CLR"X"$toff") exit
+	${CLR}B${toff}) back to main menu
+	${CLR}X${toff}) exit
 
-Device Info: "$CLR"$DEVICE_MAN"$toff"/"$CLR"$DEVICE_MOD"$toff" ADB: $ADB_MSG
+Device Info: ${CLR}$DEVICE_MAN${toff}/${CLR}$DEVICE_MOD${toff} ADB: $ADB_MSG
 Please choose an option to continue:"
 echo -n "> "
 
