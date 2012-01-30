@@ -77,7 +77,15 @@ elif [ "$1" = "--install" ]; then
 			echo "Going to setup menu...";;
 			*)
 			for x in $LIST_MISSING; do
-				sudo apt-get install $x
+				if [ "$x" = "sun-java6-jdk" ]; then
+					clear
+					echo "You don't have sun-java6-jdk doing that now..."
+					sudo add-apt-repository ppa:ferramroberto/java
+					sudo apt-get update
+					sudo apt-get install sun-java6-jdk
+				else
+					sudo apt-get install $x
+				fi
 			done			
 			clear
 			echo "All apps should be installed now..."
