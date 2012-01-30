@@ -36,7 +36,21 @@ if [ "$1" = "--check" ]; then
 	done
 	COUNT_1="${COUNT}"
 	if [ "$BITS" = "x86_64" ]; then
-		PKG_LIST=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline5-dev gcc-4.3-multilib g++-4.3-multilib)
+     		if [[ "$VER_NUM" = "10.04" ||\
+        	   	"$VER_NUM" = "10.10" ]];
+     		then
+			PKG_LIST=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline5-dev gcc-4.3-multilib g++-4.3-multilib)
+		elif [ "$VER_NUM" = "11.04" ];
+		then
+			PKG_LIST=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline-gplv2-dev gcc-4.3-multilib g++-4.3-multilib)
+		elif [[ "$VER_NUM" = "11.10" ||\
+        	   	"$VER_NUM" = "12.04" ]];
+		then
+			PKG_LIST=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline-gplv2-dev)
+		else
+			echo -e "Could not determine your Version Number. Recieved $VER_NUM"
+			$MAIN
+		fi
 		COUNT="1"
 		for x in ${PKG_LIST[@]}; do
 			CHK=$(dpkg --get-selections $x |grep -v deinstall |grep -c install)
