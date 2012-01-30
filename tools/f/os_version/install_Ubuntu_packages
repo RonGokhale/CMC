@@ -20,9 +20,30 @@ if [ "$1" = "--check" ]; then
              echo -e "Could not determine your Version Number. Recieved $VER_NUM"
              $MAIN
         fi
+
 	COUNT="0"
-	clear
-	for x in ${PKG_LIST[@]}; do
+
+	if [ "$BITS" = "x86_64" ]; then
+     		if [[ "$VER_NUM" = "10.04" ||\
+        	   	"$VER_NUM" = "10.10" ]];
+     		then
+			PKG_LIST64=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline5-dev gcc-4.3-multilib g++-4.3-multilib)
+		elif [ "$VER_NUM" = "11.04" ];
+		then
+			PKG_LIST64=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline-gplv2-dev gcc-4.3-multilib g++-4.3-multilib)
+		elif [[ "$VER_NUM" = "11.10" ||\
+        	   	"$VER_NUM" = "12.04" ]];
+		then
+			PKG_LIST64=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline-gplv2-dev)
+		else
+			echo -e "Could not determine your Version Number. Recieved $VER_NUM"
+			$MAIN
+		fi
+	else
+		unset PKG_LIST64
+	fi
+
+	for x in ${PKG_LIST[@]} ${PKG_LIST64[@]}; do
 		CHK=$(dpkg --get-selections $x |grep -v deinstall |grep -c install)
 		if [ "$CHK" -eq "1" ]; then
 			let COUNT=COUNT
@@ -34,60 +55,40 @@ if [ "$1" = "--check" ]; then
                         let COUNT=COUNT+1
 		fi
 	done
-	COUNT_1="${COUNT}"
-	if [ "$BITS" = "x86_64" ]; then
-     		if [[ "$VER_NUM" = "10.04" ||\
-        	   	"$VER_NUM" = "10.10" ]];
-     		then
-			PKG_LIST=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline5-dev gcc-4.3-multilib g++-4.3-multilib)
-		elif [ "$VER_NUM" = "11.04" ];
-		then
-			PKG_LIST=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline-gplv2-dev gcc-4.3-multilib g++-4.3-multilib)
-		elif [[ "$VER_NUM" = "11.10" ||\
-        	   	"$VER_NUM" = "12.04" ]];
-		then
-			PKG_LIST=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline-gplv2-dev)
-		else
-			echo -e "Could not determine your Version Number. Recieved $VER_NUM"
-			$MAIN
-		fi
-		COUNT="1"
-		for x in ${PKG_LIST[@]}; do
-			CHK=$(dpkg --get-selections $x |grep -v deinstall |grep -c install)
-			if [ "$CHK" -eq "1" ]; then
-				echo
-                	else
-                        	let COUNT=COUNT+1
-			fi
-		done
-	fi
+
 	if  [ "$COUNT" -gt "0" ]; then
 		export PKG_COUNT="Missing: ${tred}${COUNT}${toff} Packages"
 	else
 		export PKG_COUNT="${CLR}Packages good${toff}"
 	fi
 elif [ "$1" = "--install" ]; then
-	LIST_MISSING=$(cat $MISSING_TOOLS)
-	clear
-	echo "We will now install these missing applications:"
-	echo "$LIST_MISSING"
-	echo
-	echo -e "Press ${tred}X${toff} to go back to setup menu"
-        echo -n "Press any key to continue..."
-	read response
-	case $reponse in
-		x)
+	if [ -f $MISSING_TOOLS ]; then
+		LIST_MISSING=$(cat $MISSING_TOOLS)
 		clear
-		echo "Going to setup menu...";;
-		*)
-		for x in $LIST_MISSING; do
-			sudo apt-get install $x
-		done
-		clear
-		echo "All apps should be installed now..."
+		echo "We will now install these missing applications:"
+		echo "$LIST_MISSING"
+		echo
+		echo -e "Press ${tred}X${toff} to go back to setup menu"
+        	echo -n "Press any key to continue..."
+		read response
+		case $reponse in
+			x)
+			clear
+			echo "Going to setup menu...";;
+			*)
+			for x in $LIST_MISSING; do
+				sudo apt-get install $x
+			done			
+			clear
+			echo "All apps should be installed now..."
+			read -sn 1 -p "Press any key to go back to main menu...";;
+		esac
+	else
+		echo "Couldn\'t locate $MISSING_TOOLS"
 		read -sn 1 -p "Press any key to go back to main menu...";;
-	esac
-	rm $MISSING_TOOLS
+	if [ -f $MISSING_TOOLS ]; then
+		rm $MISSING_TOOLS
+	fi
 else
 	echo "This"
 fi
