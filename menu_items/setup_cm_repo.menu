@@ -33,7 +33,7 @@ case $option in
 		setup_cm_repo
 		$MAIN;;
 	2)
-		. $CMC_FUNCTIONS/install_${OSVER}_packages --install
+		. $CMC_FUNCTIONS/os_version/install_${OSVER}_packages --install
 		$SETUP;;
 	b|B)
 		$MAIN;;

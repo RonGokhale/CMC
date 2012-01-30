@@ -2,15 +2,36 @@
 # Written by lithid (mrlithid@gmail.com)
 
 . $CMC_HOME/tools/f/compile_functions
-COUNT="0"
+VER_NUM=$(lsb_release -r |awk '{print $2}')
+MISSING_TOOLS=$CMC_LOCAL/.MISSING_TOOLS
 
 if [ "$1" = "--check" ]; then
-	PKG_LIST=(git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev libwxgtk2.6-dev squashfs-tools build-essential zip curl libncurses5-dev zlib1g-dev sun-java6-jdk pngcrush schedtool)
-	COUNT="1"
+	if [ -f $MISSING_TOOLS ]; then
+		rm -rf $MISSING_TOOLS
+	fi
+     	if [[ "$VER_NUM" = "10.04" ||\
+           	"$VER_NUM" = "10.10" ||\
+           	"$VER_NUM" = "11.04" ||\
+           	"$VER_NUM" = "11.10" ||\
+           	"$VER_NUM" = "12.04" ]];
+     	then
+          	PKG_LIST=(git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev libwxgtk2.6-dev squashfs-tools build-essential zip curl libncurses5-dev zlib1g-dev sun-java6-jdk pngcrush schedtool pork)
+        else
+             echo -e "Could not determine your Version Number. Recieved $VER_NUM"
+             $MAIN
+        fi
+	COUNT="0"
+	clear
 	for x in ${PKG_LIST[@]}; do
-		CHK=$(dpkg –get-selections | grep -v deinstall |grep -c $x)
+		CHK=$(dpkg --get-selections $x |grep -v deinstall |grep -c install)
 		if [ "$CHK" -eq "1" ]; then
-			let COUNT=COUNT+1
+			let COUNT=COUNT
+                else
+   			if [ ! -f $MISSING_TOOLS ]; then
+				touch $MISSING_TOOLS
+			fi
+			echo "$x" >> $MISSING_TOOLS
+                        let COUNT=COUNT+1
 		fi
 	done
 	COUNT_1="${COUNT}"
@@ -18,20 +39,41 @@ if [ "$1" = "--check" ]; then
 		PKG_LIST=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline5-dev gcc-4.3-multilib g++-4.3-multilib)
 		COUNT="1"
 		for x in ${PKG_LIST[@]}; do
-			CHK=$(dpkg –get-selections | grep -v deinstall |grep -c $x)
+			CHK=$(dpkg --get-selections $x |grep -v deinstall |grep -c install)
 			if [ "$CHK" -eq "1" ]; then
-				let COUNT=COUNT+1
+				echo
+                	else
+                        	let COUNT=COUNT+1
 			fi
 		done
 	fi
 	if  [ "$COUNT" -gt "0" ]; then
-		export PKG_COUNT="Missing: ${tred}${COUNT}{toff} Packages"
+		export PKG_COUNT="Missing: ${tred}${COUNT}${toff} Packages"
 	else
-		export PKG_COUNT="${CLR}Packages good{toff}"
+		export PKG_COUNT="${CLR}Packages good${toff}"
 	fi
 elif [ "$1" = "--install" ]; then
+	LIST_MISSING=$(cat $MISSING_TOOLS)
 	clear
-	echo "This option doesn't work yet"
-	read -sn 1 -p "Press any key to go back to setup menu..."
+	echo "We will now install these missing applications:"
+	echo "$LIST_MISSING"
+	echo
+	echo -e "Press ${tred}X${toff} to go back to setup menu"
+        echo -n "Press any key to continue..."
+	read response
+	case $reponse in
+		x)
+		clear
+		echo "Going to setup menu...";;
+		*)
+		for x in $LIST_MISSING; do
+			sudo apt-get install $x
+		done
+		clear
+		echo "All apps should be installed now..."
+		read -sn 1 -p "Press any key to go back to main menu...";;
+	esac
+	rm $MISSING_TOOLS
 else
+	echo "This"
 fi
