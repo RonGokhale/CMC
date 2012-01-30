@@ -381,7 +381,13 @@ fi
 cd $REPO_PATH
 clear
 
-SP_GIT=$CM_GIT
+CUSTOM_GIT_CHECK=$(grep CUSTOM_GIT: ~/.cmc/cmc-config |grep -v "#" |wc -l)
+if [ "$CUSTOM_GIT_CHECK" -eq "1" ]; then
+     CUSTOM_GIT=$(grep CUSTOM_GIT: ${CMC_CONFIG} |awk '{print $2}')
+     SP_GIT=${CUSTOM_GIT}
+else
+     SP_GIT=${CM_GIT}
+fi
 get_sp_branch_list
 list_sp_branch
 LIST_BRANCH=$(cat $TMPX)
