@@ -47,12 +47,12 @@ if [ "$1" = "--check" ]; then
 		CHK=$(dpkg --get-selections $x |grep -v deinstall |grep -c install)
 		if [ "$CHK" -eq "1" ]; then
 			let COUNT=COUNT
-                else
-   			if [ ! -f $MISSING_TOOLS ]; then
+		else
+			if [ ! -f $MISSING_TOOLS ]; then
 				touch $MISSING_TOOLS
 			fi
 			echo "$x" >> $MISSING_TOOLS
-                        let COUNT=COUNT+1
+			let COUNT=COUNT+1
 		fi
 	done
 
