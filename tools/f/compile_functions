@@ -384,6 +384,8 @@ clear
 CUSTOM_GIT_CHECK=$(grep CUSTOM_GIT: ~/.cmc/cmc-config |grep -v "#" |wc -l)
 if [ "$CUSTOM_GIT_CHECK" -eq "1" ]; then
      CUSTOM_GIT=$(grep CUSTOM_GIT: ${CMC_CONFIG} |awk '{print $2}')
+     clear
+     echo -e "Found custom git using ${CLR}${CUSTOM_GIT}${toff}"
      SP_GIT=${CUSTOM_GIT}
 else
      SP_GIT=${CM_GIT}
@@ -424,7 +426,7 @@ case $input in
 			exit 6
 		fi
 		clear
-		$REPO init -u $CM_GIT -b $BRANCH
+		$REPO init -u $SP_GIT -b $BRANCH
 		clear
 		echo "Complete!. Please sync from the sync/update menu!"
 		read -sn 1 -p "Press any key to continue..."
