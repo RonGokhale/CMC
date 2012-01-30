@@ -93,7 +93,7 @@ elif [ "$1" = "--install" ]; then
 		esac
 	else
 		echo "Couldn\'t locate $MISSING_TOOLS"
-		read -sn 1 -p "Press any key to go back to main menu...";;
+		read -sn 1 -p "Press any key to go back to main menu..."
 	if [ -f $MISSING_TOOLS ]; then
 		rm $MISSING_TOOLS
 	fi
