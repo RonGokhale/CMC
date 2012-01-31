@@ -2,8 +2,9 @@
 # Written by lithid (mrlithid@gmail.com)
 
 . $CMC_HOME/tools/f/compile_functions
+
 VER_NUM=$(lsb_release -r |awk '{print $2}')
-MISSING_TOOLS=$CMC_LOCAL/.MISSING_TOOLS
+export MISSING_TOOLS=$CMC_LOCAL/.MISSING_TOOLS
 
 if [ "$1" = "--check" ]; then
 	if [ -f $MISSING_TOOLS ]; then
@@ -13,27 +14,23 @@ if [ "$1" = "--check" ]; then
            	"$VER_NUM" = "10.10" ||\
            	"$VER_NUM" = "11.04" ||\
            	"$VER_NUM" = "11.10" ||\
-           	"$VER_NUM" = "12.04" ]];
-     	then
+           	"$VER_NUM" = "12.04" ]]; then
           	PKG_LIST=(git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev libwxgtk2.6-dev squashfs-tools build-essential zip curl libncurses5-dev zlib1g-dev sun-java6-jdk pngcrush schedtool pork)
         else
-             echo -e "Could not determine your Version Number. Recieved $VER_NUM"
-             $MAIN
+		echo -e "Could not determine your Version Number. Recieved $VER_NUM"
+		$MAIN
         fi
 
 	COUNT="0"
 
 	if [ "$BITS" = "x86_64" ]; then
      		if [[ "$VER_NUM" = "10.04" ||\
-        	   	"$VER_NUM" = "10.10" ]];
-     		then
+        	   	"$VER_NUM" = "10.10" ]]; then
 			PKG_LIST64=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline5-dev gcc-4.3-multilib g++-4.3-multilib)
-		elif [ "$VER_NUM" = "11.04" ];
-		then
+		elif [ "$VER_NUM" = "11.04" ]; then
 			PKG_LIST64=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline-gplv2-dev gcc-4.3-multilib g++-4.3-multilib)
 		elif [[ "$VER_NUM" = "11.10" ||\
-        	   	"$VER_NUM" = "12.04" ]];
-		then
+        	   	"$VER_NUM" = "12.04" ]]; then
 			PKG_LIST64=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline-gplv2-dev)
 		else
 			echo -e "Could not determine your Version Number. Recieved $VER_NUM"
@@ -61,7 +58,8 @@ if [ "$1" = "--check" ]; then
 	else
 		export PKG_COUNT="${CLR}Packages good${toff}"
 	fi
-elif [ "$1" = "--install" ]; then
+fi
+if [ "$1" = "--install" ]; then
 	if [ -f $MISSING_TOOLS ]; then
 		LIST_MISSING=$(cat $MISSING_TOOLS)
 		clear
@@ -94,9 +92,7 @@ elif [ "$1" = "--install" ]; then
 	else
 		echo "Couldn\'t locate $MISSING_TOOLS"
 		read -sn 1 -p "Press any key to go back to main menu..."
-	if [ -f $MISSING_TOOLS ]; then
-		rm $MISSING_TOOLS
-	fi
-else
-	echo "This"
+		if [ -f $MISSING_TOOLS ]; then
+			rm $MISSING_TOOLS
+		fi
 fi

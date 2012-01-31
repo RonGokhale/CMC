@@ -1,32 +1,8 @@
 #!/bin/bash
 # Written by lithid (mrlithid@gmail.com)
-MAIN="$CMC_HOME/CMCompiler"
-SETUP=". $CMC_HOME/menu_items/setup_cm_repo.menu"
-SYNC=". $CMC_HOME/menu_items/update_cm_repo.menu"
-CMC_LOCAL="$HOME/.cmc"
-CMC_CONFIG="$CMC_LOCAL/cmc-config"
-CMC_TOOLS="$CMC_HOME/tools/t"
-CMC_SCRIPTS="$CMC_HOME/tools/s"
-CMC_FUNCTIONS="$CMC_HOME/tools/f"
-CMC_PLUGINS="$CMC_HOME/plugins"
-CMC_DELETED="$CMC_LOCAL/CMC_DELETED_FILES"
-CMC_RESTORE="$CMC_LOCAL/CMC_RESTORE_FILES"
-CMC_BACKUP="$CMC_LOCAL/BACKUP"
-hash repo &> /dev/null
-if [ $? -eq 1 ]; then
-	export REPO="$CMC_TOOLS/repo"
-else
-	export REPO="$(which repo)"
-fi
-TMPX="/tmp/CM_BUILD"
-TMP_REPO="/tmp/found_repos"
-TMP_C="/tmp/cm_compile.log"
-NULL="/dev/null"
-CM_GIT="https://github.com/CyanogenMod/android.git"
-DEFAULT_REPO_HOME="$HOME/Development/CM-GB"
-TMP_AF="/tmp/SP_BRANCH"
-TEMPA="/tmp/A_BUILD"
-export GOG_REPO="https://dl-ssl.google.com/dl/googlesource/git-repo/repo"
+
+. $CMC_HOME/tools/f/compile_exports
+
 #######################################################
 #
 # Start of the functions
@@ -45,28 +21,28 @@ fi
 
 function get_colors_set() {
 # Colors
-toff="\e[0m"  # Color off
-tblk="\e[0;30m" # Black
-tred="\e[0;31m" # Red
-tgrn="\e[0;32m" # Green
-tylw="\e[0;33m" # Yellow
-tblu="\e[0;34m" # Blue
-tprpl="\e[0;35m" # Purple
-tcyn="\e[0;36m" # Cyan
+export toff="\e[0m"  # Color off
+export tblk="\e[0;30m" # Black
+export tred="\e[0;31m" # Red
+export tgrn="\e[0;32m" # Green
+export tylw="\e[0;33m" # Yellow
+export tblu="\e[0;34m" # Blue
+export tprpl="\e[0;35m" # Purple
+export tcyn="\e[0;36m" # Cyan
 # Light Colors
-ltblk="\e[1;30m" # Black
-ltred="\e[1;31m" # Red
-ltgrn="\e[1;32m" # Green
-ltylw="\e[1;33m" # Yellow
-ltblu="\e[1;34m" # Blue
-ltprpl="\e[1;35m" # Purple
-ltcyn="\e[1;36m" # Cyan
+export ltblk="\e[1;30m" # Black
+export ltred="\e[1;31m" # Red
+export ltgrn="\e[1;32m" # Green
+export ltylw="\e[1;33m" # Yellow
+export ltblu="\e[1;34m" # Blue
+export ltprpl="\e[1;35m" # Purple
+export ltcyn="\e[1;36m" # Cyan
 
-CLR="$ltgrn"
+export CLR="$ltgrn"
 CONF_COLOR_CHK=$(grep COLOR $CMC_CONFIG |wc -l)
 CONF_COLOR_SET=$(grep COLOR $CMC_CONFIG |awk '{print $2}')
 if [ "$CONF_COLOR_CHK" -eq "1" ]; then
-	CLR="$CONF_COLOR_SET"
+	export CLR="$CONF_COLOR_SET"
 fi
 }
 
@@ -75,12 +51,12 @@ export NVER="$(cd $CMC_HOME; git log -1 --numstat | grep commit | awk '{print $2
 export RVER="$(cd $CMC_HOME; git ls-remote https://github.com/lithid/CMC.git HEAD 2>/dev/null | awk '{print $1}')"
 if [ -n "$NVER" -a -n "$RVER" ]; then
 	if [ "$NVER" != "$RVER" ]; then
-		UPDATE_MSG=""$CLR"Available"$toff""
+		export UPDATE_MSG=""$CLR"Available"$toff""
 	else
-		UPDATE_MSG="Up-to-date"
+		export UPDATE_MSG="Up-to-date"
 	fi
 else
-	UPDATE_MSG=""$tred"Error"$toff""
+	export UPDATE_MSG=""$tred"Error"$toff""
 fi
 
 }
@@ -131,9 +107,6 @@ fi
 }
 
 function chk_repo_path_conf() {
-clear
-echo "Checking for current repos..."
-clear
 chk_tmp
 if [ ! -f $CMC_CONFIG ]; then
 	touch $CMC_CONFIG
@@ -144,9 +117,6 @@ if [ "$CMC_CONFIG_REPO_CHK" -eq "1" ];then
 	export REPO_PATH=$CMC_CONFIG_REPO
 	if [ -z "$FOUND_NUM" ]; then
 		export FOUND_NUM=$(find $CMC_CONFIG_REPO -maxdepth 2 -type d -iname .repo |wc -l)
-		echo "Repos: $FOUND_NUM"
-	else
-		echo "Repos: $FOUND_NUM"
 	fi
 	export CONFIGED="$CMC_CONFIG_REPO_CHK"
 else
@@ -186,7 +156,7 @@ if [ "$GET_LIST_W" != "0" ]; then
 	sleep 2
 	$MAIN
 else
-	DEVICE_MAN="Unknown"
+	export DEVICE_MAN="Unknown"
 	clear
 	echo -e "Your Manufacturer is "$CLR"$DEVICE_MAN"$toff", please try again"
 	sleep 2
@@ -212,7 +182,7 @@ if [ "$GET_LIST_W" != "0" ]; then
 	sleep 2
 	$MAIN
 else
-	DEVICE_MOD="Unknown"
+	export DEVICE_MOD="Unknown"
 	clear
 	echo -e "Your model is "$CLR"$DEVICE_MOD"$toff", please try again"
 	sleep 2
@@ -253,9 +223,9 @@ sleep 1
 function chk_adb_running() {
 chk_adb=$(adb devices 2>$NULL |grep device |grep -v attached |wc -l)
 if [ "$chk_adb" != "1" ]; then
-	ADB_MSG=""$tred"N/A"$toff""
+	export ADB_MSG=""$tred"N/A"$toff""
 else
-	ADB_MSG=""$CLR"Running"$toff""
+	export ADB_MSG=""$CLR"Running"$toff""
 fi
 }
 
@@ -291,10 +261,10 @@ function process_branch_list() {
 GET_LIST=$(sed -n "$option"p $TMPX |awk '{print $2}')
 GET_LIST_W=$(sed -n "$option"p $TMPX |cut -d")" -f"1")
 if [ ! -z "$option" ]; then
-	BRANCH=$(echo "$GET_LIST")
+	export BRANCH=$(echo "$GET_LIST")
 	chk_tmp
 else
-	BRANCH="$D_BRANCH"
+	export BRANCH="$D_BRANCH"
 	chk_tmp
 fi
 }
@@ -337,7 +307,7 @@ if [ "$REPO_PATH" = "None" ] && [ "$FOUND_NUM" = "None" ];then
 		export REPO_PATH=$CHK_4_REPO_PATH
 		sleep 2
 	elif [ "$CHK_4_REPO" -eq "1" ]; then
-		CHK_4_REPO_PATH_LIST="$CHK_4_REPO_PATH"
+		export CHK_4_REPO_PATH_LIST="$CHK_4_REPO_PATH"
 		NUM=1
 		echo "Found mulitple repo paths:"
 		echo "$CHK_4_REPO_PATH_LIST"
@@ -393,7 +363,7 @@ fi
 get_sp_branch_list
 list_sp_branch
 LIST_BRANCH=$(cat $TMPX)
-D_BRANCH="gingerbread"
+export D_BRANCH="gingerbread"
 echo -e "Please choose the branch:
 Default is "$CLR"$D_BRANCH"$toff".
 
@@ -473,8 +443,8 @@ else
 fi
 
 clear
-MSG="Languages have been removed!"
-SCRIPT="$CMC_SCRIPTS/build_language_only"
+export MSG="Languages have been removed!"
+export SCRIPT="$CMC_SCRIPTS/build_language_only"
 run_remove_function yes
 }
 
@@ -532,16 +502,16 @@ esac
 function compile_cm() {
 export WHICH_REPO=$(grep BRANCH $CMC_CONFIG |awk '{print $2}')
 if [ "$WHICH_REPO" = "gingerbread" ]; then
-	K_PATH="$REPO_PATH/vendor/cyanogen/products/common_versions.mk"
+	export K_PATH="$REPO_PATH/vendor/cyanogen/products/common_versions.mk"
 elif [ "$WHICH_REPO" = "ics" ]; then
-	K_PATH="$REPO_PATH/vendor/cm/config/common.mk"
+	export K_PATH="$REPO_PATH/vendor/cm/config/common.mk"
 else
-	K_PATH="null"
+	export K_PATH="null"
 fi
 if [ -f $K_PATH ]; then
 	CHK_KANG=$(grep kang $CMC_DELETED |wc -l)
 	if [ "$CHK_KANG" -eq "0" ]; then
-		REM_BACK="$CMC_BACKUP/remove_cmc_kang"
+		export REM_BACK="$CMC_BACKUP/remove_cmc_kang"
 		if [ ! -d $REM_BACK ]; then
 			mkdir -p $REM_BACK
 		fi
@@ -642,15 +612,15 @@ fi
 
 function undo_repo_changes() {
 if [ ! -f $CMC_DELETED ]; then
-	CHANGE_COUNT="0"
-	CHANGE_LIST="	None"
+	export CHANGE_COUNT="0"
+	export CHANGE_LIST="	None"
 else
 	CHANGE_COUNT=$(awk '{print $2}' $CMC_DELETED | wc -l)
 	CHANGE_LIST=$(cat $CMC_DELETED)
 	CHANGE_PATH=$(awk '{print $1}' $CMC_DELETED)
 	if [ "$CHANGE_COUNT" -lt "1" ]; then
-		CHANGE_COUNT="0"
-		CHANGE_LIST="	None"
+		export CHANGE_COUNT="0"
+		export CHANGE_LIST="	None"
 	fi
 fi
 if [ "$1" = "RM_NOW" ]; then
