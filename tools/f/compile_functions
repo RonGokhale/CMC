@@ -244,6 +244,7 @@ case $response in
 		echo
 		read -sn 1 -p "Press any key to go back to main menu...";;
 esac
+clear
 }
 
 function reposync_update() {
@@ -585,21 +586,21 @@ fi
 function find_toggle_git_https() {
 MANIFEST=$(find $REPO_PATH/.repo -type f -iname default.xml)
 CONFIG=$(find $REPO_PATH/.repo -type f -iname config |grep manifests.git)
-CHK_TOGGLE=$(grep fetch $MANIFEST |head -n1 |cut -d: -f1 |cut -d"\"" -f2)
+CHK_TOGGLE=$(grep fetch $MANIFEST |grep -v "android.googlesource.com" |head -n1 |cut -d: -f1 |cut -d"\"" -f2)
 }
 
 function toggle_git_https() {
 find_toggle_git_https
 
 if [ "$CHK_TOGGLE" = "https" ]; then
-	sed -i 's/https:\/\//git:\/\//g' $MANIFEST
-	sed -i 's/https:\/\//git:\/\//g' $CONFIG
+	sed -E '/googlesource/!s/https:\/\//git:\/\//g' $MANIFEST &>> /dev/null
+	sed -E '/googlesource/!s/https:\/\//git:\/\//g' $CONFIG &>> /dev/null
 	clear
 	echo -e ""$CLR"git"$toff" is now on!"
 	sleep 1
 elif [ "$CHK_TOGGLE" = "git" ]; then
-	sed -i 's/git:\/\//https:\/\//g' $MANIFEST
-	sed -i 's/git:\/\//https:\/\//g' $CONFIG
+	sed -E '/googlesource/!s/git:\/\//https:\/\//g' $MANIFEST &>> /dev/null
+	sed -E '/googlesource/!s/git:\/\//https:\/\//g' $CONFIG &>> /dev/null
 	clear
 	echo -e ""$CLR"https"$toff" is now on!"
 	sleep 1
