@@ -15,7 +15,7 @@ if [ "$1" = "--check" ]; then
            	"$VER_NUM" = "11.04" ||\
            	"$VER_NUM" = "11.10" ||\
            	"$VER_NUM" = "12.04" ]]; then
-          	PKG_LIST=(git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev libwxgtk2.6-dev squashfs-tools build-essential zip curl libncurses5-dev zlib1g-dev sun-java6-jdk pngcrush schedtool pork)
+          	PKG_LIST=(git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev libwxgtk2.6-dev squashfs-tools build-essential zip curl libncurses5-dev zlib1g-dev sun-java6-jdk pngcrush schedtool)
         else
 		echo -e "Could not determine your Version Number. Recieved $VER_NUM"
 		$MAIN
