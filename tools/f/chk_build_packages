@@ -7,7 +7,7 @@ export OSVER=$(grep OSVER $CMC_CONFIG |awk '{print $2}')
 CHK_OSVER=$(grep -c OSVER $CMC_CONFIG)
 SUP_OSVER=(Ubuntu Archlinux Other)
 BITS=$(uname -m)
-COUNT="0"
+COUNT=0
 
 if [ "$CHK_OSVER" -eq "0" ]; then
 	clear

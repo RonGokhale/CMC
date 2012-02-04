@@ -39,7 +39,7 @@ if [ "$1" = "--check" ]; then
 	fi
 
 	for x in ${PKG_LIST[@]} ${PKG_LIST64[@]}; do
-		CHK=$(dpkg --get-selections $x 2>1 /dev/null |grep -v deinstall |grep -c install)
+		CHK=$(dpkg --get-selections $x 2> /dev/null |grep -v deinstall |grep -c install)
 		if [ "$CHK" -eq "1" ]; then
 			let COUNT=COUNT
 		else

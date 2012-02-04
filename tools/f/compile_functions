@@ -593,14 +593,14 @@ function toggle_git_https() {
 find_toggle_git_https
 
 if [ "$CHK_TOGGLE" = "https" ]; then
-	sed -E '/googlesource/!s/https:\/\//git:\/\//g' $MANIFEST &>> /dev/null
-	sed -E '/googlesource/!s/https:\/\//git:\/\//g' $CONFIG &>> /dev/null
+	sed -iE '/googlesource/!s/https:\/\//git:\/\//g' $MANIFEST &>> /dev/null
+	sed -iE '/googlesource/!s/https:\/\//git:\/\//g' $CONFIG &>> /dev/null
 	clear
 	echo -e ""$CLR"git"$toff" is now on!"
 	sleep 1
 elif [ "$CHK_TOGGLE" = "git" ]; then
-	sed -E '/googlesource/!s/git:\/\//https:\/\//g' $MANIFEST &>> /dev/null
-	sed -E '/googlesource/!s/git:\/\//https:\/\//g' $CONFIG &>> /dev/null
+	sed -iE '/googlesource/!s/git:\/\//https:\/\//g' $MANIFEST &>> /dev/null
+	sed -iE '/googlesource/!s/git:\/\//https:\/\//g' $CONFIG &>> /dev/null
 	clear
 	echo -e ""$CLR"https"$toff" is now on!"
 	sleep 1
