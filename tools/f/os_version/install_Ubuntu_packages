@@ -4,7 +4,7 @@
 . $CMC_HOME/tools/f/compile_functions
 
 VER_NUM=$(lsb_release -r |awk '{print $2}')
-export MISSING_TOOLS=$CMC_LOCAL/.MISSING_TOOLS
+MISSING_TOOLS=$CMC_LOCAL/.MISSING_TOOLS
 
 if [ "$1" = "--check" ]; then
 	if [ -f $MISSING_TOOLS ]; then
@@ -24,13 +24,11 @@ if [ "$1" = "--check" ]; then
 	COUNT="0"
 
 	if [ "$BITS" = "x86_64" ]; then
-     		if [[ "$VER_NUM" = "10.04" ||\
-        	   	"$VER_NUM" = "10.10" ]]; then
+     		if [[ "$VER_NUM" = "10.04" || "$VER_NUM" = "10.10" ]]; then
 			PKG_LIST64=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline5-dev gcc-4.3-multilib g++-4.3-multilib)
 		elif [ "$VER_NUM" = "11.04" ]; then
 			PKG_LIST64=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline-gplv2-dev gcc-4.3-multilib g++-4.3-multilib)
-		elif [[ "$VER_NUM" = "11.10" ||\
-        	   	"$VER_NUM" = "12.04" ]]; then
+		elif [[ "$VER_NUM" = "11.10" || "$VER_NUM" = "12.04" ]]; then
 			PKG_LIST64=(g++-multilib lib32z1-dev lib32ncurses5-dev lib32readline-gplv2-dev)
 		else
 			echo -e "Could not determine your Version Number. Recieved $VER_NUM"
@@ -41,7 +39,7 @@ if [ "$1" = "--check" ]; then
 	fi
 
 	for x in ${PKG_LIST[@]} ${PKG_LIST64[@]}; do
-		CHK=$(dpkg --get-selections $x |grep -v deinstall |grep -c install)
+		CHK=$(dpkg --get-selections $x 2>1 /dev/null |grep -v deinstall |grep -c install)
 		if [ "$CHK" -eq "1" ]; then
 			let COUNT=COUNT
 		else
@@ -58,8 +56,7 @@ if [ "$1" = "--check" ]; then
 	else
 		export PKG_COUNT="${CLR}Packages good${toff}"
 	fi
-fi
-if [ "$1" = "--install" ]; then
+elif [ "$1" = "--install" ]; then
 	if [ -f $MISSING_TOOLS ]; then
 		LIST_MISSING=$(cat $MISSING_TOOLS)
 		clear
@@ -78,11 +75,11 @@ if [ "$1" = "--install" ]; then
 				if [ "$x" = "sun-java6-jdk" ]; then
 					clear
 					echo "You don't have sun-java6-jdk doing that now..."
-					sudo add-apt-repository ppa:ferramroberto/java
+					sudo apt-add-repository -y ppa:flexiondotorg/java
 					sudo apt-get update
-					sudo apt-get install sun-java6-jdk
+					sudo apt-get install -y --force-yes sun-java6-jdk sun-java6-plugin
 				else
-					sudo apt-get install $x
+					sudo apt-get install -y $x
 				fi
 			done			
 			clear
@@ -95,4 +92,7 @@ if [ "$1" = "--install" ]; then
 		if [ -f $MISSING_TOOLS ]; then
 			rm $MISSING_TOOLS
 		fi
+	fi
+else
+	echo "Nope"
 fi
