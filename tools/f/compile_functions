@@ -47,16 +47,21 @@ fi
 }
 
 function check_update_fn() {
-export NVER="$(cd $CMC_HOME; git log -1 --numstat | grep commit | awk '{print $2}')"
-export RVER="$(cd $CMC_HOME; git ls-remote https://github.com/lithid/CMC.git HEAD 2>/dev/null | awk '{print $1}')"
-if [ -n "$NVER" -a -n "$RVER" ]; then
-	if [ "$NVER" != "$RVER" ]; then
-		export UPDATE_MSG=""$CLR"Available"$toff""
-	else
-		export UPDATE_MSG="Up-to-date"
-	fi
-else
+chk_git=$(which git |wc -l)
+if [ "${chk_git}" -eq "0" ]; then
 	export UPDATE_MSG=""$tred"Error"$toff""
+else
+	export NVER="$(cd $CMC_HOME; git log -1 --numstat | grep commit | awk '{print $2}')"
+	export RVER="$(cd $CMC_HOME; git ls-remote https://github.com/lithid/CMC.git HEAD 2>/dev/null | awk '{print $1}')"
+	if [ -n "$NVER" -a -n "$RVER" ]; then
+		if [ "$NVER" != "$RVER" ]; then
+			export UPDATE_MSG=""$CLR"Available"$toff""
+		else
+			export UPDATE_MSG="Up-to-date"
+		fi
+	else
+		export UPDATE_MSG=""$tred"Error"$toff""
+	fi
 fi
 
 }
