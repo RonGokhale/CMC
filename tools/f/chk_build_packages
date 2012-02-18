@@ -20,7 +20,11 @@ if [ "$CHK_OSVER" -eq "0" ]; then
 	echo -n "> "
 	read response
 	echo "OSVER: ${SUP_OSVER[$response]}" >>  $CMC_CONFIG
-elif [ "$CHK_OSVER" -gt "0" ]; then
+	$SETUP
+fi
+
+export OSVER=$(grep OSVER $CMC_CONFIG |awk '{print $2}')
+if [ "$CHK_OSVER" -gt "0" ]; then
 	if [ "$OSVER" = "Ubuntu" ]; then # Ubuntu
 		. $CMC_FUNCTIONS/os_version/install_Ubuntu_packages --check
 	elif [ "$OSVER" = "Archlinux" ]; then # Archlinux
