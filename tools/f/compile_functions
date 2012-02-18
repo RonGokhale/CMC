@@ -39,6 +39,9 @@ export ltprpl="\e[1;35m" # Purple
 export ltcyn="\e[1;36m" # Cyan
 
 export CLR="$ltgrn"
+if [ ! -f $CMC_CONFIG ]; then
+	touch $CMC_CONFIG
+fi
 CONF_COLOR_CHK=$(grep COLOR $CMC_CONFIG |wc -l)
 CONF_COLOR_SET=$(grep COLOR $CMC_CONFIG |awk '{print $2}')
 if [ "$CONF_COLOR_CHK" -eq "1" ]; then
