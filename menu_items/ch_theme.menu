@@ -15,13 +15,7 @@ Repos found: ${CLR}$FOUND_NUM${toff}
 	${CLR}5${toff}) Blue
 	${CLR}6${toff}) Purple
 	${CLR}7${toff}) Cyan
-	${CLR}8${toff}) Light Black
-	${CLR}9${toff}) Light Red
-	${CLR}10${toff}) Light Green
-	${CLR}11${toff}) Light Yellow
-	${CLR}12${toff}) Light Blue
-	${CLR}13${toff}) Light Purple
-	${CLR}14${toff}) Light Cyan
+	${CLR}8${toff}) White
 	-----
 	${CLR}B${toff}) back to main menu
 	${CLR}X${toff}) exit
@@ -54,26 +48,8 @@ case $option in
 		CUST_COLOR="$tcyn"
 		COLOR_DESC="Cyan";;
 	8)
-		CUST_COLOR="$ltblk"
-		COLOR_DESC="Light Black";;
-	9)
-		CUST_COLOR="$ltred"
-		COLOR_DESC="Light Red";;
-	10)
-		CUST_COLOR="$ltgrn"
-		COLOR_DESC="Light Green";;
-	11)
-		CUST_COLOR="$ltylw"
-		COLOR_DESC="Light Yellow";;
-	12)
-		CUST_COLOR="$ltblu"
-		COLOR_DESC="Light Blue";;
-	13)
-		CUST_COLOR="$ltprpl"
-		COLOR_DESC="Light Purple";;
-	14)
-		CUST_COLOR="$ltcyn"
-		COLOR_DESC="Light Cyan";;
+		CUST_COLOR="$twht"
+		COLOR_DESC="White";;
 	b|B)
 		$MAIN;;
 	x|X)
@@ -85,4 +61,5 @@ case $option in
 esac
 
 apply_theme_process
+get_colors_set
 $MAIN
