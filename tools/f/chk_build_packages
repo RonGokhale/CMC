@@ -5,7 +5,7 @@
 
 export OSVER=$(grep OSVER $CMC_CONFIG |awk '{print $2}')
 CHK_OSVER=$(grep -c OSVER $CMC_CONFIG)
-SUP_OSVER=(Ubuntu Archlinux Other)
+SUP_OSVER=(Ubuntu Archlinux LinuxMint Other)
 BITS=$(uname -m)
 COUNT=0
 
@@ -29,6 +29,8 @@ if [ "$CHK_OSVER" -gt "0" ]; then
 		. $CMC_FUNCTIONS/os_version/install_Ubuntu_packages --check
 	elif [ "$OSVER" = "Archlinux" ]; then # Archlinux
 		. $CMC_FUNCTIONS/os_version/install_Archlinux_packages --check
+	elif [ "$OSVER" = "LinuxMint" ]; then # LinuxMint
+		. $CMC_FUNCTIONS/os_version/install_LinuxMint_packages --check
 	elif [ "$OSVER" = "Other"]; then # Other manual packages.
 		. $CMC_FUNCTIONS/os_version/install_Other_packages --check
 	else
