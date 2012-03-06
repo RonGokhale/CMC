@@ -13,8 +13,8 @@ if [ "$1" = "--check" ]; then
      	if [[ "$VER_NUM" = "9" ||\
            	"$VER_NUM" = "10" ||\
            	"$VER_NUM" = "11" ||\
-           	"$VER_NUM" = "12" ||; then
-          	PKG_LIST=(git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev libwxgtk2.6-dev squashfs-tools build-essential zip curl libncurses5-dev zlib1g-dev sun-java6-jdk pngcrush schedtool)
+           	"$VER_NUM" = "12" ]]; then
+          	PKG_LIST=(git-core gnupg flex bison gperf libsdl1.2-dev libesd0-dev libwxgtk2.6-dev squashfs-tools build-essential zip curl libncurses5-dev zlib1g-dev openjdk-6-jdk pngcrush schedtool)
         else
 		echo -e "Could not determine your Version Number. Recieved $VER_NUM"
 		$MAIN
@@ -71,15 +71,7 @@ elif [ "$1" = "--install" ]; then
 			echo "Going to setup menu...";;
 			*)
 			for x in $LIST_MISSING; do
-				if [ "$x" = "sun-java6-jdk" ]; then
-					clear
-					echo "You don't have sun-java6-jdk doing that now..."
-					sudo apt-add-repository -y ppa:flexiondotorg/java
-					sudo apt-get update
-					sudo apt-get install -y --force-yes sun-java6-jdk sun-java6-plugin
-				else
-					sudo apt-get install -y $x
-				fi
+				sudo apt-get install -y $x
 			done			
 			clear
 			echo "All apps should be installed now..."
