@@ -31,7 +31,7 @@ if [ "$CHK_OSVER" -gt "0" ]; then
 		. $CMC_FUNCTIONS/os_version/install_Archlinux_packages --check
 	elif [ "$OSVER" = "LinuxMint" ]; then # LinuxMint
 		. $CMC_FUNCTIONS/os_version/install_LinuxMint_packages --check
-	elif [ "$OSVER" = "Other"]; then # Other manual packages.
+	elif [ "$OSVER" = "Other" ]; then # Other manual packages.
 		. $CMC_FUNCTIONS/os_version/install_Other_packages --check
 	else
 		echo "Could not detect your OS version."
